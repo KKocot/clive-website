@@ -13,7 +13,11 @@
     "format:check": "prettier --check .",
     "check": "astro check",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "deploy": "pnpm build && wrangler pages deploy dist --project-name=clive-website",
+    "deploy:preview": "pnpm build && wrangler pages deploy dist --project-name=clive-website --branch=preview",
+    "deploy:vercel": "vercel --prod",
+    "deploy:vercel:preview": "vercel"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -40,6 +44,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
     "sharp": "^0.34.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "wrangler": "^4.0.0"
   }
 }
