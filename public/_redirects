@@ -1,0 +1,12 @@
+# Cloudflare Pages redirects
+# Astro default: trailingSlash: 'ignore' (no redirect inserted, both work).
+# We do NOT force trailing slash here to avoid double-redirects with Astro's
+# canonical URLs (which omit trailing slashes for content pages).
+#
+# If you switch astro.config.mjs to trailingSlash: 'always', uncomment:
+#   /blog/*  /blog/:splat/  301
+#
+# If you switch to trailingSlash: 'never', uncomment:
+#   /blog/*/  /blog/:splat  301
+#
+# Place project-specific redirects below this line.

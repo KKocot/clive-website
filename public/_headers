@@ -1,0 +1,42 @@
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
+
+# TODO(security): script-src 'unsafe-inline' is required because Astro emits
+# inline runtime bootstrap scripts (astro-island custom element, client:visible
+# IntersectionObserver, Solid hydration registry _$HY) directly into HTML.
+# Future hardening: switch to CSP nonces via a Cloudflare Pages Function or
+# precomputed sha256 hashes of the (deterministic) Astro runtime snippets.
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/blog/*
+  Cache-Control: public, max-age=300, s-maxage=86400, stale-while-revalidate=86400
+
+/
+  Cache-Control: public, max-age=300, s-maxage=86400, stale-while-revalidate=86400
+
+/rss.xml
+  Content-Type: application/xml; charset=utf-8
+  Cache-Control: public, max-age=3600, s-maxage=86400
+
+/sitemap-index.xml
+  Content-Type: application/xml; charset=utf-8
+  Cache-Control: public, max-age=3600, s-maxage=86400
+
+/sitemap-*.xml
+  Content-Type: application/xml; charset=utf-8
+  Cache-Control: public, max-age=3600, s-maxage=86400

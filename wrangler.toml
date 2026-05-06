@@ -1,0 +1,18 @@
+name = "clive-website"
+compatibility_date = "2026-05-01"
+pages_build_output_dir = "./dist"
+
+# Cloudflare Pages auto-deploys do not strictly require this file when using
+# the dashboard Git integration. It is kept for:
+#   - `wrangler pages deploy dist --project-name=clive-website` (direct upload)
+#   - documenting the project metadata in-repo
+#
+# Add bindings ([[kv_namespaces]], [[d1_databases]], [vars]) here if/when
+# Pages Functions are introduced. Today the site is fully static.
+
+[env.production]
+# pages_build_output_dir is inherited from root.
+# Add production-only [[kv_namespaces]] / [vars] here when needed.
+
+[env.preview]
+# Add preview-only bindings here when needed.

@@ -1,0 +1,13 @@
+# Clive — robots.txt
+# Public website. Allow all crawlers, point to the auto-generated sitemap.
+
+User-agent: *
+Allow: /
+
+# Block known wasteful crawlers (optional — uncomment when needed).
+# User-agent: GPTBot
+# Disallow: /
+# User-agent: CCBot
+# Disallow: /
+
+Sitemap: https://clive.openhive.network/sitemap-index.xml
