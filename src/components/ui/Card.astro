@@ -1,0 +1,12 @@
+---
+// Card primitive — placeholder, design-engineer will style
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["card", className]}>
+  <slot />
+</div>

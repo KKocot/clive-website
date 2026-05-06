@@ -1,0 +1,13 @@
+---
+// Badge primitive — placeholder, design-engineer will style
+interface Props {
+  variant?: "default" | "outline";
+  class?: string;
+}
+
+const { variant = "default", class: className } = Astro.props;
+---
+
+<span class:list={["badge", `badge--${variant}`, className]}>
+  <slot />
+</span>
