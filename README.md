@@ -107,11 +107,18 @@ ignores the other's files.
 
 ### Vercel (production)
 
-Automatic deploy via Vercel:
+The Vercel project is connected to GitHub (`KKocot/clive-website`) — deploys
+are triggered automatically:
 
-1. `vercel` — first time setup (link the project, prompts for name / scope).
-2. `pnpm deploy:vercel` — production deploy.
-3. `pnpm deploy:vercel:preview` — preview deploy.
+- Push to `main` → **production deploy** (`https://clive-website-alpha.vercel.app`,
+  later `clive.openhive.network` once DNS is wired).
+- Push to any other branch → **preview deploy**.
+- Pull request → preview deploy with a unique preview URL posted to the PR.
+
+Manual CLI deploys are still available but unused in the standard flow:
+
+- `pnpm deploy:vercel` — manual production deploy (bypasses Git).
+- `pnpm deploy:vercel:preview` — manual preview deploy.
 
 Build settings (auto-detected from `vercel.json`):
 
