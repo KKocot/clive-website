@@ -1,16 +1,115 @@
 ---
-// Button primitive — placeholder, design-engineer will style
-interface Props {
+import type { HTMLAttributes } from "astro/types";
+
+type Variant = "primary" | "secondary" | "ghost";
+type Size = "sm" | "md" | "lg";
+
+interface Props extends Omit<HTMLAttributes<"a">, "size"> {
+  variant?: Variant;
+  size?: Size;
   href?: string;
-  variant?: "primary" | "secondary" | "ghost";
-  size?: "sm" | "md" | "lg";
+  type?: "button" | "submit" | "reset";
   class?: string;
 }
 
-const { href, variant = "primary", size = "md", class: className, ...rest } = Astro.props;
+const {
+  variant = "primary",
+  size = "md",
+  href,
+  type,
+  class: className,
+  ...rest
+} = Astro.props;
+
 const Tag = href ? "a" : "button";
+
+const baseClass =
+  "btn inline-flex items-center justify-center gap-2 font-medium select-none whitespace-nowrap";
+const sizeClass: Record<Size, string> = {
+  sm: "btn--sm h-8 px-3 text-sm rounded-md",
+  md: "btn--md h-10 px-4 text-base rounded-md",
+  lg: "btn--lg h-12 px-6 text-base rounded-md",
+};
+const variantClass: Record<Variant, string> = {
+  primary: "btn--primary",
+  secondary: "btn--secondary",
+  ghost: "btn--ghost",
+};
 ---
 
-<Tag href={href} class:list={["btn", `btn--${variant}`, `btn--${size}`, className]} {...rest}>
+<Tag
+  href={href}
+  type={!href ? (type ?? "button") : undefined}
+  class:list={[baseClass, sizeClass[size], variantClass[variant], className]}
+  {...rest}
+>
   <slot />
+  <slot name="icon-end" />
 </Tag>
+
+<style>
+  .btn {
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition:
+      background-color var(--duration-fast) var(--ease-out-quad),
+      border-color var(--duration-fast) var(--ease-out-quad),
+      box-shadow var(--duration-fast) var(--ease-out-quad),
+      transform var(--duration-fast) var(--ease-out-quad),
+      color var(--duration-fast) var(--ease-out-quad);
+  }
+  .btn:focus-visible {
+    box-shadow: var(--shadow-focus-ring);
+    outline: none;
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Primary */
+  .btn--primary {
+    background-color: var(--color-accent-primary);
+    color: #ffffff;
+    border-color: transparent;
+  }
+  .btn--primary:hover {
+    background-color: var(--color-accent-primary-hover);
+    box-shadow: var(--shadow-glow-indigo);
+  }
+  .btn--primary:active {
+    background-color: var(--color-accent-primary-active);
+    transform: translateY(1px);
+  }
+
+  /* Secondary */
+  .btn--secondary {
+    background-color: transparent;
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+  }
+  .btn--secondary:hover {
+    background-color: var(--color-bg-overlay);
+    border-color: var(--color-text-muted);
+  }
+  .btn--secondary:active {
+    background-color: var(--color-bg-overlay-strong);
+    transform: translateY(1px);
+  }
+
+  /* Ghost */
+  .btn--ghost {
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border-color: transparent;
+  }
+  .btn--ghost:hover {
+    color: var(--color-text);
+    background-color: var(--color-bg-overlay);
+  }
+  .btn--ghost:active {
+    background-color: var(--color-bg-overlay-strong);
+    transform: translateY(1px);
+  }
+</style>

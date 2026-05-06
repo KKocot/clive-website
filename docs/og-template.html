@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Clive — OG Default Template (1200x630)</title>
+    <!--
+      Used to generate /public/og-default.png from /public/og-default.svg.
+
+      Workflow:
+        1) Open this file in a browser (or via Playwright/Puppeteer).
+        2) Take a screenshot of the .og element at exactly 1200x630.
+        3) Save as /public/og-default.png (under ~200 KB, PNG-8 if possible).
+
+      Quick Playwright snippet (run from project root):
+
+        npx playwright open file://$(pwd)/docs/og-template.html
+        // or use a script with page.setViewportSize({width:1200,height:630})
+
+      The SVG is referenced verbatim so any future edits to og-default.svg
+      propagate here automatically — no need to keep two designs in sync.
+    -->
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #0a0a0c;
+        font-family:
+          -apple-system, "Inter", "Segoe UI", system-ui, sans-serif;
+        color: #c0c0cc;
+      }
+      .stage {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 24px;
+      }
+      .label {
+        font-size: 14px;
+        color: #71717a;
+        font-family:
+          ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+      }
+      .og {
+        width: 1200px;
+        height: 630px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.65);
+      }
+      .og img,
+      .og object {
+        width: 1200px;
+        height: 630px;
+        display: block;
+      }
+      .frame-only .og {
+        box-shadow: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage frame-only">
+      <span class="label"
+        >Clive OG (1200x630) — screenshot the .og element below</span
+      >
+      <div class="og" id="og">
+        <!--
+          Use <object> so the SVG is rendered as a vector by the browser
+          and scales without rasterization artifacts before screenshot.
+        -->
+        <object
+          type="image/svg+xml"
+          data="../public/og-default.svg"
+          aria-label="Clive default OG image"
+        ></object>
+      </div>
+    </div>
+  </body>
+</html>

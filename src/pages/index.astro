@@ -1,11 +1,17 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/sections/Hero.astro";
+import Features from "../components/sections/Features.astro";
+import Install from "../components/sections/Install.astro";
+import Demo from "../components/sections/Demo.astro";
 ---
 
-<BaseLayout title="Clive — Hive blockchain CLI/TUI wallet">
-  <main>
-    <h1>Clive</h1>
-    <p>Hive blockchain CLI/TUI wallet. Coming soon.</p>
-    <a href="/blog">Blog</a>
-  </main>
+<BaseLayout
+  title="Clive — power-user wallet for Hive"
+  description="Encrypted keys, mouse-driven TUI, full blockchain operations — straight from your terminal. Beta · Open source · Built for Hive."
+>
+  <Hero />
+  <Features />
+  <Install />
+  <Demo />
 </BaseLayout>

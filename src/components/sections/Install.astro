@@ -1,9 +1,255 @@
 ---
-// Install section — placeholder, design-engineer will implement
-// Note: Interactive install tabs (pip/binary/docker) will be in islands/InstallTabs.tsx
+import InstallTabs from "../islands/InstallTabs";
+import { LINKS } from "../../config/links";
 ---
 
-<section id="install">
-  <!-- Install instructions with tabs: pip, binary download, docker -->
-  <slot />
+<section
+  id="install"
+  class="install"
+  aria-labelledby="install-heading"
+>
+  <div class="container-x">
+    <header class="install__header reveal">
+      <h2 id="install-heading" class="install__title">
+        Install in 30 seconds
+      </h2>
+      <p class="install__lead">
+        One command pulls Clive and sets up your Beekeeper wallet. Pick your OS.
+      </p>
+    </header>
+
+    <div
+      class="install__warning"
+      role="note"
+      aria-label="Beta warning"
+    >
+      <span class="install__warning-icon" aria-hidden="true">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </span>
+      <p>
+        Clive is in active development (Beta). Installation may require Hive
+        infrastructure access — see docs.
+      </p>
+    </div>
+
+    <div class="install__tabs">
+      <InstallTabs client:visible />
+    </div>
+
+    <p class="install__doc-link">
+      <a href={LINKS.GITLAB_INSTALL} rel="noopener noreferrer" target="_blank">
+        Read full installation guide
+        <span aria-hidden="true">↗</span>
+      </a>
+    </p>
+  </div>
 </section>
+
+<style>
+  .install {
+    padding-block: var(--section-y);
+  }
+  @media (min-width: 64rem) {
+    .install {
+      padding-block: var(--section-y-lg);
+    }
+  }
+
+  .install__header {
+    max-width: 48rem;
+    margin-bottom: var(--space-10);
+  }
+
+  .install__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin: 0 0 var(--space-3);
+  }
+
+  .install__lead {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  .install__warning {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    background-color: rgba(245, 158, 11, 0.08);
+    color: var(--color-text);
+    margin-bottom: var(--space-8);
+    max-width: 56rem;
+  }
+  .install__warning p {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+  }
+  .install__warning-icon {
+    flex-shrink: 0;
+    color: var(--color-accent-warning);
+    margin-top: 2px;
+  }
+
+  .install__tabs {
+    max-width: 56rem;
+  }
+
+  .install__doc-link {
+    margin: var(--space-6) 0 0;
+    font-size: var(--text-sm);
+  }
+  .install__doc-link a {
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--duration-fast) var(--ease-out-quad), color var(--duration-fast) var(--ease-out-quad);
+  }
+  .install__doc-link a:hover {
+    color: var(--color-accent-primary-hover);
+    border-bottom-color: currentColor;
+  }
+
+  /* InstallTabs island styling (global since solid renders raw markup) */
+  :global(.install-tabs) {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-bg-surface);
+    overflow: hidden;
+  }
+
+  :global(.install-tabs__list) {
+    display: flex;
+    gap: 2px;
+    padding: var(--space-2);
+    background-color: var(--color-bg-elevated);
+    border-bottom: 1px solid var(--color-border);
+    overflow-x: auto;
+  }
+
+  :global(.install-tabs__tab) {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 var(--space-4);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    background-color: transparent;
+    color: var(--color-text-muted);
+    font-family: inherit;
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      color var(--duration-fast) var(--ease-out-quad),
+      background-color var(--duration-fast) var(--ease-out-quad),
+      border-color var(--duration-fast) var(--ease-out-quad);
+  }
+  :global(.install-tabs__tab:hover) {
+    color: var(--color-text);
+    background-color: var(--color-bg-overlay);
+  }
+  :global(.install-tabs__tab[data-active="true"]) {
+    color: var(--color-text);
+    background-color: var(--color-bg-surface);
+    border-color: var(--color-border);
+  }
+  :global(.install-tabs__tab:focus-visible) {
+    outline: none;
+    box-shadow: var(--shadow-focus-ring);
+  }
+
+  :global(.install-tabs__panel) {
+    padding: var(--space-5);
+  }
+
+  :global(.install-tabs__code-wrap) {
+    position: relative;
+    background-color: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  :global(.install-tabs__code) {
+    margin: 0;
+    padding: var(--space-4) var(--space-5);
+    padding-right: 6rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text);
+    overflow-x: auto;
+  }
+
+  :global(.install-tabs__copy) {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+  }
+
+  :global(.install-tabs__note) {
+    margin: var(--space-3) 0 0;
+    font-size: var(--text-xs);
+    color: var(--color-text-subtle);
+  }
+
+  /* Copy button */
+  :global(.copy-btn) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    height: 32px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-surface);
+    color: var(--color-text-muted);
+    font-family: inherit;
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-out-quad),
+      background-color var(--duration-fast) var(--ease-out-quad),
+      border-color var(--duration-fast) var(--ease-out-quad);
+  }
+  :global(.copy-btn:hover) {
+    color: var(--color-text);
+    background-color: var(--color-bg-overlay);
+    border-color: var(--color-border-strong);
+  }
+  :global(.copy-btn[data-copied="true"]) {
+    color: var(--color-accent-success);
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+  :global(.copy-btn:focus-visible) {
+    outline: none;
+    box-shadow: var(--shadow-focus-ring);
+  }
+  :global(.copy-btn__icon) {
+    display: inline-flex;
+  }
+</style>

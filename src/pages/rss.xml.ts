@@ -2,15 +2,21 @@ import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
 import type { APIContext } from "astro";
 
-export async function GET(context: APIContext) {
-  const posts = await getCollection("blog");
-  const publishedPosts = posts.filter((post) => !post.data.draft);
+export async function GET(context: APIContext): Promise<Response> {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  if (context.site === undefined) {
+    throw new Error(
+      "rss.xml.ts: `site` is not configured in astro.config — required for RSS feed.",
+    );
+  }
 
   return rss({
     title: "Clive Blog",
-    description: "News, updates and tutorials about Clive — Hive blockchain CLI/TUI wallet.",
-    site: context.site!,
-    items: publishedPosts
+    description:
+      "Updates, deep-dives, and how-tos from the Clive project — Hive blockchain CLI/TUI wallet.",
+    site: context.site,
+    items: posts
       .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
       .map((post) => ({
         title: post.data.title,

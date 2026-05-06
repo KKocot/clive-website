@@ -1,12 +1,95 @@
 ---
-// Card primitive — placeholder, design-engineer will style
+type Glow = "none" | "emerald" | "indigo" | "amber" | "hive";
+
 interface Props {
+  glow?: Glow;
+  fade?: boolean;
+  as?: "article" | "div" | "section";
   class?: string;
 }
 
-const { class: className } = Astro.props;
+const props: Props = Astro.props;
+const {
+  glow = "none",
+  fade = false,
+  as: Tag = "article",
+  class: className,
+} = props;
 ---
 
-<div class:list={["card", className]}>
-  <slot />
-</div>
+<Tag class:list={["card", `card--glow-${glow}`, className]}>
+  {glow !== "none" && <div class="card__glow" aria-hidden="true" />}
+  <div class="card__inner">
+    <slot />
+  </div>
+  {fade && <div class="card__fade" aria-hidden="true" />}
+</Tag>
+
+<style>
+  .card {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition:
+      transform var(--duration-base) var(--ease-out-quint),
+      border-color var(--duration-base) var(--ease-out-quint),
+      box-shadow var(--duration-base) var(--ease-out-quint);
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-md);
+  }
+  .card:focus-within {
+    box-shadow: var(--shadow-focus-ring);
+  }
+
+  .card__inner {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-6);
+  }
+  @media (min-width: 48rem) {
+    .card__inner {
+      padding: var(--space-8);
+    }
+  }
+
+  .card__glow {
+    position: absolute;
+    inset: -20% -20% auto -20%;
+    height: 60%;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(48px);
+    opacity: 0.5;
+    transition: opacity var(--duration-base) var(--ease-out-quad);
+  }
+  .card:hover .card__glow {
+    opacity: 1;
+  }
+  .card--glow-emerald .card__glow {
+    background: var(--tint-emerald);
+  }
+  .card--glow-indigo .card__glow {
+    background: var(--tint-indigo);
+  }
+  .card--glow-amber .card__glow {
+    background: var(--tint-amber);
+  }
+  .card--glow-hive .card__glow {
+    background: var(--tint-hive);
+  }
+
+  .card__fade {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 35%;
+    background: var(--gradient-card-fade);
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>

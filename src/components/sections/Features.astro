@@ -1,8 +1,242 @@
 ---
-// Features section — placeholder, design-engineer will implement
+import Card from "../ui/Card.astro";
+
+type Glow = "indigo" | "emerald" | "amber";
+
+interface Feature {
+  title: string;
+  desc: string;
+  glow: Glow;
+  iconKey: "split" | "key" | "mouse" | "user" | "zap";
+}
+
+const features: Feature[] = [
+  {
+    title: "Dual interface",
+    desc: "Run `clive` for full TUI or pass commands for CLI scripting. One tool, two modes.",
+    glow: "indigo",
+    iconKey: "split",
+  },
+  {
+    title: "Beekeeper encryption",
+    desc: "Keys live in encrypted wallets, not raw on disk. Unlock once, sign many.",
+    glow: "emerald",
+    iconKey: "key",
+  },
+  {
+    title: "Mouse-driven TUI",
+    desc: "Click buttons in your terminal. Inspired by Midnight Commander, modernized.",
+    glow: "amber",
+    iconKey: "mouse",
+  },
+  {
+    title: "Profile system",
+    desc: "Working account, watched accounts, key aliases, multi-node — all in one profile.",
+    glow: "indigo",
+    iconKey: "user",
+  },
+  {
+    title: "Full blockchain ops",
+    desc: "Transfers, delegations, witness votes, governance — every operation, terminal-native.",
+    glow: "emerald",
+    iconKey: "zap",
+  },
+];
+
+const glowToColorVar: Record<Glow, string> = {
+  indigo: "var(--color-accent-primary)",
+  emerald: "var(--color-accent-success)",
+  amber: "var(--color-accent-warning)",
+};
 ---
 
-<section id="features">
-  <!-- Feature cards: TUI, CLI, Hive integration, security, etc. -->
-  <slot />
+<section
+  id="features"
+  class="features"
+  aria-labelledby="features-heading"
+>
+  <div class="container-x">
+    <header class="features__header reveal">
+      <h2 id="features-heading" class="features__title">
+        Built for power users
+      </h2>
+      <p class="features__lead">
+        Five things Clive gets right — encrypted, scriptable, terminal-native.
+      </p>
+    </header>
+
+    <ul class="features__grid" role="list">
+      {
+        features.map((f, i) => (
+          <li class={`reveal reveal--delay-${(i % 4) + 1}`}>
+            <Card glow={f.glow} fade>
+              <div
+                class="feature__icon"
+                style={`color: ${glowToColorVar[f.glow]}`}
+                aria-hidden="true"
+              >
+                {f.iconKey === "split" && (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                    <line x1="12" y1="4" x2="12" y2="20" />
+                  </svg>
+                )}
+                {f.iconKey === "key" && (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="8" cy="15" r="4" />
+                    <line x1="10.85" y1="12.15" x2="20" y2="3" />
+                    <line x1="18" y1="5" x2="20" y2="7" />
+                    <line x1="15" y1="8" x2="17" y2="10" />
+                  </svg>
+                )}
+                {f.iconKey === "mouse" && (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M3 3l7.5 18 2.5-7 7-2.5L3 3z" />
+                    <line x1="13" y1="13" x2="20" y2="20" />
+                  </svg>
+                )}
+                {f.iconKey === "user" && (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
+                    <circle cx="18" cy="6" r="2" />
+                  </svg>
+                )}
+                {f.iconKey === "zap" && (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                  </svg>
+                )}
+              </div>
+              <h3 class="feature__title">{f.title}</h3>
+              <p class="feature__desc">{f.desc}</p>
+            </Card>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
 </section>
+
+<style>
+  .features {
+    padding-block: var(--section-y);
+  }
+  @media (min-width: 64rem) {
+    .features {
+      padding-block: var(--section-y-lg);
+    }
+  }
+
+  .features__header {
+    max-width: 48rem;
+    margin-bottom: var(--space-12);
+  }
+
+  .features__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin: 0 0 var(--space-3);
+    color: var(--color-text);
+  }
+
+  .features__lead {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  .features__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  @media (min-width: 48rem) {
+    .features__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 64rem) {
+    .features__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .feature__icon {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-overlay);
+    margin-bottom: var(--space-4);
+  }
+
+  .feature__title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-tight);
+    margin: 0 0 var(--space-2);
+    color: var(--color-text);
+  }
+
+  .feature__desc {
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+</style>

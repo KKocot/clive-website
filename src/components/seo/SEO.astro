@@ -1,30 +1,213 @@
 ---
-// SEO component — placeholder, design-engineer will expand
+/**
+ * SEO — central head tags for Clive website.
+ *
+ * Renders title, meta description, canonical, Open Graph + Twitter cards,
+ * favicons, theme-color and (optional) JSON-LD schema.org payload.
+ *
+ * NOTE: <title> is rendered here so callers must NOT also render it.
+ *       BaseLayout previously rendered <title> separately — that has been
+ *       removed to avoid duplicates. See git history if reverting.
+ *
+ * TODO: generate /og-default.png from /og-default.svg for older socials
+ *       (Slack legacy, some scrapers). See docs/SEO_ASSETS.md.
+ */
+
 interface Props {
+  /** Page title without the brand suffix. e.g. "Power-user wallet for Hive" */
   title: string;
+  /** 150-160 chars, action-oriented copy. */
   description?: string;
+  /** Path or URL to the OG image (defaults to /og-default.svg). */
+  ogImage?: string;
+  /** OG type — "website" for landing/static, "article" for blog posts. */
+  ogType?: "website" | "article";
+  /** Override canonical URL (defaults to Astro.url). */
+  canonical?: string;
+  /** Block crawlers from indexing this page. */
+  noindex?: boolean;
+  /** Author name (used in <meta name="author"> + JSON-LD). */
+  author?: string;
+  /** Article publish date (only used when ogType === "article"). */
+  pubDate?: Date;
+  /** Article last-modified date (optional). */
+  modDate?: Date;
+  /** Tags for the article (only used when ogType === "article"). */
+  tags?: string[];
+  /** Inject WebSite schema.org JSON-LD (typically only on the homepage). */
+  jsonLdWebsite?: boolean;
+
+  /** Backwards-compat aliases — older callers may still pass these. */
   image?: string;
   canonicalURL?: string;
 }
 
+const DEFAULT_DESCRIPTION =
+  "Clive — power-user wallet for Hive blockchain. Encrypted keys, mouse-driven TUI, full blockchain ops from your terminal.";
+
+const SITE_NAME = "Clive";
+const SITE_LOCALE = "en_US";
+const BRAND_SUFFIX = " · Clive";
+const THEME_COLOR = "#111113";
+
 const {
   title,
-  description = "Clive — Hive blockchain CLI/TUI wallet",
-  image = "/og-default.png",
-  canonicalURL = Astro.url.href,
+  description = DEFAULT_DESCRIPTION,
+  ogImage,
+  image, // legacy
+  ogType = "website",
+  canonical,
+  canonicalURL, // legacy
+  noindex = false,
+  author = "Clive contributors",
+  pubDate,
+  modDate,
+  tags,
+  jsonLdWebsite = false,
 } = Astro.props;
+
+// Resolve OG image — accept new `ogImage` or legacy `image` prop, default to SVG.
+const rawOgImage = ogImage ?? image ?? "/og-default.svg";
+
+// Resolve canonical — explicit prop wins, else fall back to current URL.
+const canonicalHref = canonical ?? canonicalURL ?? Astro.url.toString();
+
+// Build absolute URL for OG image (sockets and crawlers require absolute).
+const siteOrigin = Astro.site ?? new URL(Astro.url.origin);
+const absoluteOgImage = new URL(rawOgImage, siteOrigin).toString();
+
+// Title with brand suffix unless caller already included it.
+const fullTitle = title.includes(SITE_NAME) ? title : `${title}${BRAND_SUFFIX}`;
+
+// Truncate description to 160 chars (search engines clip beyond ~160).
+const trimmedDescription =
+  description.length > 160
+    ? `${description.slice(0, 157).trimEnd()}...`
+    : description;
+
+// JSON-LD payload for the website (used on homepage when jsonLdWebsite=true).
+const websiteSchema = jsonLdWebsite
+  ? {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: siteOrigin.toString(),
+      description: DEFAULT_DESCRIPTION,
+      inLanguage: "en",
+    }
+  : null;
+
+// JSON-LD payload for an article (when ogType === "article" and pubDate set).
+const articleSchema =
+  ogType === "article" && pubDate
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        description: trimmedDescription,
+        image: absoluteOgImage,
+        datePublished: pubDate.toISOString(),
+        ...(modDate ? { dateModified: modDate.toISOString() } : {}),
+        author: {
+          "@type": "Person",
+          name: author,
+        },
+        publisher: {
+          "@type": "Organization",
+          name: SITE_NAME,
+          url: siteOrigin.toString(),
+        },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": canonicalHref,
+        },
+        ...(tags && tags.length > 0 ? { keywords: tags.join(", ") } : {}),
+      }
+    : null;
 ---
 
-<!-- Open Graph -->
-<meta property="og:type" content="website" />
+{/* Primary */}
+<title>{fullTitle}</title>
+<meta name="description" content={trimmedDescription} />
+<meta name="author" content={author} />
+<link rel="canonical" href={canonicalHref} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+{/* Theme + favicons */}
+<meta name="theme-color" content={THEME_COLOR} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+{/* TODO(SEO): generate /favicon.ico (16+32+48) and /apple-touch-icon.png (180x180)
+   from favicon.svg via sharp; see docs/SEO_ASSETS.md.
+   Until then, point legacy/iOS to the SVG too. */}
+<link rel="apple-touch-icon" href="/favicon.svg" />
+<link rel="mask-icon" href="/favicon.svg" color={THEME_COLOR} />
+
+{/* Open Graph */}
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:locale" content={SITE_LOCALE} />
+<meta property="og:type" content={ogType} />
 <meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.site)} />
-<meta property="og:url" content={canonicalURL} />
-<!-- Twitter -->
+<meta property="og:description" content={trimmedDescription} />
+<meta property="og:url" content={canonicalHref} />
+<meta property="og:image" content={absoluteOgImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta
+  property="og:image:alt"
+  content={`${SITE_NAME} — ${trimmedDescription}`}
+/>
+
+{
+  ogType === "article" && pubDate && (
+    <meta
+      property="article:published_time"
+      content={pubDate.toISOString()}
+    />
+  )
+}
+{
+  ogType === "article" && modDate && (
+    <meta
+      property="article:modified_time"
+      content={modDate.toISOString()}
+    />
+  )
+}
+{
+  ogType === "article" && author && (
+    <meta property="article:author" content={author} />
+  )
+}
+{
+  ogType === "article" &&
+    tags &&
+    tags.map((tag) => <meta property="article:tag" content={tag} />)
+}
+
+{/* Twitter */}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={new URL(image, Astro.site)} />
-<!-- Canonical -->
-<link rel="canonical" href={canonicalURL} />
+<meta name="twitter:description" content={trimmedDescription} />
+<meta name="twitter:image" content={absoluteOgImage} />
+<meta
+  name="twitter:image:alt"
+  content={`${SITE_NAME} — ${trimmedDescription}`}
+/>
+
+{/* JSON-LD schema.org */}
+{
+  websiteSchema && (
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(websiteSchema)}
+    />
+  )
+}
+{
+  articleSchema && (
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(articleSchema)}
+    />
+  )
+}

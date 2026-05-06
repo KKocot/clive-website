@@ -1,9 +1,92 @@
 ---
-// Demo section — placeholder, design-engineer will implement
-// TUI demo: embedded video or animated screenshot
+import TerminalFrame from "../ui/TerminalFrame.astro";
+
+const demoTerminalHtml = `<span class="t-dim">$</span> <span class="t-accent">clive</span>
+
+<span class="t-dim">╭─ Profile ─────────────────────────────────────────────────╮</span>
+<span class="t-dim">│</span>  Working account:  <span class="t-accent">@alice</span>                                  <span class="t-dim">│</span>
+<span class="t-dim">│</span>  Watched:          @bob, @carol, @dan                    <span class="t-dim">│</span>
+<span class="t-dim">│</span>  Node:             api.hive.blog                          <span class="t-dim">│</span>
+<span class="t-dim">├───────────────────────────────────────────────────────────┤</span>
+<span class="t-dim">│</span>  <span class="t-accent">▶</span> Transfer          HIVE  →  HBD                       <span class="t-dim">│</span>
+<span class="t-dim">│</span>    Delegate         to: <span class="t-emerald">@bob</span>  amount: <span class="t-emerald">100 HP</span>           <span class="t-dim">│</span>
+<span class="t-dim">│</span>    Witness vote     <span class="t-amber">[ pending ]</span>                        <span class="t-dim">│</span>
+<span class="t-dim">│</span>    Custom JSON      [ ready ]                              <span class="t-dim">│</span>
+<span class="t-dim">├───────────────────────────────────────────────────────────┤</span>
+<span class="t-dim">│</span>  <span class="t-subtle">[Tab] switch · [Enter] open · [Q] quit · [?] help</span>          <span class="t-dim">│</span>
+<span class="t-dim">╰───────────────────────────────────────────────────────────╯</span>`;
 ---
 
-<section id="demo">
-  <!-- Demo: animated GIF/video of Clive TUI in action -->
-  <slot />
+<section
+  id="demo"
+  class="demo"
+  aria-labelledby="demo-heading"
+>
+  <div class="container-x">
+    <header class="demo__header reveal">
+      <h2 id="demo-heading" class="demo__title">See Clive in action</h2>
+      <p class="demo__lead">
+        A typical session: unlock the wallet, sign a transfer, broadcast.
+      </p>
+    </header>
+
+    <div class="demo__frame reveal">
+      {/* TODO: replace with asciinema cast or MP4 demo */}
+      <TerminalFrame
+        title="clive — main view"
+        ariaLabel="Clive TUI demo placeholder"
+      >
+        <Fragment set:html={demoTerminalHtml} />
+      </TerminalFrame>
+    </div>
+
+    <p class="demo__caption">
+      Demo coming soon · Asciinema cast in preparation
+    </p>
+  </div>
 </section>
+
+<style>
+  .demo {
+    padding-block: var(--section-y);
+  }
+  @media (min-width: 64rem) {
+    .demo {
+      padding-block: var(--section-y-lg);
+    }
+  }
+
+  .demo__header {
+    max-width: 48rem;
+    margin-bottom: var(--space-10);
+  }
+
+  .demo__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin: 0 0 var(--space-3);
+  }
+
+  .demo__lead {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  .demo__frame {
+    max-width: 60rem;
+    margin-inline: auto;
+  }
+
+  .demo__caption {
+    margin: var(--space-4) 0 0;
+    text-align: center;
+    font-size: var(--text-sm);
+    color: var(--color-text-subtle);
+    font-family: var(--font-mono);
+  }
+</style>

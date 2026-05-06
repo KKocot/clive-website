@@ -1,13 +1,253 @@
 ---
-// Footer section — placeholder, design-engineer will implement
+import Badge from "../ui/Badge.astro";
+import { LINKS } from "../../config/links";
+
 const currentYear = new Date().getFullYear();
+const VERSION = "v0.1 beta";
+
+interface FooterLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+const productLinks: FooterLink[] = [
+  { label: "Features", href: "/#features" },
+  { label: "Install", href: "/#install" },
+  { label: "Blog", href: "/blog" },
+  { label: "Docs", href: LINKS.GITLAB_README, external: true },
+];
+
+const sourceLinks: FooterLink[] = [
+  { label: "GitLab", href: LINKS.GITLAB, external: true },
+  { label: "License", href: LINKS.GITLAB_LICENSE, external: true },
+  { label: "Issues", href: LINKS.GITLAB_ISSUES, external: true },
+  { label: "Releases", href: LINKS.GITLAB_RELEASES, external: true },
+];
+
+const hiveLinks: FooterLink[] = [
+  { label: "hive.io", href: LINKS.HIVE, external: true },
+  { label: "Hive Docs", href: LINKS.HIVE_DOCS, external: true },
+  { label: "Beekeeper", href: LINKS.BEEKEEPER, external: true },
+  { label: "Hive Wax", href: LINKS.WAX, external: true },
+];
 ---
 
-<footer>
-  <p>&copy; {currentYear} Clive / OpenHive.Network</p>
-  <nav>
-    <a href="/blog">Blog</a>
-    <a href="/rss.xml">RSS</a>
-    <a href="https://github.com/openhive-network/clive" rel="noopener noreferrer" target="_blank">GitHub</a>
-  </nav>
+<footer class="footer">
+  <div class="container-x">
+    <div class="footer__cols">
+      <div class="footer__col footer__brand">
+        <a href="/" class="footer__wordmark" aria-label="Clive — home">
+          <span style="color: var(--color-accent-primary)">$</span>
+          <span style="color: var(--color-text)">clive</span>
+        </a>
+        <p class="footer__tagline">
+          Power-user wallet for Hive — encrypted, scriptable, terminal-native.
+        </p>
+        <p class="footer__hive-line">
+          Built for <span style="color: var(--color-hive)">Hive</span> blockchain
+        </p>
+      </div>
+
+      <nav class="footer__col" aria-labelledby="footer-product">
+        <h3 id="footer-product" class="footer__heading">Product</h3>
+        <ul class="footer__list">
+          {
+            productLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="footer__link"
+                  {...(link.external
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
+                  {link.label}
+                  {link.external && (
+                    <span aria-hidden="true" class="footer__ext">
+                      {"↗"}
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav class="footer__col" aria-labelledby="footer-source">
+        <h3 id="footer-source" class="footer__heading">Source</h3>
+        <ul class="footer__list">
+          {
+            sourceLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="footer__link"
+                  {...(link.external
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
+                  {link.label}
+                  {link.external && (
+                    <span aria-hidden="true" class="footer__ext">
+                      {"↗"}
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav class="footer__col" aria-labelledby="footer-hive">
+        <h3 id="footer-hive" class="footer__heading">Hive</h3>
+        <ul class="footer__list">
+          {
+            hiveLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="footer__link"
+                  {...(link.external
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
+                  {link.label}
+                  {link.external && (
+                    <span aria-hidden="true" class="footer__ext">
+                      {"↗"}
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copy">© {currentYear} Clive contributors</p>
+      <div class="footer__meta">
+        <Badge variant="neutral">MIT</Badge>
+        <span class="footer__version">{VERSION}</span>
+      </div>
+    </div>
+  </div>
 </footer>
+
+<style>
+  .footer {
+    background-color: var(--color-bg-surface);
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--section-y);
+    margin-top: var(--space-16);
+  }
+
+  .footer__cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+    margin-bottom: var(--space-12);
+  }
+  @media (min-width: 48rem) {
+    .footer__cols {
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-8);
+    }
+  }
+
+  .footer__col {
+    min-width: 0;
+  }
+
+  .footer__wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-3);
+  }
+
+  .footer__tagline {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+    max-width: 36ch;
+  }
+
+  .footer__hive-line {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-text-subtle);
+  }
+
+  .footer__heading {
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    color: var(--color-text-subtle);
+  }
+
+  .footer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out-quad);
+  }
+  .footer__link:hover {
+    color: var(--color-text);
+  }
+
+  .footer__ext {
+    font-size: var(--text-xs);
+    color: var(--color-text-subtle);
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer__copy {
+    margin: 0;
+    font-size: var(--text-xs);
+    color: var(--color-text-subtle);
+  }
+
+  .footer__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .footer__version {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-subtle);
+  }
+</style>

@@ -1,11 +1,105 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/ui/Button.astro";
+import TerminalFrame from "../components/ui/TerminalFrame.astro";
+
+const ascii404 = `  _   _    ___    _  _
+ | | | |  / _ \\  | || |
+ | |_| | | | | | | || |_
+ |___ /  | |_| | |__   _|
+   _|_|   \\___/     |_|`;
+
+const errTerminalHtml = `<span class="t-dim">$</span> clive find <span class="t-amber">--page</span>
+<span class="t-dim">›</span> <span class="t-subtle">searching profile…</span>
+<span class="t-dim">›</span> <span class="t-subtle">querying api.hive.blog…</span>
+<span class="t-dim">›</span> <span style="color: var(--color-accent-danger)">no such route in this chain</span>`;
 ---
 
-<BaseLayout title="404 — Page Not Found | Clive">
-  <main>
-    <h1>404</h1>
-    <p>Page not found.</p>
-    <a href="/">Go home</a>
-  </main>
+<BaseLayout
+  title="404 — Lost in the mempool"
+  description="This block was not found."
+  noindex={true}
+>
+  <section class="notfound" aria-labelledby="notfound-heading">
+    <div class="container-x notfound__inner">
+      <pre class="notfound__art" aria-hidden="true">{ascii404}</pre>
+      <h1 id="notfound-heading" class="notfound__title">
+        404 — Lost in the mempool
+      </h1>
+      <p class="notfound__subhead">This block was not found.</p>
+
+      <div class="notfound__frame">
+        <TerminalFrame title="clive — error" ariaLabel="Error placeholder">
+          <Fragment set:html={errTerminalHtml} />
+        </TerminalFrame>
+      </div>
+
+      <div class="notfound__cta">
+        <Button variant="primary" size="lg" href="/">
+          Back to home
+          <span slot="icon-end" aria-hidden="true">→</span>
+        </Button>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .notfound {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    padding-block: var(--section-y);
+  }
+
+  .notfound__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-6);
+  }
+
+  .notfound__art {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: var(--leading-tight);
+    color: var(--color-accent-primary);
+    white-space: pre;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .notfound__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .notfound__subhead {
+    margin: 0;
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+  }
+
+  .notfound__frame {
+    width: 100%;
+    max-width: 36rem;
+    margin-top: var(--space-4);
+    text-align: left;
+  }
+
+  .notfound__cta {
+    margin-top: var(--space-2);
+  }
+
+  /* Terminal token highlights (replicated from Hero) */
+  :global(.notfound .t-accent) { color: var(--color-accent-primary); }
+  :global(.notfound .t-emerald) { color: var(--color-accent-success); }
+  :global(.notfound .t-amber) { color: var(--color-accent-warning); }
+  :global(.notfound .t-dim) { color: var(--color-text-subtle); }
+  :global(.notfound .t-subtle) { color: var(--color-text-muted); }
+</style>

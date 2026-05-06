@@ -1,15 +1,47 @@
 ---
-title: "Welcome to Clive Blog"
-description: "This is a placeholder draft post. Real content coming soon."
+title: "Welcome to the Clive blog"
+description: "What we're building, why, and what's next."
 pubDate: 2026-05-06
-tags: ["clive", "hive", "announcement"]
+tags: ["announcement"]
 draft: true
 ---
 
-# Welcome to Clive
-
-This is a draft placeholder post. The design engineer will replace this with real content.
+This post kicks off the Clive blog. Expect short release notes, deeper internals
+write-ups, and the occasional how-to as the wallet matures from beta toward 1.0.
 
 ## What is Clive?
 
-Clive is a CLI/TUI wallet for the Hive blockchain. Stay tuned for more updates.
+Clive is a power-user wallet for the [Hive](https://hive.io) blockchain, built
+around a CLI for scripts and a mouse-driven TUI for everyday operations. Keys
+live inside a local, encrypted Beekeeper wallet — never plain-text on disk.
+
+A few principles we keep coming back to:
+
+- **Terminal-first, not terminal-only.** The TUI is fully keyboard- and
+  mouse-navigable; the CLI mirrors every action for automation.
+- **Encryption by default.** No `clive --insecure` mode. Beekeeper or nothing.
+- **Honest about beta.** Auth setup may still change before 1.0; we'll flag
+  breaking changes prominently in release notes.
+
+## A taste of the CLI
+
+You can list your profiles with a single command:
+
+```bash
+clive show profiles
+```
+
+Or open the TUI and start operating:
+
+```bash
+clive
+```
+
+> Beta software — verify checksums and review the install script before running
+> anything from the internet against your keys.
+
+### What's next
+
+We are heads-down on profile switching, RC delegations, and a smoother first-run
+flow. Subscribe via [RSS](/rss.xml) to follow along, or keep an eye on the
+[GitLab repository](https://gitlab.syncad.com/hive/clive) for live progress.

@@ -1,12 +1,64 @@
 ---
 import "../styles/global.css";
+import SEO from "../components/seo/SEO.astro";
+import Footer from "../components/sections/Footer.astro";
+import { LINKS } from "../config/links";
 
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  hideFooter?: boolean;
+  /** OG type — set to "article" for blog posts. */
+  ogType?: "website" | "article";
+  /** Article publish date (only relevant for ogType="article"). */
+  pubDate?: Date;
+  /** Article last-modified date (only relevant for ogType="article"). */
+  modDate?: Date;
+  /** Article author name. */
+  author?: string;
+  /** Article tags. */
+  tags?: string[];
+  /** Hide the page from indexing (e.g. drafts, preview). */
+  noindex?: boolean;
 }
 
-const { title, description = "Clive — Hive blockchain CLI/TUI wallet" } = Astro.props;
+const {
+  title,
+  description = "Clive — power-user wallet for Hive. Encrypted keys, mouse-driven TUI, full blockchain operations from your terminal.",
+  image,
+  hideFooter = false,
+  ogType,
+  pubDate,
+  modDate,
+  author,
+  tags,
+  noindex,
+} = Astro.props;
+
+const navLinks: { href: string; label: string; external?: boolean }[] = [
+  { href: "/#features", label: "Features" },
+  { href: "/#install", label: "Install" },
+  { href: "/blog", label: "Blog" },
+  {
+    href: LINKS.GITLAB,
+    label: "GitLab",
+    external: true,
+  },
+];
+
+const currentPath = Astro.url.pathname;
+
+const isCurrent = (href: string): boolean => {
+  // Hash-only or page-with-hash links never count as current page.
+  if (href.startsWith("#") || href.includes("#")) return false;
+  // External links never count.
+  if (/^https?:\/\//.test(href)) return false;
+  if (href === "/") {
+    return currentPath === "/" || currentPath === "/index.html";
+  }
+  return currentPath === href || currentPath.startsWith(href + "/");
+};
 ---
 
 <!doctype html>
@@ -14,11 +66,180 @@ const { title, description = "Clive — Hive blockchain CLI/TUI wallet" } = Astr
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
+    <meta name="generator" content={Astro.generator} />
+    <SEO
+      title={title}
+      description={description}
+      {...image ? { ogImage: image } : {}}
+      {...ogType ? { ogType } : {}}
+      {...pubDate ? { pubDate } : {}}
+      {...modDate ? { modDate } : {}}
+      {...author ? { author } : {}}
+      {...tags ? { tags } : {}}
+      {...noindex ? { noindex } : {}}
+      jsonLdWebsite={
+        Astro.url.pathname === "/" || Astro.url.pathname === "/index.html"
+      }
+    />
+    <slot name="head" />
   </head>
-  <body>
-    <slot />
+  <body class="min-h-dvh">
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
+    <header
+      class="sticky top-0 z-50 w-full border-b backdrop-blur-md"
+      style="background-color: color-mix(in srgb, var(--color-bg) 80%, transparent); border-color: var(--color-border);"
+    >
+      <div class="container-x flex h-16 items-center justify-between gap-4">
+        <a
+          href="/"
+          class="flex items-center gap-2 font-mono text-base font-semibold tracking-tight"
+          aria-label="Clive — home"
+        >
+          <span style="color: var(--color-accent-primary)">$</span>
+          <span style="color: var(--color-text)">clive</span>
+        </a>
+
+        <nav
+          class="hidden items-center gap-1 md:flex"
+          aria-label="Primary navigation"
+        >
+          {
+            navLinks.map((link) => {
+              const current = isCurrent(link.href);
+              return (
+                <a
+                  href={link.href}
+                  class="nav-link rounded-md px-3 py-2 text-sm font-medium transition-colors"
+                  {...(current ? { "aria-current": "page" } : {})}
+                  {...(link.external
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
+                  {link.label}
+                  {link.external && (
+                    <span aria-hidden="true" class="ml-0.5 text-xs">
+                      {"↗"}
+                    </span>
+                  )}
+                </a>
+              );
+            })
+          }
+        </nav>
+
+        <details class="md:hidden">
+          <summary
+            class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md"
+            style="color: var(--color-text);"
+            aria-label="Toggle menu"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="4" y1="7" x2="20" y2="7"></line>
+              <line x1="4" y1="12" x2="20" y2="12"></line>
+              <line x1="4" y1="17" x2="20" y2="17"></line>
+            </svg>
+          </summary>
+          <div
+            class="absolute inset-x-0 top-16 border-b p-4"
+            style="background-color: var(--color-bg-elevated); border-color: var(--color-border);"
+          >
+            <nav aria-label="Mobile navigation">
+              <ul class="flex flex-col gap-1">
+                {
+                  navLinks.map((link) => {
+                    const current = isCurrent(link.href);
+                    return (
+                      <li>
+                        <a
+                          href={link.href}
+                          class="nav-link-mobile block rounded-md px-3 py-3 text-base font-medium"
+                          {...(current ? { "aria-current": "page" } : {})}
+                          {...(link.external
+                            ? { target: "_blank", rel: "noopener noreferrer" }
+                            : {})}
+                        >
+                          {link.label}
+                          {link.external && (
+                            <span aria-hidden="true" class="ml-1 text-xs">
+                              {"↗"}
+                            </span>
+                          )}
+                        </a>
+                      </li>
+                    );
+                  })
+                }
+              </ul>
+            </nav>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    {!hideFooter && <Footer />}
+
+    <script>
+      // Close <details> mobile menu when a link inside is clicked or Escape pressed.
+      // Astro hashes/bundles this script so it runs once per page navigation.
+      const closeOpenMenus = () => {
+        document
+          .querySelectorAll<HTMLDetailsElement>("header details[open]")
+          .forEach((d) => d.removeAttribute("open"));
+      };
+      document
+        .querySelectorAll<HTMLAnchorElement>("header details a")
+        .forEach((a) => {
+          a.addEventListener("click", () => {
+            a.closest("details")?.removeAttribute("open");
+          });
+        });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeOpenMenus();
+      });
+    </script>
+
+    <style>
+      .nav-link {
+        color: var(--color-text-muted);
+        transition:
+          color var(--duration-fast) var(--ease-out),
+          background-color var(--duration-fast) var(--ease-out);
+      }
+      .nav-link:hover,
+      .nav-link:focus-visible {
+        color: var(--color-text);
+        background-color: var(--color-bg-overlay);
+      }
+      .nav-link[aria-current="page"] {
+        color: var(--color-text);
+      }
+
+      .nav-link-mobile {
+        color: var(--color-text);
+        transition: background-color var(--duration-fast) var(--ease-out);
+      }
+      .nav-link-mobile:hover,
+      .nav-link-mobile:focus-visible {
+        background-color: var(--color-bg-overlay);
+      }
+      .nav-link-mobile[aria-current="page"] {
+        color: var(--color-accent-primary);
+      }
+    </style>
   </body>
 </html>

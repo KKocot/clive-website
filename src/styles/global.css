@@ -1,2 +1,150 @@
 @import "tailwindcss";
 @import "./tokens.css";
+
+/* ============================================================
+ * BASE — element resets / page defaults
+ * ============================================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  min-height: 100dvh;
+}
+
+/* Container helper */
+.container-x {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
+}
+
+@media (min-width: 48rem) {
+  .container-x {
+    padding-inline: var(--container-gutter-lg);
+  }
+}
+
+/* ============================================================
+ * SKIP LINK — hidden until focused
+ * ============================================================ */
+.skip-link {
+  position: absolute;
+  inset-inline-start: var(--space-4);
+  inset-block-start: var(--space-4);
+  z-index: var(--z-tooltip);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform var(--duration-fast) var(--ease-out-quad);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+  box-shadow: var(--shadow-focus-ring);
+  outline: none;
+}
+
+/* ============================================================
+ * FOCUS — universal visible ring
+ * ============================================================ */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+a:focus-visible,
+button:focus-visible,
+[role="tab"]:focus-visible,
+[role="button"]:focus-visible {
+  outline: none;
+}
+
+/* ============================================================
+ * PROSE — minimal defaults; blog content uses dedicated layer
+ * ============================================================ */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+/* ============================================================
+ * BETA DOT — pulse animation
+ * ============================================================ */
+@keyframes clive-pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.85;
+  }
+  80% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+ * REVEAL — section/hero entrance via @starting-style (CSS only)
+ * ============================================================ */
+.reveal {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity var(--duration-slower) var(--ease-out-expo),
+    transform var(--duration-slower) var(--ease-out-expo);
+}
+
+@starting-style {
+  .reveal {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.reveal--delay-1 {
+  transition-delay: 80ms;
+}
+
+.reveal--delay-2 {
+  transition-delay: 160ms;
+}
+
+.reveal--delay-3 {
+  transition-delay: 240ms;
+}
+
+.reveal--delay-4 {
+  transition-delay: 320ms;
+}
+
+/* ============================================================
+ * TYPOGRAPHY — display heading utility
+ * ============================================================ */
+.h-display {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tighter);
+  line-height: var(--leading-tight);
+}
