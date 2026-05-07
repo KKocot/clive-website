@@ -26,15 +26,15 @@ Operations          Status
   <div class="container-x hero__inner">
     <div class="hero__content">
       <div class="reveal reveal--delay-1 hero__meta">
-        <span class="hero__eyebrow">CLI for Hive blockchain</span>
+        <span class="hero__eyebrow"><span aria-hidden="true">$ </span>clive --help</span>
       </div>
 
       <h1
         id="hero-heading"
         class="h-display reveal reveal--delay-2 hero__heading"
       >
-        Clive — power-user wallet for <span class="hero__heading-accent"
-          >Hive</span
+        clive — power-user wallet for <span class="hero__heading-accent"
+          >hive<span class="hero__cursor" aria-hidden="true">▊</span></span
         >
       </h1>
 
@@ -121,23 +121,43 @@ Operations          Status
     display: inline-block;
   }
   .hero__eyebrow {
-    font-size: 0.8125rem;            /* 13px */
-    font-weight: var(--font-weight-semibold);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.04em;
     color: var(--color-primary-bright);
-    opacity: 0.9;
+    text-transform: lowercase;
   }
 
   .hero__heading {
     margin: 0;
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: var(--font-weight-bold);
-    letter-spacing: -0.02em;
-    line-height: var(--leading-tight);
+    font-family: var(--font-mono);
+    font-size: clamp(2rem, 4.6vw, 3.5rem);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-mono-display);
+    line-height: var(--leading-mono-display);
+    text-transform: lowercase;
   }
   .hero__heading-accent {
     color: var(--color-primary-bright);
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .hero__cursor {
+    display: inline-block;
+    margin-left: 0.08em;
+    color: var(--color-primary-bright);
+    animation: clive-cursor-blink var(--cursor-blink-duration) steps(2, end) infinite;
+  }
+  @keyframes clive-cursor-blink {
+    0%, 49.99% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__cursor {
+      animation: none;
+      opacity: 1;
+    }
   }
 
   .hero__subhead {
