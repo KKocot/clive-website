@@ -80,7 +80,7 @@ body {
 :focus-visible {
   outline: none;
   box-shadow: var(--shadow-focus-ring);
-  border-radius: var(--radius-sm);
+  border-radius: var(--tui-radius);
 }
 
 a:focus-visible,
@@ -163,6 +163,17 @@ video {
 .h-display {
   font-family: var(--font-display);
   font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--tracking-tighter);
-  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-mono-display);
+  line-height: var(--leading-mono-display);
+  text-transform: lowercase;
+}
+
+/* ============================================================
+ * UTILITY — bracket-style version/tag pill (mono)
+ * ============================================================ */
+.tag-bracket {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--color-primary-soft);
 }
