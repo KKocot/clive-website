@@ -34,9 +34,9 @@ const firstStepsHtml = `<span class="t-comment"># 1. TUI launches automatically<
 >
   <div class="container-x">
     <header class="install__header reveal">
-      <p class="install__eyebrow">Get started</p>
+      <p class="install__eyebrow"><span aria-hidden="true">$ </span>install</p>
       <h2 id="install-heading" class="install__title">
-        Install in 30 seconds
+        <span class="section-title__prefix" aria-hidden="true">## </span>install
       </h2>
       <p class="install__lead">
         One command. Pulls Clive and sets up your Beekeeper wallet.
@@ -153,24 +153,30 @@ const firstStepsHtml = `<span class="t-comment"># 1. TUI launches automatically<
 
   .install__eyebrow {
     margin: 0 0 var(--space-3);
-    font-size: 0.8125rem;
-    font-weight: var(--font-weight-semibold);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.04em;
     color: var(--color-primary-bright);
-    opacity: 0.9;
+    text-transform: lowercase;
   }
 
   .install__title {
     font-family: var(--font-display);
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--tracking-tight);
-    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-mono-display);
+    line-height: var(--leading-mono-display);
+    text-transform: lowercase;
     margin: 0 0 var(--space-3);
   }
 
+  .section-title__prefix {
+    color: var(--color-text-subtle);
+  }
+
   .install__lead {
+    font-family: var(--font-sans);
     font-size: var(--text-lg);
     color: var(--color-text-muted);
     line-height: var(--leading-relaxed);
@@ -237,7 +243,7 @@ const firstStepsHtml = `<span class="t-comment"># 1. TUI launches automatically<
     padding: var(--space-4) var(--space-5);
     border-radius: var(--radius-md);
     border: 1px solid var(--color-accent-warning);
-    background-color: rgba(245, 158, 11, 0.08);
+    background-color: rgba(255, 166, 43, 0.08);
     color: var(--color-text);
     margin-bottom: var(--space-6);
     max-width: 42rem;
@@ -402,7 +408,7 @@ const firstStepsHtml = `<span class="t-comment"># 1. TUI launches automatically<
   }
   :global(.copy-btn[data-copied="true"]) {
     color: var(--color-accent-success);
-    border-color: rgba(34, 197, 94, 0.4);
+    border-color: rgba(78, 191, 113, 0.4);
   }
   :global(.copy-btn:focus-visible) {
     outline: none;
