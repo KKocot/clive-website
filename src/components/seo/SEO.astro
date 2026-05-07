@@ -20,20 +20,12 @@ interface Props {
   description?: string;
   /** Path or URL to the OG image (defaults to /og-default.svg). */
   ogImage?: string;
-  /** OG type — "website" for landing/static, "article" for blog posts. */
-  ogType?: "website" | "article";
   /** Override canonical URL (defaults to Astro.url). */
   canonical?: string;
   /** Block crawlers from indexing this page. */
   noindex?: boolean;
   /** Author name (used in <meta name="author"> + JSON-LD). */
   author?: string;
-  /** Article publish date (only used when ogType === "article"). */
-  pubDate?: Date;
-  /** Article last-modified date (optional). */
-  modDate?: Date;
-  /** Tags for the article (only used when ogType === "article"). */
-  tags?: string[];
   /** Inject WebSite schema.org JSON-LD (typically only on the homepage). */
   jsonLdWebsite?: boolean;
 
@@ -55,14 +47,10 @@ const {
   description = DEFAULT_DESCRIPTION,
   ogImage,
   image, // legacy
-  ogType = "website",
   canonical,
   canonicalURL, // legacy
   noindex = false,
   author = "Clive contributors",
-  pubDate,
-  modDate,
-  tags,
   jsonLdWebsite = false,
 } = Astro.props;
 
@@ -96,34 +84,6 @@ const websiteSchema = jsonLdWebsite
       inLanguage: "en",
     }
   : null;
-
-// JSON-LD payload for an article (when ogType === "article" and pubDate set).
-const articleSchema =
-  ogType === "article" && pubDate
-    ? {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        headline: title,
-        description: trimmedDescription,
-        image: absoluteOgImage,
-        datePublished: pubDate.toISOString(),
-        ...(modDate ? { dateModified: modDate.toISOString() } : {}),
-        author: {
-          "@type": "Person",
-          name: author,
-        },
-        publisher: {
-          "@type": "Organization",
-          name: SITE_NAME,
-          url: siteOrigin.toString(),
-        },
-        mainEntityOfPage: {
-          "@type": "WebPage",
-          "@id": canonicalHref,
-        },
-        ...(tags && tags.length > 0 ? { keywords: tags.join(", ") } : {}),
-      }
-    : null;
 ---
 
 {/* Primary */}
@@ -145,7 +105,7 @@ const articleSchema =
 {/* Open Graph */}
 <meta property="og:site_name" content={SITE_NAME} />
 <meta property="og:locale" content={SITE_LOCALE} />
-<meta property="og:type" content={ogType} />
+<meta property="og:type" content="website" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={trimmedDescription} />
 <meta property="og:url" content={canonicalHref} />
@@ -156,33 +116,6 @@ const articleSchema =
   property="og:image:alt"
   content={`${SITE_NAME} — ${trimmedDescription}`}
 />
-
-{
-  ogType === "article" && pubDate && (
-    <meta
-      property="article:published_time"
-      content={pubDate.toISOString()}
-    />
-  )
-}
-{
-  ogType === "article" && modDate && (
-    <meta
-      property="article:modified_time"
-      content={modDate.toISOString()}
-    />
-  )
-}
-{
-  ogType === "article" && author && (
-    <meta property="article:author" content={author} />
-  )
-}
-{
-  ogType === "article" &&
-    tags &&
-    tags.map((tag) => <meta property="article:tag" content={tag} />)
-}
 
 {/* Twitter */}
 <meta name="twitter:card" content="summary_large_image" />
@@ -200,14 +133,6 @@ const articleSchema =
     <script
       type="application/ld+json"
       set:html={JSON.stringify(websiteSchema)}
-    />
-  )
-}
-{
-  articleSchema && (
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify(articleSchema)}
     />
   )
 }

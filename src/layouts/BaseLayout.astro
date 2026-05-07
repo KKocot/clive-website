@@ -10,16 +10,6 @@ interface Props {
   description?: string;
   image?: string;
   hideFooter?: boolean;
-  /** OG type — set to "article" for blog posts. */
-  ogType?: "website" | "article";
-  /** Article publish date (only relevant for ogType="article"). */
-  pubDate?: Date;
-  /** Article last-modified date (only relevant for ogType="article"). */
-  modDate?: Date;
-  /** Article author name. */
-  author?: string;
-  /** Article tags. */
-  tags?: string[];
   /** Hide the page from indexing (e.g. drafts, preview). */
   noindex?: boolean;
 }
@@ -29,18 +19,12 @@ const {
   description = "Clive — power-user wallet for Hive. Encrypted keys, mouse-driven TUI, full blockchain operations from your terminal.",
   image,
   hideFooter = false,
-  ogType,
-  pubDate,
-  modDate,
-  author,
-  tags,
   noindex,
 } = Astro.props;
 
 const navLinks: { href: string; label: string; external?: boolean }[] = [
   { href: "/#features", label: "Features" },
   { href: "/#install", label: "Install" },
-  { href: "/blog", label: "Blog" },
   {
     href: LINKS.GITLAB,
     label: "GitLab",
@@ -72,11 +56,6 @@ const isCurrent = (href: string): boolean => {
       title={title}
       description={description}
       {...image ? { ogImage: image } : {}}
-      {...ogType ? { ogType } : {}}
-      {...pubDate ? { pubDate } : {}}
-      {...modDate ? { modDate } : {}}
-      {...author ? { author } : {}}
-      {...tags ? { tags } : {}}
       {...noindex ? { noindex } : {}}
       jsonLdWebsite={
         Astro.url.pathname === "/" || Astro.url.pathname === "/index.html"
