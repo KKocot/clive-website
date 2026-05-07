@@ -2,7 +2,7 @@
   "name": "clive-website",
   "type": "module",
   "version": "0.1.0",
-  "description": "Clive — Hive blockchain CLI/TUI wallet. Official website and blog.",
+  "description": "Clive — Hive blockchain CLI/TUI wallet. Official website.",
   "license": "UNLICENSED",
   "scripts": {
     "dev": "astro dev",
@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.14",
-    "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/solid-js": "^6.0.1",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
