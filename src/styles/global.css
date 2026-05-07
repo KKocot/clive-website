@@ -2,6 +2,24 @@
 @import "./tokens.css";
 
 /* ============================================================
+ * FONTS — JetBrains Mono Variable: symbols subset
+ * Fontsource (@fontsource-variable/jetbrains-mono) covers Latin/Cyrillic/Greek/Vietnamese
+ * but NOT Box Drawing (U+2500-257F) — needed for terminal ASCII frames.
+ * This @font-face adds the missing range so frames in Hero/Demo render with
+ * monospace-correct cell widths instead of falling back to SF Mono/Menlo.
+ * Source: official JetBrainsMono variable TTF, subset to symbol ranges.
+ * ============================================================ */
+@font-face {
+  font-family: "JetBrains Mono Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("/fonts/jetbrains-mono-symbols-wght-normal.woff2") format("woff2-variations");
+  /* Box Drawing, Block Elements, Geometric Shapes, Arrows, Miscellaneous Technical */
+  unicode-range: U+2190-21FF, U+2300-23FF, U+2500-25FF;
+}
+
+/* ============================================================
  * BASE — element resets / page defaults
  * ============================================================ */
 html {
