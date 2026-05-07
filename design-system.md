@@ -1,5 +1,9 @@
 # Clive — Design System Specification
 
+> **Note:** Paleta zaktualizowana 2026-05-07 (Faithful TUI).
+> Source of truth: `src/styles/tokens.css` + KB pattern `tui-coherent-web-palette`.
+> ADR: 69fc7009e61d0c3b00cae5c4
+
 **Project:** Clive (Hive blockchain CLI/TUI wallet) — landing
 **Stack:** Astro 5 + Tailwind 4 (CSS-first `@theme`) + MDX + Shiki
 **Status:** Beta / WIP
@@ -12,7 +16,7 @@
 
 ## 1. Mood & Voice
 
-Clive jest narzedziem dla **power userow Hive** — terminalowych, swiadomych developerow. Estetyka: **dark-only, terminal-inspired ale nowoczesna** (nie retro CRT, nie skeuomorficzny terminal). Indygo (`#5d6ae3`) jako primary — sygnalizuje technologie i precyzje, oddziela Clive od typowych blockchain wallet UI (zwykle: turkus/zielony jaskrawy lub pure czerwien). Hive red (`#e31337`) wystepuje **tylko jako wskaznik przynaleznosci** (footer "Built for Hive", favicon korner, status indicator), aby nie kolidowac z primary indigo i nie wywolywac podswiadomego "alarm/error".
+Clive jest narzedziem dla **power userow Hive** — terminalowych, swiadomych developerow. Estetyka: **dark-only, terminal-inspired ale nowoczesna** (nie retro CRT, nie skeuomorficzny terminal). Electric blue (`#3b82f6`) jako primary, navy (`#1a2030`) bg — TUI-coherent z CLI: paleta odwzorowuje chrome terminala Clive (panele, ramki, alarmy), zapewniajac wizualna ciaglosc miedzy landing a aplikacja. Hive red (`#e31337`) wystepuje **tylko jako wskaznik przynaleznosci** (footer "Built for Hive", favicon korner, status indicator), aby nie kolidowac z primary blue i nie wywolywac podswiadomego "alarm/error".
 
 Voice: rzeczowy, krotki, techniczny. Drugi person ("Get Clive", "Run it"). Bez marketingowego pufu. Beta WIP komunikowane otwarcie ale bez przesady — power user ceni szczerosc, nie panike.
 
@@ -59,13 +63,13 @@ Voice: rzeczowy, krotki, techniczny. Drugi person ("Get Clive", "Run it"). Bez m
 ## 4. Komponenty
 
 ### 4.1 `Button.astro`
-Variants: `primary` | `secondary` | `ghost`. Sizes: `sm`/`md`/`lg`. Radius `--radius-md`. Focus-visible: `box-shadow: var(--shadow-focus-ring)` — nigdy `outline:none` bez zamiennika. Press: `translateY(1px)`. Primary hover: bg `--color-accent-primary-hover` + `--shadow-glow-indigo` + arrow `translateX(2px)`. Secondary: outline 1px `--color-border-strong`. Ghost: text-muted bg-none.
+Variants: `primary` | `secondary` | `ghost`. Sizes: `sm`/`md`/`lg`. Radius `--radius-md`. Focus-visible: `box-shadow: var(--shadow-focus-ring)` — nigdy `outline:none` bez zamiennika. Press: `translateY(1px)`. Primary hover: bg `--color-accent-primary-hover` + `--shadow-glow-blue` + arrow `translateX(2px)`. Secondary: outline 1px `--color-border-strong`. Ghost: text-muted bg-none.
 
 ### 4.2 `Card.astro`
 Variants: `default` | `tint-emerald` | `tint-indigo` | `tint-amber` | `tint-hive`. Struktura: `card__glow` (blur 48px absolute) + `card__inner` (icon/title/body slots) + `card__fade` (gradient-card-fade bottom 35%). Hover: `translateY(-2px)`, border strong, glow opacity 1. Transition: `var(--duration-base) var(--ease-out-quint)`.
 
 ### 4.3 `Badge.astro`
-Variants: `neutral` | `beta` | `success` | `warning` | `danger`. `--text-xs font-weight-medium tracking-wide`, padding `2px 8px`, radius `--radius-full`. Beta: border 1px indigo alpha 0.6 + dot pulse 6px (patrz §7).
+Variants: `neutral` | `beta` | `success` | `warning` | `danger`. `--text-xs font-weight-medium tracking-wide`, padding `2px 8px`, radius `--radius-full`. Beta: bg `rgba(196,75,110,0.12)`, border 1px `var(--color-accent-danger)` (crimson), text `var(--color-accent-danger-text)` (`#ff6b8a`) + dot pulse 6px (patrz §7).
 
 ### 4.4 `TerminalFrame.astro`
 `<figure>` z `terminal__bar` (36px, dots red/amber/green aria-hidden) + `<pre class="terminal__body">`. Bg `--color-bg-surface`, border 1px, radius `--radius-lg`. Body: `--font-mono --text-sm`, scroll horizontal.
@@ -160,7 +164,7 @@ Globalny override jest juz w `tokens.css` (`@media (prefers-reduced-motion: redu
 
 ## 7. Beta badge — 2 warianty
 
-### Wariant A (REKOMENDOWANY) — pill outline indigo + dot pulse
+### Wariant A (REKOMENDOWANY) — pill outline crimson + dot pulse
 
 ```html
 <span class="badge badge--beta" aria-label="Beta version">
@@ -173,9 +177,9 @@ Globalny override jest juz w `tokens.css` (`@media (prefers-reduced-motion: redu
 ```
 
 CSS:
-- Container: `--text-xs font-weight-medium tracking-wide`, padding `2px 10px 2px 8px`, radius `--radius-full`, border 1px `rgba(93,106,227,0.6)`, color `--color-accent-primary`, gap 6px
-- Dot: 6px circle, bg `--color-accent-primary`, full opacity
-- Ring: 6px circle, border 1px `--color-accent-primary`, animate `pulse 1.6s var(--ease-out-quad) infinite` (scale 1 -> 1.6, opacity 0.8 -> 0)
+- Container: `--text-xs font-weight-medium tracking-wide`, padding `2px 10px 2px 8px`, radius `--radius-full`, bg `rgba(196,75,110,0.12)`, border 1px `var(--color-accent-danger)` (crimson `#c44b6e`), color `var(--color-accent-danger-text)` (`#ff6b8a`), gap 6px
+- Dot: 6px circle, bg `currentColor`, full opacity
+- Ring: 6px circle, border 1px `currentColor`, animate `pulse 1.6s var(--ease-out-quad) infinite` (scale 1 -> 1.6, opacity 0.8 -> 0)
 - Reduced-motion: ring opacity 0 (statyczny dot)
 
 **Zalety:** wyrazny, nie krzykliwy, pasuje do tech-aesthetic, dot daje "live" feeling bez bycia denerwujacym.
