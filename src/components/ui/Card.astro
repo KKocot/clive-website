@@ -1,5 +1,5 @@
 ---
-type Glow = "none" | "emerald" | "indigo" | "amber" | "hive";
+type Glow = "none" | "blue" | "cyan" | "green" | "crimson" | "amber" | "hive" | "emerald" | "indigo";
 
 interface Props {
   glow?: Glow;
@@ -30,21 +30,30 @@ const {
     position: relative;
     overflow: hidden;
     isolation: isolate;
-    background-color: var(--color-bg-surface);
-    border: 1px solid var(--color-border);
+    background-color: var(--color-bg-elevated);
+    /* TUI panel-style: 1px electric blue border at 40% opacity, 100% on hover */
+    border: 1px solid color-mix(in srgb, var(--color-border-bright) 40%, transparent);
     border-radius: var(--radius-lg);
     transition:
       transform var(--duration-base) var(--ease-out-quint),
-      border-color var(--duration-base) var(--ease-out-quint),
+      border-color 200ms var(--ease-out-quad),
       box-shadow var(--duration-base) var(--ease-out-quint);
   }
   .card:hover {
     transform: translateY(-2px);
-    border-color: var(--color-border-strong);
+    border-color: var(--color-border-bright);
     box-shadow: var(--shadow-md);
   }
   .card:focus-within {
     box-shadow: var(--shadow-focus-ring);
+  }
+
+  /* Hive brand-anchor variant: red border instead of blue */
+  .card--glow-hive {
+    border-color: color-mix(in srgb, var(--color-hive) 50%, transparent);
+  }
+  .card--glow-hive:hover {
+    border-color: var(--color-hive);
   }
 
   .card__inner {
@@ -65,17 +74,25 @@ const {
     z-index: 0;
     pointer-events: none;
     filter: blur(48px);
-    opacity: 0.5;
+    opacity: 0.7;
     transition: opacity var(--duration-base) var(--ease-out-quad);
   }
   .card:hover .card__glow {
     opacity: 1;
   }
-  .card--glow-emerald .card__glow {
-    background: var(--tint-emerald);
-  }
+  .card--glow-blue .card__glow,
   .card--glow-indigo .card__glow {
-    background: var(--tint-indigo);
+    background: var(--tint-blue);
+  }
+  .card--glow-cyan .card__glow {
+    background: var(--tint-cyan);
+  }
+  .card--glow-green .card__glow,
+  .card--glow-emerald .card__glow {
+    background: var(--tint-green);
+  }
+  .card--glow-crimson .card__glow {
+    background: var(--tint-crimson);
   }
   .card--glow-amber .card__glow {
     background: var(--tint-amber);
