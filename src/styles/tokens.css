@@ -2,7 +2,9 @@
  * Clive — Design Tokens
  * Tailwind 4 CSS-first config (@theme).
  * Dark-only. Inter (sans) + JetBrains Mono (mono).
- * Reference: toolstack.framer.website (modern developer-tool aesthetic).
+ *
+ * Palette: "Faithful TUI" — navy surfaces, electric blue panel borders,
+ * crimson alarm, Hive red anchor. Mirrors Clive's TUI chrome.
  *
  * Usage:
  *   - Tailwind utilities: bg-bg, text-text-muted, border-border, etc.
@@ -14,55 +16,82 @@
 
 @theme {
   /* ============================================================
-   * COLORS — Surfaces (dark-only)
+   * COLORS — Surfaces (dark-only, navy not black)
    * ============================================================ */
-  --color-bg: #111113;                    /* page background */
-  --color-bg-surface: #18181b;            /* cards, panels */
-  --color-bg-elevated: #1f1f23;           /* hovered cards, popovers */
-  --color-bg-overlay: rgba(255, 255, 255, 0.06); /* glassmorphism-lite layer */
-  --color-bg-overlay-strong: rgba(255, 255, 255, 0.10);
+  --color-bg: #1a2030;                    /* page background — navy */
+  --color-bg-surface: #242c3d;            /* cards, footer, panels */
+  --color-bg-elevated: #2e3850;           /* hovered cards, code blocks, nav elevated */
+  --color-bg-section-tinted: #1f2638;     /* Install section tint */
+  --color-bg-overlay: rgba(255, 255, 255, 0.05);        /* glass-lite layer */
+  --color-bg-overlay-strong: rgba(255, 255, 255, 0.09);
 
   /* ============================================================
-   * COLORS — Text (WCAG AA verified vs --color-bg)
+   * COLORS — Text (WCAG AA verified vs --color-bg #1a2030)
    * ============================================================ */
-  --color-text: #ffffff;                  /* contrast 18.7:1 — primary copy */
-  --color-text-muted: #9d9da8;            /* contrast 7.2:1  — secondary copy */
-  --color-text-subtle: #71717a;           /* contrast 4.8:1  — tertiary, captions */
-  --color-text-inverse: #111113;          /* on light surfaces (badges etc.) */
+  --color-text: #ffffff;                  /* primary copy */
+  --color-text-muted: #a8b1c4;            /* secondary copy — slightly warmer */
+  --color-text-subtle: #6b7691;           /* tertiary, captions */
+  --color-text-inverse: #1a2030;          /* on light surfaces */
 
   /* ============================================================
-   * COLORS — Borders & dividers
+   * COLORS — Borders & dividers (TUI panel-style 1px blue)
    * ============================================================ */
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.14);
-  --color-border-focus: #5d6ae3;
+  --color-border-bright: #3b82f6;                       /* solid panel ramka */
+  --color-border-default: rgba(59, 130, 246, 0.30);     /* default state */
+  --color-border-subtle: rgba(59, 130, 246, 0.15);      /* hairlines */
+
+  /* Legacy aliases (mapped to new palette so all components keep working) */
+  --color-border: var(--color-border-default);
+  --color-border-strong: var(--color-border-bright);
+  --color-border-focus: var(--color-border-bright);
 
   /* ============================================================
    * COLORS — Brand & accents
    * ============================================================ */
-  --color-accent-primary: #5d6ae3;        /* indigo — primary CTA */
-  --color-accent-primary-hover: #6c78ea;
-  --color-accent-primary-active: #4f5ad6;
-  --color-accent-success: #10b981;        /* emerald */
-  --color-accent-warning: #f59e0b;        /* amber */
-  --color-accent-danger: #ef4444;         /* red */
+  --color-primary: #3b82f6;               /* electric blue — primary CTA */
+  --color-primary-bright: #60a5fa;        /* cyan light — values, highlights */
+  --color-primary-soft: #93c5fd;          /* light blue — labels secondary */
 
-  /* Hive brand red — used SPARINGLY. See design-system.md §8. */
+  /* Legacy accent aliases (mapped to new primary) */
+  --color-accent-primary: var(--color-primary);
+  --color-accent-primary-hover: var(--color-primary-bright);
+  --color-accent-primary-active: #2563eb;
+
+  --color-accent-success: #22c55e;        /* green — UNLOCKED status */
+  --color-accent-warning: #f59e0b;        /* amber — preserved */
+  --color-accent-danger: #c44b6e;         /* crimson — ALARM, Beta */
+  --color-accent-danger-text: #ff6b8a;    /* lighter shade for AA on tinted bg */
+
+  /* Hive brand red — used SPARINGLY (footer anchor, 1 feature card border). */
   --color-hive: #e31337;
-  --color-hive-muted: #b81530;            /* darker fallback for adjacencies */
+  --color-hive-text: #ff5070;             /* lighter shade for small text AA */
+  --color-hive-muted: #b81530;
 
   /* ============================================================
-   * COLORS — Tint glows (for card halos, hero accents)
+   * COLORS — Tint glows (cards, hero accents)
    * ============================================================ */
-  --tint-emerald: rgba(16, 185, 129, 0.20);
-  --tint-indigo: rgba(129, 140, 248, 0.18);
+  --tint-blue: rgba(59, 130, 246, 0.25);
+  --tint-cyan: rgba(96, 165, 250, 0.20);
+  --tint-green: rgba(34, 197, 94, 0.20);
+  --tint-crimson: rgba(196, 75, 110, 0.18);
   --tint-amber: rgba(245, 158, 11, 0.18);
-  --tint-red: rgba(239, 68, 68, 0.20);
-  --tint-hive: rgba(227, 19, 55, 0.14);
+  --tint-hive: rgba(227, 19, 55, 0.15);
+
+  /* Legacy tint aliases */
+  --tint-emerald: var(--tint-green);
+  --tint-indigo: var(--tint-blue);
+  --tint-red: var(--tint-crimson);
 
   /* Card bottom-fade overlay (toolstack-style) */
-  --gradient-card-fade: linear-gradient(180deg, rgba(0,0,0,0) 65%, rgba(0,0,0,1) 100%);
-  --gradient-hero-radial: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(93, 106, 227, 0.18), transparent 60%);
+  --gradient-card-fade: linear-gradient(180deg, rgba(0,0,0,0) 65%, rgba(26,32,48,1) 100%);
+
+  /* Hero gradient — 3-stop electric blue dominant */
+  --hero-gradient:
+    radial-gradient(ellipse 80% 50% at 30% 0%, rgba(59,130,246,0.35), transparent 65%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(96,165,250,0.18), transparent 70%),
+    radial-gradient(circle at 50% 90%, rgba(59,130,246,0.10), transparent 60%);
+  /* Legacy alias */
+  --gradient-hero-radial: var(--hero-gradient);
 
   /* ============================================================
    * TYPOGRAPHY — Families
@@ -155,14 +184,18 @@
   --shadow-lg: 0 12px 24px -6px rgba(0, 0, 0, 0.55), 0 4px 8px -4px rgba(0, 0, 0, 0.35);
   --shadow-xl: 0 24px 48px -12px rgba(0, 0, 0, 0.65), 0 8px 16px -8px rgba(0, 0, 0, 0.40);
 
-  /* SHADOWS — colored glows (for hero, card hover, focus halo) */
-  --shadow-glow-emerald: 0 0 32px -4px rgba(16, 185, 129, 0.40);
-  --shadow-glow-indigo:  0 0 32px -4px rgba(93, 106, 227, 0.45);
+  /* SHADOWS — colored glows (hero CTA, card hover, focus halo) */
+  --shadow-glow-blue:    0 8px 24px rgba(59, 130, 246, 0.35);
+  --shadow-glow-cyan:    0 0 32px -4px rgba(96, 165, 250, 0.45);
+  --shadow-glow-emerald: 0 0 32px -4px rgba(34, 197, 94, 0.40);
   --shadow-glow-amber:   0 0 32px -4px rgba(245, 158, 11, 0.40);
+  --shadow-glow-crimson: 0 0 32px -4px rgba(196, 75, 110, 0.40);
   --shadow-glow-hive:    0 0 32px -4px rgba(227, 19, 55, 0.32);
+  /* Legacy alias */
+  --shadow-glow-indigo:  var(--shadow-glow-blue);
 
   /* Focus ring — universal (use with outline-offset: 2px) */
-  --shadow-focus-ring: 0 0 0 2px rgba(17, 17, 19, 1), 0 0 0 4px rgba(93, 106, 227, 0.85);
+  --shadow-focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.45);
 
   /* ============================================================
    * MOTION — durations
@@ -175,6 +208,7 @@
 
   /* MOTION — easing */
   --ease-linear:        linear;
+  --ease-out:           cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-out-quad:      cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-out-quint:     cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-expo:      cubic-bezier(0.16, 1, 0.3, 1);
@@ -242,9 +276,28 @@
 }
 
 /* ==============================================================
- * SELECTION — branded
+ * SELECTION — branded electric blue
  * ============================================================== */
 ::selection {
-  background-color: rgba(93, 106, 227, 0.35);
-  color: var(--color-text);
+  background-color: rgba(59, 130, 246, 0.40);
+  color: #ffffff;
+}
+
+/* ==============================================================
+ * SCROLLBAR — branded (webkit)
+ * ============================================================== */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.40);
+  border: 3px solid var(--color-bg);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.70);
 }
