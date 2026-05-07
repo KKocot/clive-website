@@ -3,20 +3,25 @@ interface Props {
   title?: string;
   ariaLabel?: string;
   class?: string;
+  /**
+   * Element used for the body wrapper.
+   * - `pre` (default): preserves whitespace — for ASCII/inline terminal content.
+   * - `div`: flow content — for structured TUI panels with HTML elements.
+   */
+  as?: "pre" | "div";
 }
 
 const {
   title = "clive",
   ariaLabel = "Terminal preview",
   class: className,
+  as = "pre",
 } = Astro.props;
+
+const BodyTag = as;
 ---
 
-<figure
-  class:list={["terminal", className]}
-  role="figure"
-  aria-label={ariaLabel}
->
+<figure class:list={["terminal", className]} role="figure" aria-label={ariaLabel}>
   <header class="terminal__bar">
     <span class="terminal__dots" aria-hidden="true">
       <span class="dot dot--red"></span>
@@ -26,7 +31,7 @@ const {
     <span class="terminal__title">{title}</span>
     <span aria-hidden="true"></span>
   </header>
-  <pre class="terminal__body" tabindex="0"><slot /></pre>
+  <BodyTag class="terminal__body" data-as={as} tabindex="0"><slot /></BodyTag>
 </figure>
 
 <style>
@@ -82,7 +87,9 @@ const {
   .terminal__body {
     margin: var(--space-3);
     padding: var(--space-4) var(--space-5);
-    font-family: var(--font-mono);
+    font-family:
+      ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "JetBrains Mono Variable",
+      monospace;
     font-size: var(--text-sm);
     line-height: 1.2;
     color: var(--color-text);
@@ -91,7 +98,9 @@ const {
     background-color: var(--color-bg-elevated);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md);
-    font-feature-settings: "calt" 0, "liga" 0;
+    font-feature-settings:
+      "calt" 0,
+      "liga" 0;
     font-variant-ligatures: none;
     font-variant-numeric: tabular-nums;
   }
@@ -99,5 +108,12 @@ const {
   .terminal__body:focus-visible {
     outline: none;
     box-shadow: var(--shadow-focus-ring);
+  }
+
+  /* Structured-content variant: flow children as normal HTML
+     (used for TUI panels built with CSS borders, not ASCII art). */
+  .terminal__body[data-as="div"] {
+    white-space: normal;
+    overflow-x: visible;
   }
 </style>
