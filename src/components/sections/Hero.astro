@@ -1,6 +1,5 @@
 ---
 import Button from "../ui/Button.astro";
-import Badge from "../ui/Badge.astro";
 import TerminalFrame from "../ui/TerminalFrame.astro";
 import { LINKS } from "../../config/links";
 
@@ -26,8 +25,10 @@ Operations          Status
 
   <div class="container-x hero__inner">
     <div class="hero__content">
-      <div class="reveal reveal--delay-1">
-        <Badge variant="beta">Beta</Badge>
+      <div class="reveal reveal--delay-1 hero__meta">
+        <span class="hero__eyebrow">CLI for Hive blockchain</span>
+        <span class="hero__separator" aria-hidden="true">·</span>
+        <span class="hero__badge-beta">BETA</span>
       </div>
 
       <h1
@@ -62,7 +63,7 @@ Operations          Status
       </div>
 
       <p class="reveal reveal--delay-4 hero__note">
-        Beta · Open source · Built for Hive
+        Open source · Built for Hive
       </p>
     </div>
 
@@ -94,13 +95,7 @@ Operations          Status
     position: absolute;
     inset: 0;
     z-index: -1;
-    background:
-      var(--gradient-hero-radial),
-      radial-gradient(
-        ellipse 60% 50% at 0% 0%,
-        rgba(93, 106, 227, 0.12),
-        transparent 60%
-      );
+    background: var(--hero-gradient);
     pointer-events: none;
   }
 
@@ -124,6 +119,40 @@ Operations          Status
     max-width: 32rem;
   }
 
+  .hero__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .hero__eyebrow {
+    font-size: 0.8125rem;            /* 13px */
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary-bright);
+    opacity: 0.9;
+  }
+  .hero__separator {
+    color: var(--color-text-subtle);
+    font-size: 0.8125rem;
+    line-height: 1;
+  }
+  .hero__badge-beta {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-accent-danger);
+    background-color: rgba(196, 75, 110, 0.12);
+    color: var(--color-accent-danger-text);
+    font-size: 0.6875rem;            /* 11px */
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+  }
+
   .hero__heading {
     margin: 0;
     font-size: clamp(2.5rem, 6vw, 4.5rem);
@@ -132,7 +161,7 @@ Operations          Status
     line-height: var(--leading-tight);
   }
   .hero__heading-accent {
-    color: var(--color-accent-primary);
+    color: var(--color-primary-bright);
   }
 
   .hero__subhead {
@@ -163,7 +192,7 @@ Operations          Status
 
   /* Terminal token highlights */
   :global(.t-accent) {
-    color: var(--color-accent-primary);
+    color: var(--color-primary-bright);
   }
   :global(.t-emerald) {
     color: var(--color-accent-success);
