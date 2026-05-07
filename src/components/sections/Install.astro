@@ -139,6 +139,11 @@ const firstStepsHtml = `<span class="t-comment"># 1. TUI launches automatically<
   .install {
     background-color: var(--color-bg-section-tinted);
     padding-block: var(--section-y);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   @media (min-width: 64rem) {
     .install {
