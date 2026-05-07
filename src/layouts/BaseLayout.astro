@@ -22,15 +22,21 @@ const {
   noindex,
 } = Astro.props;
 
-const navLinks: { href: string; label: string; external?: boolean }[] = [
+const centerNavLinks: {
+  href: string;
+  label: string;
+  external?: boolean;
+}[] = [
   { href: "/#features", label: "Features" },
   { href: "/#install", label: "Install" },
-  {
-    href: LINKS.GITLAB,
-    label: "GitLab",
-    external: true,
-  },
+  { href: "/#demo", label: "Demo" },
 ];
+
+const gitlabLink = {
+  href: LINKS.GITLAB,
+  label: "GitLab",
+  external: true as const,
+};
 
 const currentPath = Astro.url.pathname;
 
@@ -70,10 +76,12 @@ const isCurrent = (href: string): boolean => {
       class="sticky top-0 z-50 w-full border-b backdrop-blur-md"
       style="background-color: rgba(26, 32, 48, 0.85); border-color: var(--color-border-subtle);"
     >
-      <div class="container-x flex h-16 items-center justify-between gap-4">
+      <div
+        class="container-x flex h-16 items-center justify-between gap-4 md:grid md:grid-cols-3"
+      >
         <a
           href="/"
-          class="flex items-center gap-2 font-mono text-base font-semibold tracking-tight"
+          class="flex items-center gap-2 font-mono text-base font-semibold tracking-tight md:justify-self-start"
           aria-label="Clive — home"
         >
           <span style="color: var(--color-primary-bright)">$</span>
@@ -81,11 +89,11 @@ const isCurrent = (href: string): boolean => {
         </a>
 
         <nav
-          class="hidden items-center gap-1 md:flex"
+          class="hidden items-center gap-1 md:flex md:justify-self-center"
           aria-label="Primary navigation"
         >
           {
-            navLinks.map((link) => {
+            centerNavLinks.map((link) => {
               const current = isCurrent(link.href);
               return (
                 <a
@@ -106,8 +114,25 @@ const isCurrent = (href: string): boolean => {
               );
             })
           }
-          <a href="#install" class="nav-cta">Get Clive</a>
         </nav>
+
+        <a
+          href={gitlabLink.href}
+          class="nav-link nav-link-icon hidden h-10 w-10 items-center justify-center rounded-md text-sm font-medium transition-colors md:flex md:justify-self-end"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={gitlabLink.label}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.4049L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4997-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z" />
+          </svg>
+        </a>
 
         <details class="md:hidden">
           <summary
@@ -138,7 +163,7 @@ const isCurrent = (href: string): boolean => {
             <nav aria-label="Mobile navigation">
               <ul class="flex flex-col gap-1">
                 {
-                  navLinks.map((link) => {
+                  centerNavLinks.map((link) => {
                     const current = isCurrent(link.href);
                     return (
                       <li>
@@ -163,10 +188,22 @@ const isCurrent = (href: string): boolean => {
                 }
                 <li>
                   <a
-                    href="#install"
-                    class="nav-cta-mobile block rounded-md px-3 py-3 text-base font-semibold text-center"
+                    href={gitlabLink.href}
+                    class="nav-link-mobile flex items-center gap-2 rounded-md px-3 py-3 text-base font-medium"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Get Clive
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.4049L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4997-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z" />
+                    </svg>
+                    {gitlabLink.label}
+                    <span aria-hidden="true" class="ml-1 text-xs">{"↗"}</span>
                   </a>
                 </li>
               </ul>
@@ -218,32 +255,6 @@ const isCurrent = (href: string): boolean => {
         color: var(--color-primary-bright);
       }
 
-      .nav-cta {
-        display: inline-flex;
-        align-items: center;
-        margin-left: var(--space-2);
-        padding: 8px 16px;
-        border-radius: 6px;
-        background-color: var(--color-primary);
-        color: #ffffff;
-        font-size: var(--text-sm);
-        font-weight: var(--font-weight-semibold);
-        text-decoration: none;
-        transition:
-          background-color var(--duration-fast) var(--ease-out),
-          box-shadow var(--duration-fast) var(--ease-out),
-          transform var(--duration-fast) var(--ease-out);
-      }
-      .nav-cta:hover,
-      .nav-cta:focus-visible {
-        background-color: var(--color-primary-bright);
-        color: #0b1224;
-        box-shadow: var(--shadow-glow-blue);
-      }
-      .nav-cta:active {
-        transform: translateY(1px);
-      }
-
       .nav-link-mobile {
         color: var(--color-text);
         transition: background-color var(--duration-fast) var(--ease-out);
@@ -254,19 +265,6 @@ const isCurrent = (href: string): boolean => {
       }
       .nav-link-mobile[aria-current="page"] {
         color: var(--color-primary-bright);
-      }
-
-      .nav-cta-mobile {
-        margin-top: var(--space-2);
-        background-color: var(--color-primary);
-        color: #ffffff;
-        text-decoration: none;
-        transition: background-color var(--duration-fast) var(--ease-out);
-      }
-      .nav-cta-mobile:hover,
-      .nav-cta-mobile:focus-visible {
-        background-color: var(--color-primary-bright);
-        color: #0b1224;
       }
     </style>
   </body>
