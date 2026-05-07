@@ -5,9 +5,7 @@
 3. **Wersja w buildzie:** czy w v1 wpisujemy hardcoded `v0.1.0-beta` czy czytamy z `package.json` build-time? Sugeruje build-time przez Astro `import.meta.env`.
 4. **Demo TUI assets:** kto dostarcza asciinema/MP4? Jesli brak na launch, idziemy ze static screenshot + caption "Live demo coming soon" (pattern OK, ale zaznaczyc).
 5. **Newsletter:** confirmed brak w v1. Czy w v1.1 planowany? Wplywa na footer space allocation.
-6. **Author na blogu:** czy jeden czy multi-author? Wplywa na frontmatter schema.
-7. **Cover images blog:** czy required czy optional? (rekomenduje optional z fallbackiem placeholder).
-8. **i18n:** czy planowane w v1? Jesli tak — `astro:i18n` setup od razu, inaczej kosztowny refactor.
+6. **i18n:** czy planowane w v1? Jesli tak — `astro:i18n` setup od razu, inaczej kosztowny refactor.
 
 ---
 

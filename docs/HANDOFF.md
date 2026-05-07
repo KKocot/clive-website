@@ -14,16 +14,14 @@ Skrot wymagan per strona:
 
 - `<title>`: `<page-title> · Clive` (max 60 chars)
 - `<meta name="description">`: 150-160 chars, action-oriented
-- `<meta property="og:type">`: `website` (landing), `article` (post)
+- `<meta property="og:type">`: `website` (landing)
 - `<link rel="canonical">`: zawsze
 - `<meta name="twitter:card" content="summary_large_image">` + `twitter:image` = OG image
 - Sitemap: `@astrojs/sitemap` — sprawdz config
-- RSS: `src/pages/rss.xml.ts`
 
 ### Schema.org (JSON-LD)
 
 - Landing: `SoftwareApplication` (name, applicationCategory: "DeveloperApplication", operatingSystem: "Linux, macOS, Windows")
-- Blog post: `BlogPosting` (headline, datePublished, author, image)
 - Wstrzyknac przez `<script type="application/ld+json">` w `BaseLayout.astro` slot
 
 ---
@@ -31,8 +29,8 @@ Skrot wymagan per strona:
 ## Priorytet implementacji
 
 1. **P0** — `tokens.css` (DONE), `BaseLayout.astro` (font preload, skip link, theme), `Button`, `Card`, `Badge`, `TerminalFrame`, `CodeBlock`, `Hero`, `Features`, `Install`, `Footer`
-2. **P1** — `Demo` (placeholder), `blog/index.astro`, `blog/[slug].astro` (bez TOC), `404.astro`, `MobileNav`, `CopyButton`, `InstallTabs`
-3. **P2** — TOC sticky, OG image generator, schema.org, related posts, RSS poprawki
+2. **P1** — `Demo` (placeholder), `404.astro`, `MobileNav`, `CopyButton`, `InstallTabs`
+3. **P2** — OG image generator, schema.org
 
 ---
 
@@ -42,8 +40,6 @@ Z istniejacego `node_modules` widze: Astro 5.18.1, Sharp 0.34.5, `@astrojs/sitem
 
 **Potrzebne (sprawdz czy juz sa, jesli nie -> instalacja):**
 - `astro` 5.18.x (jest)
-- `@astrojs/mdx` (dla blog) — pinned `^4.x` (zgodne z Astro 5)
-- `@astrojs/rss` (dla `rss.xml.ts`) — pinned `^4.x`
 - `@astrojs/sitemap` (jest)
 - `tailwindcss` 4.x — CSS-first, **NIE config JS**
 - `@tailwindcss/vite` — plugin Vite dla Tailwind 4
@@ -85,16 +81,12 @@ export default defineConfig({
 
 **Islands hydration:** `client:load` tylko dla MobileNav (potrzebne od razu do interakcji), `client:visible` dla CopyButton i InstallTabs (lazy).
 
-**Content collections:** `src/content.config.ts` juz istnieje — sprawdz schema dla blog (title, description, pubDate, tags, cover?, draft?). Dla blogu uzyj `getCollection('blog', ({ data }) => !data.draft)`.
-
 **Shiki integration:** w `astro.config.mjs`:
 ```js
 markdown: {
   shikiConfig: { theme: 'github-dark-default', wrap: false }
 }
 ```
-
-**MDX:** `@astrojs/mdx` integration; `BlogLayout.astro` z `<slot />` dla content + custom `Components` mapping (np. custom `<a>` dla external link iconki).
 
 ---
 
@@ -125,10 +117,8 @@ Frontend-developer po implementacji uruchamia (handoff do agenta `ui-harden`):
 10. `src/components/sections/*` (Hero, Features, Install, Demo, Footer)
 11. `src/components/islands/*` (MobileNav, CopyButton, InstallTabs)
 12. `src/pages/index.astro`
-13. `src/pages/blog/index.astro`
-14. `src/pages/blog/[...slug].astro` + `src/layouts/BlogLayout.astro`
-15. `src/pages/404.astro`
-16. SEO: `src/components/seo/SEO.astro`, OG image generator
+13. `src/pages/404.astro`
+14. SEO: `src/components/seo/SEO.astro`, OG image generator
 
 ---
 

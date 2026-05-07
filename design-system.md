@@ -1,9 +1,9 @@
 # Clive — Design System Specification
 
-**Project:** Clive (Hive blockchain CLI/TUI wallet) — landing + blog
+**Project:** Clive (Hive blockchain CLI/TUI wallet) — landing
 **Stack:** Astro 5 + Tailwind 4 (CSS-first `@theme`) + MDX + Shiki
 **Status:** Beta / WIP
-**Site type:** HYBRID (marketing-leaning landing + content blog)
+**Site type:** Marketing landing
 **Reference aesthetic:** [toolstack.framer.website](https://toolstack.framer.website) — modern developer-tool, dark-only
 **Owner of brief:** design-engineer → handoff to frontend-developer
 **Tokens source of truth:** `src/styles/tokens.css`
@@ -30,17 +30,17 @@ Voice: rzeczowy, krotki, techniczny. Drugi person ("Get Clive", "Run it"). Bez m
 
 **Hero height decision:** **NIE 100vh.** Uzyj `min-height: clamp(560px, 80vh, 760px)` z naturalna zawartoscia. Powod: 100vh psuje sie na mobilach z dynamicznym viewport (URL bar collapse) oraz blokuje immediate visual proof. Powyzej hero jest natychmiast widoczny pierwszy fragment Features (tease) na desktop FHD+, co w marketing-pattern (Z-pattern) zwieksza scroll-depth.
 
-**Sticky elementy:** nav top sticky (z `backdrop-filter: blur(12px)`, opaque scroll-state), TOC w blog post `position: sticky; top: 96px;` (desktop only).
+**Sticky elementy:** nav top sticky (z `backdrop-filter: blur(12px)`, opaque scroll-state).
 
 ---
 
 ## 3. Hierarchia stron
 
-**Strony:** `index.astro` (landing) · `blog/index.astro` · `blog/[...slug].astro` · `404.astro`
+**Strony:** `index.astro` (landing) · `404.astro`
 
 ### 3.1 Landing (`index.astro`) — sekcje od gory
 
-**Nav (sticky):** Clive wordmark + Beta badge (wariant A §7) · links: Features/Install/Demo/Blog/Docs · GitLab icon + CTA "Get Clive". Mobile: hamburger → MobileNav island.
+**Nav (sticky):** Clive wordmark + Beta badge (wariant A §7) · links: Features/Install/Demo/Docs · GitLab icon + CTA "Get Clive". Mobile: hamburger → MobileNav island.
 
 **Hero:** Eyebrow mono `// hive blockchain wallet · v0.1 beta` → H1 "Power user wallet for Hive." (`--text-6xl`/`--text-4xl`) → subhead max 56ch → CTA group (primary "Get Clive" anchor `#install` + secondary "View on GitLab") → TerminalFrame ASCII boot-up kolumna prawa (autoplay 1x, NO loop). Background: `var(--gradient-hero-radial)` + grid SVG `opacity: 0.03`.
 
@@ -52,11 +52,7 @@ Voice: rzeczowy, krotki, techniczny. Drugi person ("Get Clive", "Run it"). Bez m
 
 **Footer:** 4 kolumny (wordmark+tagline / Product / Resources / Build info). Bottom: copyright + "Built for **Hive**" (`--color-hive` na "Hive").
 
-### 3.2 Blog index — 3-col grid desktop, karta z cover (optional) + tags + H3 + meta. Empty state: TerminalFrame "no posts yet".
-
-### 3.3 Blog post — 2-col layout (`1fr 240px`). Prose: max-width 720px, `--text-lg`. TOC sticky (>=3 headings). Related posts: DEFERRED v1.1.
-
-### 3.4 404 — TerminalFrame centered 640px, ASCII "404", ghost buttons Home/Blog/GitLab.
+### 3.2 404 — TerminalFrame centered 640px, ASCII "404", ghost buttons Home/GitLab.
 
 ---
 
@@ -150,7 +146,7 @@ Globalny override jest juz w `tokens.css` (`@media (prefers-reduced-motion: redu
 
 - **Forms:** brak w v1 (jesli newsletter -> labels + inline validation on blur, NIE placeholder-as-label).
 
-- **Images:** `alt=""` (decorative) lub opisowe; cover blogu: alt = title postu jesli brak figcaption.
+- **Images:** `alt=""` (decorative) lub opisowe.
 
 - **Code blocks:** `<pre>` z `tabindex="0"` zeby keyboard mogl scrollowac horyzontalnie.
 
@@ -210,7 +206,7 @@ Pasuje do toolstack-style aesthetic, dot pulse to sprawdzony patern dla "live/be
 1. **Footer link** "Built for Hive blockchain" — slowo "Hive" w `--color-hive`, hover `--color-hive-muted`
 2. **Favicon accent** — maly element (np. dot lub akcent litery `c` w mark) w `--color-hive`, reszta w `--color-text`
 3. **Network status indicator** (jesli pojawi sie w v1.1+) — kropka z `--color-hive` przy "Connected to Hive mainnet"
-4. **Optional:** Card variant `tint-hive` rezerwowany dla blog post tag "hive-internals" (nie uzywac w hero/features)
+4. **Optional:** Card variant `tint-hive` rezerwowany dla rzadkich akcentow Hive-related (nie uzywac w hero/features)
 
 **Gdzie NIE UZYWAC:**
 - Primary CTA (kolizja z indigo, podswiadome "alarm")
@@ -244,7 +240,6 @@ Pasuje do toolstack-style aesthetic, dot pulse to sprawdzony patern dla "live/be
 
 **Images:**
 - Astro `<Image>` z `format="avif,webp"`, `loading="lazy"` poza fold
-- Cover bloga: max 1200x675, AVIF target ~80kb
 - OG images: 1200x630 PNG, jednorazowo wygenerowane (nie real-time)
 
 ---

@@ -1,6 +1,6 @@
 # clive-website
 
-Official website and blog for **Clive** — Hive blockchain CLI/TUI wallet.
+Official website for **Clive** — Hive blockchain CLI/TUI wallet.
 
 ## Documentation
 
@@ -42,7 +42,6 @@ pnpm preview
 - [Astro 5](https://astro.build) — static site generator
 - [Tailwind CSS 4](https://tailwindcss.com) — CSS-first, via `@tailwindcss/vite`
 - [SolidJS](https://solidjs.com) — interactive islands (CopyButton, MobileNav, InstallTabs)
-- [MDX](https://mdxjs.com) — blog content
 - TypeScript strict mode
 
 ## Project structure
@@ -58,11 +57,8 @@ clive-website/
 │   ├── components/      # Astro + SolidJS components
 │   ├── config/
 │   │   └── links.ts     # Centralized external URL registry (single source of truth)
-│   ├── content/
-│   │   └── blog/        # MDX blog posts (add .mdx files here)
-│   ├── content.config.ts # Astro 5 Content Layer schema (Zod)
-│   ├── layouts/         # BaseLayout, BlogLayout
-│   ├── pages/           # File-based routing (index.astro, blog/[slug].astro)
+│   ├── layouts/         # BaseLayout
+│   ├── pages/           # File-based routing (index.astro, 404.astro)
 │   └── styles/
 │       ├── tokens.css   # Tailwind 4 @theme design tokens
 │       └── global.css   # @import "tailwindcss" entry point
@@ -70,27 +66,6 @@ clive-website/
 ├── wrangler.toml        # Cloudflare Pages project config
 └── tsconfig.json
 ```
-
-## Adding blog content
-
-Blog posts live in `src/content/blog/`. Each post is an `.mdx` file with frontmatter:
-
-```mdx
----
-title: "Post title"
-description: "Short description shown in listing and meta tags"
-pubDate: 2026-06-01
-updatedDate: 2026-06-15   # optional
-heroImage: "/blog/my-image.png"  # optional, place images in public/blog/
-tags: ["release", "tutorial"]
-draft: false   # set to true to hide from listing (still builds)
----
-
-Your MDX content here. You can use standard Markdown plus JSX components.
-```
-
-Draft posts are excluded from the blog listing and RSS feed but are built to
-`dist/` — use `draft: true` during writing, flip to `false` before publishing.
 
 ## Updating external links
 
@@ -128,7 +103,7 @@ Build settings (auto-detected from `vercel.json`):
 - Node: 22 (from `.nvmrc`)
 
 Headers (CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy,
-Permissions-Policy, asset cache, RSS / sitemap content-type) are declared in
+Permissions-Policy, asset cache, sitemap content-type) are declared in
 `vercel.json` — Vercel ignores `public/_headers` and `public/_redirects`,
 those remain for the Cloudflare Pages fallback.
 
@@ -136,7 +111,7 @@ Custom domain: Vercel dashboard → project → Settings → Domains → Add
 `clive.openhive.network`. CF DNS: `CNAME clive.openhive.network →
 cname.vercel-dns.com` (proxied off — DNS-only — for Vercel-managed SSL).
 Verify `site` in `astro.config.mjs` matches before the first prod deploy so
-RSS / sitemap links resolve correctly.
+sitemap links resolve correctly.
 
 ### Cloudflare Pages (alternative)
 
@@ -208,8 +183,8 @@ decision is made.
 Configured declaratively in [`public/_headers`](./public/_headers):
 
 - `/_astro/*`, `/assets/*`, `*.svg`, `*.woff2` → `max-age=31536000, immutable`
-- `/`, `/blog/*` → `max-age=300, s-maxage=86400, stale-while-revalidate=86400`
-- `/rss.xml`, `/sitemap-*.xml` → correct `Content-Type` + 1h browser / 1d edge cache
+- `/` → `max-age=300, s-maxage=86400, stale-while-revalidate=86400`
+- `/sitemap-*.xml` → correct `Content-Type` + 1h browser / 1d edge cache
 - Global hardening: CSP, `X-Frame-Options: DENY`, `X-Content-Type-Options:
   nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`,
   `Permissions-Policy` denying camera/mic/geolocation.
@@ -232,7 +207,7 @@ needed; the file documents how to enable them if the policy changes.
 3. SSL: automatic via Cloudflare Universal SSL — no action required.
 4. Verify the canonical URL in `astro.config.mjs` (`site:
    "https://clive.openhive.network"`) matches before the first production
-   deploy so RSS / sitemap links are correct.
+   deploy so sitemap links are correct.
 
 ## Deploy notes
 
