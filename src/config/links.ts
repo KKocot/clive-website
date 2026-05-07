@@ -8,6 +8,8 @@ export const LINKS = {
   GITLAB: "https://gitlab.syncad.com/hive/clive",
   GITLAB_README: "https://gitlab.syncad.com/hive/clive#readme",
   GITLAB_INSTALL: "https://gitlab.syncad.com/hive/clive#install",
+  GITLAB_CLI_REFERENCE:
+    "https://gitlab.syncad.com/hive/clive/-/blob/master/docs/cli_commands_structure.md",
   GITLAB_ISSUES: "https://gitlab.syncad.com/hive/clive/-/issues",
   GITLAB_RELEASES: "https://gitlab.syncad.com/hive/clive/-/releases",
   GITLAB_LICENSE: "https://gitlab.syncad.com/hive/clive/-/blob/master/LICENSE.md",
