@@ -7,7 +7,7 @@ const VERSION = "v1.28.8.1";
 
 <footer class="footer">
   <div class="container-x footer__bar">
-    <p class="footer__copy">© {currentYear} Clive contributors</p>
+    <p class="footer__copy">© {currentYear} clive contributors</p>
     <div class="footer__meta">
       <a
         href={LINKS.MIT_LICENSE}
@@ -15,9 +15,10 @@ const VERSION = "v1.28.8.1";
         rel="noopener noreferrer"
         class="footer__license-link"
         aria-label="MIT license — opens in new tab"
-      >MIT</a>
+      ><span aria-hidden="true">[</span>MIT<span aria-hidden="true">]</span></a>
       <span aria-hidden="true" class="footer__sep">·</span>
-      <span class="footer__version">{VERSION}</span>
+      <span class="footer__version tag-bracket"
+        ><span aria-hidden="true">[</span>{VERSION}<span aria-hidden="true">]</span></span>
       <span aria-hidden="true" class="footer__sep">·</span>
       <a
         href={LINKS.HIVE}
@@ -26,7 +27,7 @@ const VERSION = "v1.28.8.1";
         class="footer__hive-link"
         aria-label="Hive blockchain — opens in new tab"
       >
-        Built for <span class="footer__hive-mark">Hive</span>
+        <span aria-hidden="true">// </span>built for <span class="footer__hive-mark">hive</span> blockchain
       </a>
     </div>
   </div>
@@ -49,7 +50,7 @@ const VERSION = "v1.28.8.1";
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(59, 130, 246, 0.5),
+      rgba(1, 120, 212, 0.5),
       transparent
     );
     pointer-events: none;
@@ -65,7 +66,9 @@ const VERSION = "v1.28.8.1";
 
   .footer__copy {
     margin: 0;
+    font-family: var(--font-mono);
     font-size: var(--text-xs);
+    letter-spacing: 0.04em;
     color: var(--color-text-subtle);
   }
 
@@ -74,7 +77,9 @@ const VERSION = "v1.28.8.1";
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
+    font-family: var(--font-mono);
     font-size: var(--text-xs);
+    letter-spacing: 0.04em;
     color: var(--color-text-muted);
   }
 
@@ -99,8 +104,10 @@ const VERSION = "v1.28.8.1";
   }
 
   .footer__hive-link {
-    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    color: var(--color-text-subtle);
     text-decoration: none;
+    text-transform: lowercase;
     transition: color var(--duration-fast) var(--ease-out-quad);
   }
   .footer__hive-link:hover {
