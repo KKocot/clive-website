@@ -2,50 +2,73 @@
 type Glow = "none" | "blue" | "cyan" | "green" | "crimson" | "amber" | "hive" | "emerald" | "indigo";
 
 interface Props {
+  title?: string;
   glow?: Glow;
-  fade?: boolean;
   as?: "article" | "div" | "section";
   class?: string;
 }
 
 const props: Props = Astro.props;
 const {
+  title,
   glow = "none",
-  fade = false,
   as: Tag = "article",
   class: className,
 } = props;
 ---
 
-<Tag class:list={["card", `card--glow-${glow}`, className]}>
-  {glow !== "none" && <div class="card__glow" aria-hidden="true" />}
+<Tag
+  class:list={["card", "card--tui", `card--glow-${glow}`, className]}
+  data-has-title={title ? "true" : "false"}
+>
+  {title && <span class="card__titlebar" aria-hidden="true">{title}</span>}
   <div class="card__inner">
     <slot />
   </div>
-  {fade && <div class="card__fade" aria-hidden="true" />}
 </Tag>
 
 <style>
   .card {
     position: relative;
-    overflow: hidden;
-    isolation: isolate;
-    background-color: var(--color-bg-elevated);
-    /* TUI panel-style: 1px electric blue border at 40% opacity, 100% on hover */
-    border: 1px solid color-mix(in srgb, var(--color-border-bright) 40%, transparent);
-    border-radius: var(--radius-lg);
+    background-color: var(--color-bg-surface);
+    border: var(--tui-border-dim);
+    border-radius: var(--tui-radius);
     transition:
-      transform var(--duration-base) var(--ease-out-quint),
-      border-color 200ms var(--ease-out-quad),
-      box-shadow var(--duration-base) var(--ease-out-quint);
+      background-color var(--duration-base) var(--ease-out-quad),
+      border-color var(--duration-base) var(--ease-out-quad),
+      transform var(--duration-fast) var(--ease-out-quad);
   }
   .card:hover {
-    transform: translateY(-2px);
+    background-color: var(--color-bg-elevated);
     border-color: var(--color-border-bright);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
   }
   .card:focus-within {
+    border-color: var(--color-border-bright);
     box-shadow: var(--shadow-focus-ring);
+  }
+
+  .card[data-has-title="true"] .card__titlebar {
+    position: absolute;
+    top: -0.55em;
+    left: var(--space-4);
+    padding: 0 var(--space-2);
+    background-color: var(--color-bg);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    color: var(--color-primary-bright);
+    text-transform: lowercase;
+    white-space: nowrap;
+    z-index: 1;
+  }
+  .card[data-has-title="true"] .card__titlebar::before {
+    content: "╭─ ";
+    color: var(--color-border-bright);
+  }
+  .card[data-has-title="true"] .card__titlebar::after {
+    content: " ─╮";
+    color: var(--color-border-bright);
   }
 
   /* Hive brand-anchor variant: red border instead of blue */
@@ -55,58 +78,17 @@ const {
   .card--glow-hive:hover {
     border-color: var(--color-hive);
   }
+  .card--glow-hive .card__titlebar::before,
+  .card--glow-hive .card__titlebar::after {
+    color: var(--color-hive);
+  }
 
   .card__inner {
-    position: relative;
-    z-index: 1;
     padding: var(--space-6);
   }
   @media (min-width: 48rem) {
     .card__inner {
-      padding: var(--space-8);
+      padding: var(--space-8) var(--space-7);
     }
-  }
-
-  .card__glow {
-    position: absolute;
-    inset: -20% -20% auto -20%;
-    height: 60%;
-    z-index: 0;
-    pointer-events: none;
-    filter: blur(48px);
-    opacity: 0.7;
-    transition: opacity var(--duration-base) var(--ease-out-quad);
-  }
-  .card:hover .card__glow {
-    opacity: 1;
-  }
-  .card--glow-blue .card__glow,
-  .card--glow-indigo .card__glow {
-    background: var(--tint-blue);
-  }
-  .card--glow-cyan .card__glow {
-    background: var(--tint-cyan);
-  }
-  .card--glow-green .card__glow,
-  .card--glow-emerald .card__glow {
-    background: var(--tint-green);
-  }
-  .card--glow-crimson .card__glow {
-    background: var(--tint-crimson);
-  }
-  .card--glow-amber .card__glow {
-    background: var(--tint-amber);
-  }
-  .card--glow-hive .card__glow {
-    background: var(--tint-hive);
-  }
-
-  .card__fade {
-    position: absolute;
-    inset: auto 0 0 0;
-    height: 35%;
-    background: var(--gradient-card-fade);
-    pointer-events: none;
-    z-index: 0;
   }
 </style>
