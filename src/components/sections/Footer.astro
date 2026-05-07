@@ -3,7 +3,7 @@ import Badge from "../ui/Badge.astro";
 import { LINKS } from "../../config/links";
 
 const currentYear = new Date().getFullYear();
-const VERSION = "v0.1 beta";
+const VERSION = "v1.28.8.1";
 
 interface FooterLink {
   label: string;
@@ -37,14 +37,14 @@ const hiveLinks: FooterLink[] = [
     <div class="footer__cols">
       <div class="footer__col footer__brand">
         <a href="/" class="footer__wordmark" aria-label="Clive — home">
-          <span style="color: var(--color-accent-primary)">$</span>
+          <span style="color: var(--color-primary-bright)">$</span>
           <span style="color: var(--color-text)">clive</span>
         </a>
         <p class="footer__tagline">
           Power-user wallet for Hive — encrypted, scriptable, terminal-native.
         </p>
         <p class="footer__hive-line">
-          Built for <span style="color: var(--color-hive)">Hive</span> blockchain
+          Built for <span class="footer__hive-mark">Hive</span> blockchain
         </p>
       </div>
 
@@ -139,10 +139,25 @@ const hiveLinks: FooterLink[] = [
 
 <style>
   .footer {
+    position: relative;
     background-color: var(--color-bg-surface);
-    border-top: 1px solid var(--color-border);
     padding-block: var(--section-y);
     margin-top: var(--space-16);
+  }
+  .footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(59, 130, 246, 0.5),
+      transparent
+    );
+    pointer-events: none;
   }
 
   .footer__cols {
@@ -185,6 +200,10 @@ const hiveLinks: FooterLink[] = [
     font-size: var(--text-sm);
     color: var(--color-text-subtle);
   }
+  .footer__hive-mark {
+    color: var(--color-hive-text);
+    font-weight: var(--font-weight-semibold);
+  }
 
   .footer__heading {
     margin: 0 0 var(--space-4);
@@ -214,7 +233,7 @@ const hiveLinks: FooterLink[] = [
     transition: color var(--duration-fast) var(--ease-out-quad);
   }
   .footer__link:hover {
-    color: var(--color-text);
+    color: var(--color-primary-bright);
   }
 
   .footer__ext {
@@ -229,7 +248,7 @@ const hiveLinks: FooterLink[] = [
     align-items: center;
     gap: var(--space-3);
     padding-top: var(--space-6);
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border-subtle);
   }
 
   .footer__copy {
