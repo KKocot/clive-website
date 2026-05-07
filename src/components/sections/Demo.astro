@@ -1,54 +1,86 @@
 ---
 import TerminalFrame from "../ui/TerminalFrame.astro";
-
-const demoTerminalHtml = `╭─ clive ───────────────────────────────────╮ ╭─ wallet · @alice ──────────────────────────╮
-│ <span class="t-accent">> Wallet</span>                                  │ │ <span class="t-dim">balance</span>                                    │
-│   Accounts                                │ │   <span class="t-emerald">HIVE</span>          1,234.567                  │
-│   Transfer                                │ │   <span class="t-emerald">HBD</span>              89.420                  │
-│   History                                 │ │   <span class="t-accent">HP</span>           4,500.000                   │
-│   Settings                                │ │                                            │
-│                                           │ │ <span class="t-dim">last activity</span>                              │
-│ <span class="t-dim">───────────────</span>                           │ │   <span class="t-amber">12:04</span>  transfer  -25.000 HIVE            │
-│ <span class="t-dim">profile</span>                                   │ │   <span class="t-amber">11:51</span>  vote      witness gtg             │
-│   <span class="t-emerald">@alice</span>                                  │ │   <span class="t-amber">10:22</span>  delegate  +500.000 HP             │
-│                                           │ │                                            │
-│                                           │ │                                            │
-├───────────────────────────────────────────┤ ├────────────────────────────────────────────┤
-│ <span class="t-dim">node</span>  api.hive.blog  <span class="t-emerald">●</span>                    │ │ <span class="t-dim">cart</span> 0 ops · <span class="t-dim">unlocked</span> <span class="t-emerald">●</span> · <span class="t-dim">14:32</span>            │
-╰───────────────────────────────────────────╯ ╰────────────────────────────────────────────╯
-
-<span class="t-amber">F1</span> <span class="t-dim">help</span>  <span class="t-amber">F2</span> <span class="t-dim">menu</span>  <span class="t-amber">F5</span> <span class="t-dim">refresh</span>  <span class="t-amber">F10</span> <span class="t-dim">quit</span>`;
 ---
 
-<section
-  id="demo"
-  class="demo"
-  aria-labelledby="demo-heading"
->
+<section id="demo" class="demo" aria-labelledby="demo-heading">
   <div class="container-x">
     <header class="demo__header reveal">
       <p class="demo__eyebrow"><span aria-hidden="true">// </span>live demo</p>
       <h2 id="demo-heading" class="demo__title">
         <span class="section-title__prefix" aria-hidden="true">## </span>demo
       </h2>
-      <p class="demo__lead">
-        A typical session: unlock the wallet, sign a transfer, broadcast.
-      </p>
+      <p class="demo__lead">A typical session: unlock the wallet, sign a transfer, broadcast.</p>
     </header>
 
     <div class="demo__frame reveal">
       {/* TODO: replace with asciinema cast or MP4 demo */}
-      <TerminalFrame
-        title="clive — main view"
-        ariaLabel="Clive TUI demo placeholder"
-      >
-        <Fragment set:html={demoTerminalHtml} />
+      <TerminalFrame title="clive — main view" ariaLabel="Clive TUI demo placeholder" as="div">
+        <div class="demo-tui">
+          <div class="demo-tui__panels">
+            <section class="demo-tui__panel" aria-label="clive sidebar">
+              <header class="demo-tui__panel-title">clive</header>
+              <div class="demo-tui__panel-body">
+                <ul class="demo-tui__menu" role="list">
+                  <li class="is-active"><span class="t-accent">&gt; Wallet</span></li>
+                  <li>Accounts</li>
+                  <li>Transfer</li>
+                  <li>History</li>
+                  <li>Settings</li>
+                </ul>
+                <hr class="demo-tui__sep" />
+                <p class="demo-tui__label t-dim">profile</p>
+                <p class="demo-tui__value"><span class="t-emerald">@alice</span></p>
+              </div>
+              <footer class="demo-tui__panel-foot">
+                <span class="t-dim">node</span>
+                <span>api.hive.blog</span>
+                <span class="t-emerald" aria-hidden="true">●</span>
+              </footer>
+            </section>
+
+            <section class="demo-tui__panel" aria-label="wallet for @alice">
+              <header class="demo-tui__panel-title">wallet · @alice</header>
+              <div class="demo-tui__panel-body">
+                <p class="demo-tui__label t-dim">balance</p>
+                <table class="demo-tui__bal">
+                  <tbody>
+                    <tr><td class="t-emerald">HIVE</td><td>1,234.567</td></tr>
+                    <tr><td class="t-emerald">HBD</td><td>89.420</td></tr>
+                    <tr><td class="t-accent">HP</td><td>4,500.000</td></tr>
+                  </tbody>
+                </table>
+                <p class="demo-tui__label t-dim">last activity</p>
+                <table class="demo-tui__act">
+                  <tbody>
+                    <tr><td class="t-amber">12:04</td><td>transfer</td><td>-25.000 HIVE</td></tr>
+                    <tr><td class="t-amber">11:51</td><td>vote</td><td>witness gtg</td></tr>
+                    <tr><td class="t-amber">10:22</td><td>delegate</td><td>+500.000 HP</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <footer class="demo-tui__panel-foot">
+                <span class="t-dim">cart</span>
+                <span>0 ops</span>
+                <span class="demo-tui__sep-dot" aria-hidden="true">·</span>
+                <span class="t-dim">unlocked</span>
+                <span class="t-emerald" aria-hidden="true">●</span>
+                <span class="demo-tui__sep-dot" aria-hidden="true">·</span>
+                <span class="t-dim">14:32</span>
+              </footer>
+            </section>
+          </div>
+
+          <p class="demo-tui__keys">
+            <span><span class="t-amber">F1</span> <span class="t-dim">help</span></span>
+            <span><span class="t-amber">F2</span> <span class="t-dim">menu</span></span>
+            <span><span class="t-amber">F5</span> <span class="t-dim">refresh</span></span>
+            <span><span class="t-amber">F10</span> <span class="t-dim">quit</span></span>
+          </p>
+        </div>
       </TerminalFrame>
     </div>
 
-    <p class="demo__caption">
-      Demo coming soon · Asciinema cast in preparation
-    </p>
+    <p class="demo__caption">Demo coming soon · Asciinema cast in preparation</p>
   </div>
 </section>
 
@@ -110,5 +142,135 @@ const demoTerminalHtml = `╭─ clive ─────────────�
     font-size: var(--text-sm);
     color: var(--color-text-subtle);
     font-family: var(--font-mono);
+  }
+
+  /* ============================================================
+   * TUI panels — CSS borders replacing unicode box-drawing.
+   * Lives inside <TerminalFrame>'s <pre class="terminal__body">,
+   * so we reset whitespace handling to flow as normal HTML.
+   * ============================================================ */
+  .demo-tui {
+    white-space: normal;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--color-text);
+    font-feature-settings:
+      "calt" 0,
+      "liga" 0;
+    font-variant-ligatures: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .demo-tui__panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 40rem) {
+    .demo-tui__panels {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .demo-tui__panel {
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    min-height: 16rem;
+  }
+
+  .demo-tui__panel-title {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border-default);
+    letter-spacing: 0.02em;
+  }
+
+  .demo-tui__panel-body {
+    flex: 1;
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .demo-tui__panel-body > p {
+    margin: 0;
+  }
+
+  .demo-tui__panel-foot {
+    padding: var(--space-2) var(--space-4);
+    border-top: 1px solid var(--color-border-default);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  .demo-tui__sep-dot {
+    color: var(--color-text-subtle);
+  }
+
+  .demo-tui__menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .demo-tui__menu li {
+    padding-inline: var(--space-2);
+  }
+
+  .demo-tui__sep {
+    border: none;
+    border-top: 1px solid var(--color-border-default);
+    margin: var(--space-2) 0;
+    width: 60%;
+  }
+
+  .demo-tui__label {
+    font-size: var(--text-xs);
+    letter-spacing: 0.02em;
+  }
+
+  .demo-tui__value {
+    margin: 0;
+  }
+
+  .demo-tui__bal,
+  .demo-tui__act {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .demo-tui__bal td,
+  .demo-tui__act td {
+    padding: 1px var(--space-3) 1px 0;
+    vertical-align: baseline;
+  }
+
+  .demo-tui__bal td:nth-child(2) {
+    text-align: right;
+  }
+
+  .demo-tui__keys {
+    margin: var(--space-3) 0 0;
+    text-align: center;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    display: flex;
+    justify-content: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
   }
 </style>
