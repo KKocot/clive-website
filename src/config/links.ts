@@ -12,7 +12,7 @@ export const LINKS = {
     "https://gitlab.syncad.com/hive/clive/-/blob/master/docs/cli_commands_structure.md",
   GITLAB_ISSUES: "https://gitlab.syncad.com/hive/clive/-/issues",
   GITLAB_RELEASES: "https://gitlab.syncad.com/hive/clive/-/releases",
-  GITLAB_LICENSE: "https://gitlab.syncad.com/hive/clive/-/blob/master/LICENSE.md",
+  MIT_LICENSE: "https://opensource.org/licenses/MIT",
   INSTALL_SCRIPT: "https://gtg.openhive.network/get/clive/start_clive.sh",
   HIVE: "https://hive.io",
   HIVE_DOCS: "https://developers.hive.io/",
