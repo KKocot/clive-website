@@ -1,14 +1,14 @@
 # Clive — Design System Specification
 
-> **Note:** Paleta zaktualizowana 2026-05-07 (Faithful TUI).
+> **Note:** Paleta zaktualizowana 2026-05-07 (Faithful TUI). CLI/TUI aesthetic globalny 2026-05-07.
 > Source of truth: `src/styles/tokens.css` + KB pattern `tui-coherent-web-palette`.
-> ADR: 69fc7009e61d0c3b00cae5c4
+> ADR (palette): 69fc7009e61d0c3b00cae5c4
 
 **Project:** Clive (Hive blockchain CLI/TUI wallet) — landing
 **Stack:** Astro 5 + Tailwind 4 (CSS-first `@theme`) + MDX + Shiki
 **Status:** Beta / WIP
 **Site type:** Marketing landing
-**Reference aesthetic:** [toolstack.framer.website](https://toolstack.framer.website) — modern developer-tool, dark-only
+**Design direction:** CLI/TUI aesthetic — strona jest kontynuacja doswiadczenia TUI, nie odrebnym brandem
 **Owner of brief:** design-engineer → handoff to frontend-developer
 **Tokens source of truth:** `src/styles/tokens.css`
 
@@ -16,13 +16,63 @@
 
 ## 1. Mood & Voice
 
-Clive jest narzedziem dla **power userow Hive** — terminalowych, swiadomych developerow. Estetyka: **dark-only, terminal-inspired ale nowoczesna** (nie retro CRT, nie skeuomorficzny terminal). Electric blue (`#3b82f6`) jako primary, navy (`#1a2030`) bg — TUI-coherent z CLI: paleta odwzorowuje chrome terminala Clive (panele, ramki, alarmy), zapewniajac wizualna ciaglosc miedzy landing a aplikacja. Hive red (`#e31337`) wystepuje **tylko jako wskaznik przynaleznosci** (footer "Built for Hive", favicon korner, status indicator), aby nie kolidowac z primary blue i nie wywolywac podswiadomego "alarm/error".
+Clive jest narzedziem dla **power userow Hive** — terminalowych, swiadomych developerow. Estetyka: **dark-only, full CLI/TUI** — mono headlines, bracket decorations, box-drawing card frames. Nie retro CRT, nie skeuomorficzny terminal — nowoczesny TUI (jak lazygit, btop, clive). Electric blue (`#3b82f6`) jako primary, navy (`#1a2030`) bg. Paleta i typografia odwzorowuja chrome terminala Clive, zapewniajac wizualna ciaglosc miedzy landing a aplikacja.
 
-Voice: rzeczowy, krotki, techniczny. Drugi person ("Get Clive", "Run it"). Bez marketingowego pufu. Beta WIP komunikowane otwarcie ale bez przesady — power user ceni szczerosc, nie panike.
+Hive red (`#e31337`) wystepuje **tylko jako wskaznik przynaleznosci** (footer "Built for Hive", status indicator).
+
+Voice: rzeczowy, krotki, techniczny. Eyebrow prefixes: `$` (akcje CLI), `//` (komentarze), `##` (sekcje Markdown-style). Drugi person ("Get Clive", "Run it"). Bez marketingowego pufu.
 
 ---
 
-## 2. Layout grid
+## 2. Typografia — CLI/TUI display
+
+### 2.1 Font stack
+
+| Rola | Font | Token |
+|---|---|---|
+| Display/Headlines | JetBrains Mono Variable | `--font-display: var(--font-mono)` |
+| Body/UI | Inter | `--font-sans` |
+| Code blocks | JetBrains Mono Variable | `--font-mono` |
+
+> `--font-display` byl `Inter` — od 2026-05-07 wskazuje na `--font-mono`. H1 i nagłowki sekcji sa w 100% mono.
+
+### 2.2 Mono headline metrics
+
+| Token | Wartosc | Powod |
+|---|---|---|
+| `--tracking-mono-display` | `-0.02em` | Kompensacja szerokich glifow mono |
+| `--leading-mono-display` | `1.08` | Zwiety leading dla display — TUI-like |
+
+H1 (`--text-6xl`/`--text-4xl` na mobile): mono lowercase, tracking `-0.02em`, leading `1.08`.
+H2 naglowki sekcji: prefiks `##` arialnie ukryty, mono lowercase.
+
+### 2.3 Eyebrow/H2 prefixes (decorative, `aria-hidden="true"`)
+
+| Kontekst | Prefix | Przyklad |
+|---|---|---|
+| CLI-action (Install, skrypt) | `$` | `$ install` |
+| Komentarz/opis | `//` | `// why clive` |
+| Markdown heading | `##` | `## features` |
+
+Prefixes wrapowane w `<span aria-hidden="true">` lub implementowane przez `::before` pseudo — screen readery ich nie slysza.
+
+### 2.4 Utility klasy
+
+```css
+/* global.css */
+.h-display {
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-mono-display);
+  line-height: var(--leading-mono-display);
+  text-transform: lowercase;
+}
+.tag-bracket::before { content: "["; color: var(--color-primary-bright); }
+.tag-bracket::after  { content: "]"; color: var(--color-primary-bright); }
+```
+
+---
+
+## 3. Layout grid
 
 | Property | Mobile | Desktop |
 |---|---|---|
@@ -32,224 +82,227 @@ Voice: rzeczowy, krotki, techniczny. Drugi person ("Get Clive", "Run it"). Bez m
 | Grid columns | 4 | 12 (CSS Grid) |
 | Column gap | 16px | 24px |
 
-**Hero height decision:** **NIE 100vh.** Uzyj `min-height: clamp(560px, 80vh, 760px)` z naturalna zawartoscia. Powod: 100vh psuje sie na mobilach z dynamicznym viewport (URL bar collapse) oraz blokuje immediate visual proof. Powyzej hero jest natychmiast widoczny pierwszy fragment Features (tease) na desktop FHD+, co w marketing-pattern (Z-pattern) zwieksza scroll-depth.
+**Hero height:** `min-height: clamp(560px, 80vh, 760px)` — NIE 100vh (dynamiczny viewport mobile).
 
-**Sticky elementy:** nav top sticky (z `backdrop-filter: blur(12px)`, opaque scroll-state).
+**Sticky nav:** top sticky z `backdrop-filter: blur(12px)`, opaque scroll-state.
 
 ---
 
-## 3. Hierarchia stron
+## 4. Hierarchia stron
 
 **Strony:** `index.astro` (landing) · `404.astro`
 
-### 3.1 Landing (`index.astro`) — sekcje od gory
+### 4.1 Landing (`index.astro`) — sekcje od gory
 
-**Nav (sticky):** Clive wordmark + Beta badge (wariant A §7) · links: Features/Install/Demo/Docs · GitLab icon + CTA "Get Clive". Mobile: hamburger → MobileNav island.
+**Nav (sticky):** Clive wordmark · links: Features/Install/Demo/Docs · GitLab icon · CTA "Get Clive". Mobile: hamburger → MobileNav island.
 
-**Hero:** Eyebrow mono `// hive blockchain wallet · v0.1 beta` → H1 "Power user wallet for Hive." (`--text-6xl`/`--text-4xl`) → subhead max 56ch → CTA group (primary "Get Clive" anchor `#install` + secondary "View on GitLab") → TerminalFrame ASCII boot-up kolumna prawa (autoplay 1x, NO loop). Background: `var(--gradient-hero-radial)` + grid SVG `opacity: 0.03`.
+**Hero:** Eyebrow `<span aria-hidden>$</span> clive --help` → H1 mono lowercase + cursor `▊` z CSS blink (`--cursor-blink-duration: 1.06s`, `prefers-reduced-motion` respect) → subhead max 56ch → CTA group (primary "Get Clive" anchor `#install` + secondary "View on GitLab"). Background: `var(--hero-gradient)` + grid SVG `opacity: 0.03`.
 
-**Features:** 5 kart `grid-cols-3` + `grid-cols-2` (desktop), stack mobile. Karty: Dual interface, Beekeeper encryption, Mouse-driven TUI, Profile system, Full blockchain ops. Tint: indigo/emerald/amber. Pełna tabela feature kart → [docs/HANDOFF.md](docs/HANDOFF.md).
+**Features:** Eyebrow `// why clive`, H2 `## features`. 6 kart w gridzie, ikony bracket ASCII:
+- `[||]` — dual interface
+- `[#]` — beekeeper encryption
+- `[+]` — mouse TUI
+- `[@]` — profile system
+- `[$]` — blockchain ops
+- `[!]` — alarm/status
 
-**Install (tabbed island):** Linux / macOS / Windows (WSL). Auto-detect `navigator.userAgent`, fallback Linux. `CodeBlock` + `CopyButton` + beta warning callout amber.
+**Install:** Eyebrow `$ install`, H2 `## install`. Tabbed island (Linux/macOS/Windows WSL).
 
-**Demo TUI:** TerminalFrame full-width (max 960px, 16:10). Placeholder — TODO: asciinema/MP4. Fallback: static screenshot.
+**Demo:** Eyebrow `// live demo`, H2 `## demo`. Dual-pane TUI mockup z F-keys footer (TUI chrome).
 
-**Footer:** 4 kolumny (wordmark+tagline / Product / Resources / Build info). Bottom: copyright + "Built for **Hive**" (`--color-hive` na "Hive").
+**Footer:** `// built for hive blockchain`, `[MIT]` link, `[v...]` version. "Hive" w `--color-hive`. `aria-hidden` na dekoracyjnych glyphach.
 
-### 3.2 404 — TerminalFrame centered 640px, ASCII "404", ghost buttons Home/GitLab.
-
----
-
-## 4. Komponenty
-
-### 4.1 `Button.astro`
-Variants: `primary` | `secondary` | `ghost`. Sizes: `sm`/`md`/`lg`. Radius `--radius-md`. Focus-visible: `box-shadow: var(--shadow-focus-ring)` — nigdy `outline:none` bez zamiennika. Press: `translateY(1px)`. Primary hover: bg `--color-accent-primary-hover` + `--shadow-glow-blue` + arrow `translateX(2px)`. Secondary: outline 1px `--color-border-strong`. Ghost: text-muted bg-none.
-
-### 4.2 `Card.astro`
-Variants: `default` | `tint-emerald` | `tint-indigo` | `tint-amber` | `tint-hive`. Struktura: `card__glow` (blur 48px absolute) + `card__inner` (icon/title/body slots) + `card__fade` (gradient-card-fade bottom 35%). Hover: `translateY(-2px)`, border strong, glow opacity 1. Transition: `var(--duration-base) var(--ease-out-quint)`.
-
-### 4.3 `Badge.astro`
-Variants: `neutral` | `beta` | `success` | `warning` | `danger`. `--text-xs font-weight-medium tracking-wide`, padding `2px 8px`, radius `--radius-full`. Beta: bg `rgba(196,75,110,0.12)`, border 1px `var(--color-accent-danger)` (crimson), text `var(--color-accent-danger-text)` (`#ff6b8a`) + dot pulse 6px (patrz §7).
-
-### 4.4 `TerminalFrame.astro`
-`<figure>` z `terminal__bar` (36px, dots red/amber/green aria-hidden) + `<pre class="terminal__body">`. Bg `--color-bg-surface`, border 1px, radius `--radius-lg`. Body: `--font-mono --text-sm`, scroll horizontal.
-
-### 4.5 `CodeBlock.astro` — Shiki `github-dark-default`, NO line numbers v1, slot CopyButton top-right, optional title bar.
-
-### 4.6 `CopyButton.tsx` (island) — Copy -> Check icon 1.5s, `aria-live="polite"`. `client:visible`.
-
-### 4.7 `InstallTabs.tsx` (island) — ARIA tablist, ArrowLeft/Right, auto-detect OS. `client:visible`.
-
-### 4.8 `MobileNav.tsx` (island) — full-screen overlay, wlasna implementacja focus trap (~30 linii), ESC close, auto-focus first element, focus return to trigger. `client:load`.
+### 4.2 404 — TerminalFrame centered 640px, ASCII "404", ghost buttons Home/GitLab.
 
 ---
 
-## 5. Motion guidelines
+## 5. Komponenty
 
-**Filozofia:** pure CSS transitions + IntersectionObserver dla reveals. **Zero motion library** w v1 (nie potrzebujemy framer-motion ani Solid spring — perf budget LCP <2.0s, JS <50kb wymusza minimal).
+### 5.1 `Button.astro`
+
+Variants: `primary` | `secondary` | `ghost`. Sizes: `sm`/`md`/`lg`. Radius `--tui-radius` (2px — sharp TUI edges).
+
+- **Primary:** bg `--color-primary` → hover bg `--color-primary-bright`, color `#0b1224`. **Brak box-shadow glow** (usunieto).
+- **Secondary:** outline 1px `--color-border-bright`, color `--color-primary-bright`.
+- **Ghost:** mono lowercase, `[ ... ]` brackets via `::before`/`::after`, `aria-hidden` przez pseudo — brak DOM node.
+
+Focus-visible: `box-shadow: var(--shadow-focus-ring)`, border-radius `--tui-radius`.
+
+### 5.2 `Card.astro`
+
+**Pelny rewrite (2026-05-07) — usunieto glow/blur/glassmorphism, zastapiono TUI panel.**
+
+Props: `title?`, `glow?` (dla Hive variant), `as?`, `class?`. Usunieto prop `fade`.
+
+Struktura:
+```html
+<article class="card card--tui" data-has-title="true">
+  <span class="card__titlebar" aria-hidden="true"><!-- title --></span>
+  <div class="card__inner"><slot /></div>
+</article>
+```
+
+Title bar via pseudo-elements:
+```css
+.card__titlebar::before { content: "╭─ "; color: var(--color-border-bright); }
+.card__titlebar::after  { content: " ─╮"; color: var(--color-border-bright); }
+```
+
+Karta resting: `border: var(--tui-border-dim)` (blue 40%). Hover: `border-color: var(--color-border-bright)` (blue 100%) + `translateY(-1px)`. Zero blur, zero glow box-shadow.
+
+Variant `glow-hive`: border Hive red zamiast blue.
+
+> Poprzednia implementacja uzywala `card__glow` (blur 48px absolute) + `card__fade` (gradient overlay) + glassmorphism. Wszystkie usuniete.
+
+### 5.3 `Badge.astro`
+
+Variants: `neutral` | `beta` | `success` | `warning` | `danger`. Beta: crimson outline + dot pulse (szczegoly w §8).
+
+### 5.4 `TerminalFrame.astro`
+
+`<figure>` z `terminal__bar` (traffic-light dots aria-hidden) + `<pre class="terminal__body">`. Bg `--color-bg-surface`, border `--tui-border-dim`, radius `--tui-radius`.
+
+### 5.5 `CodeBlock.astro` — Shiki `github-dark-default`, CopyButton top-right, optional title bar.
+
+### 5.6 `CopyButton.tsx` (island) — Copy → Check 1.5s, `aria-live="polite"`, `client:visible`.
+
+### 5.7 `InstallTabs.tsx` (island) — ARIA tablist, ArrowLeft/Right, auto-detect OS, `client:visible`.
+
+### 5.8 `MobileNav.tsx` (island) — full-screen overlay, focus trap, ESC close, `client:load`.
+
+---
+
+## 6. Motion guidelines
+
+**Filozofia:** pure CSS transitions + `@starting-style` CSS feature. Zero motion library.
+
+### Cursor blink (Hero H1)
+
+```css
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.hero__cursor {
+  animation: cursor-blink var(--cursor-blink-duration) step-end infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__cursor { animation: none; opacity: 1; }
+}
+```
+
+Token: `--cursor-blink-duration: 1.06s`.
 
 ### Animacje per element
 
-| Element | Animacja | Duration | Easing | Trigger |
-|---|---|---|---|---|
-| Hero (H1, sub, CTA) | opacity 0->1, translateY 8px->0, stagger 50ms | 600ms | `--ease-out-expo` | onload |
-| Hero terminal ASCII | typewriter (CSS `@keyframes` lub setInterval JS) | per-line 60ms | linear | onload, no loop |
-| Card hover | translateY 0 -> -2px, shadow `--shadow-md`, border lighten | 250ms | `--ease-out-quint` | hover |
-| Card glow on hover | opacity 0.5 -> 1 | 250ms | `--ease-out-quad` | hover |
-| Button primary hover | bg shift, glow, arrow translateX +2px | 150ms | `--ease-out-quad` | hover |
-| Button press | translateY 0 -> 1px | 75ms | `--ease-out-quad` | active |
-| Section reveal | opacity 0->1, translateY 16px->0 | 400ms | `--ease-out-quint` | IntersectionObserver `threshold: 0.15` |
-| Beta dot pulse | scale 1 -> 1.4, opacity 0.8 -> 0 (ring) | 1600ms | `--ease-out-quad` | infinite (chyba ze reduced-motion) |
-| Tab change | crossfade content opacity 0->1 | 150ms | `--ease-out-quad` | click |
-| Mobile nav open/close | translateX 100% -> 0, opacity 0->1 | 250ms | `--ease-out-expo` | toggle |
-| Copy success | icon rotate-in (Copy -> Check) | 200ms | `--ease-out-quint` | click |
-| Stagger inside list | 30ms delay between items | — | — | reveal |
+| Element | Animacja | Duration | Trigger |
+|---|---|---|---|
+| Hero H1 + sub + CTA | opacity 0→1, translateY 8px→0, stagger 50ms | 600ms | onload |
+| Card hover | translateY 0→-1px, border-color dim→bright | 250ms | hover |
+| Button primary hover | bg shift | 150ms | hover |
+| Button press | translateY 0→1px | 75ms | active |
+| Section reveal | opacity 0→1, translateY 16px→0 | 400ms | `@starting-style` |
+| Beta dot pulse | scale 1→1.6, opacity 0.8→0 (ring) | 1600ms | infinite |
 
 ### NIE rob
 
+- Brak box-shadow glow na hoverach (usunieto)
 - Brak parallax (perf + motion sickness)
-- Brak agresywnego skalowania (>1.05) na hoverach
-- Brak autoplay video z dzwiekiem
-- Brak `position: top/left/width/height` w transitions — TYLKO `transform` + `opacity` (GPU)
-- Brak ciaglych animacji w viewport (poza beta dot pulse — i ta wylaczona przy reduced-motion)
+- Brak `position: top/left/width/height` w transitions — TYLKO `transform` + `opacity`
+- Brak ciaglych animacji poza cursor blink i beta dot (oba wylaczone przy reduced-motion)
 
 ### Reduced-motion
 
-Globalny override jest juz w `tokens.css` (`@media (prefers-reduced-motion: reduce)` zeruje duration). Plus per-component:
-- Hero ASCII: pokazuje koncowy frame od razu, bez typewriter
-- Beta dot: brak pulsu, statyczny dot
-- Section reveals: opacity 1, translate 0 od razu
+Globalny override w `tokens.css` (`@media (prefers-reduced-motion: reduce)` zeruje duration). Per-component: cursor blink → statyczny glyph, beta dot → brak pulsu, section reveals → opacity 1 od razu.
 
 ---
 
-## 6. A11y AA
+## 7. A11y AA
 
-- **Kontrasty (zweryfikowane vs `--color-bg #111113`):**
-  - `--color-text` 18.7:1 ✓
-  - `--color-text-muted` 7.2:1 ✓
-  - `--color-text-subtle` 4.8:1 ✓ (AA dla normal text)
-  - `--color-accent-primary` na bg: 5.1:1 ✓ (AA dla normal text)
-  - Beta badge text na bg: 5.1:1 ✓
-  - Test wymagany dla `--color-hive #e31337` na bg: ~4.6:1 — OK dla normal, **NIE uzywac jako primary text long-form**
+- **Kontrasty (vs `--color-bg #1a2030`):**
+  - `--color-text` `#ffffff`: 17.4:1 ✓
+  - `--color-text-muted` `#a8b1c4`: 7.5:1 ✓
+  - `--color-text-subtle` `#9aa6bd`: 6.6:1 ✓ (bump z poprzedniej wartosci, AA na wszystkich surface wlacznie z `#2e3850`)
+  - `--color-primary` na bg: 5.1:1 ✓
 
-- **Focus rings:** `box-shadow: var(--shadow-focus-ring)` (2px offset bg-color + 2px indigo). Aplikowane na `:focus-visible`, NIE `:focus`. Nigdy `outline: none` bez zamiennika.
+- **Decorative glyphs (zasada globalna):** `$`, `//`, `##`, `▊`, `╭─`, `─╮`, bracket ASCII icons — ZAWSZE w `<span aria-hidden="true">` lub w `::before`/`::after` pseudo. Nigdy jako tresc semantyczna. Screen readery ich nie slysza.
 
-- **Skip link:** w `BaseLayout.astro` pierwszy `<a href="#main">Skip to content</a>`, default `position: absolute; left: -9999px`, on focus widoczny top-left z `--shadow-focus-ring`.
+- **Focus rings:** `box-shadow: var(--shadow-focus-ring)`, border-radius `--tui-radius`. Na `:focus-visible`, NIE `:focus`. Nigdy `outline: none` bez zamiennika.
 
-- **Semantic HTML:** `<nav>`, `<main>`, `<article>`, `<section>` z `aria-labelledby`, `<footer>`. H1 raz na strone, pozniej kolejnosc h2-h3 bez przeskokow.
+- **Skip link:** `BaseLayout.astro` — `<a href="#main">Skip to content</a>`.
+
+- **Semantic HTML:** `<nav>`, `<main>`, `<section aria-labelledby>`, `<footer>`. H1 raz na stronie.
 
 - **`aria-current="page"`** na aktywnym linku nav.
 
-- **Prose w postach:** min 18px (`--text-lg`), line-height `--leading-prose` (1.75), max-width 720px (~70-75ch przy 18px).
+- **Mobile nav:** focus trap + ESC + `aria-modal="true"` + body scroll lock.
 
-- **Mobile nav:**
-  - Focus trap (Tab/Shift+Tab cycle wewnatrz panelu)
-  - ESC -> close, focus wraca do triggera
-  - `aria-modal="true"`, `role="dialog"`, `aria-label="Main menu"`
-  - Body scroll lock (`overflow: hidden` na `<html>`)
-
-- **Forms:** brak w v1 (jesli newsletter -> labels + inline validation on blur, NIE placeholder-as-label).
-
-- **Images:** `alt=""` (decorative) lub opisowe.
-
-- **Code blocks:** `<pre>` z `tabindex="0"` zeby keyboard mogl scrollowac horyzontalnie.
-
-- **Tabs (Install):** `role="tablist"`, `role="tab"`, `aria-selected`, `aria-controls`, `role="tabpanel"`, `aria-labelledby`. Keyboard arrows.
-
-- **Reduced motion:** patrz §5.
-
-- **Color-only meaning:** beta status nie tylko kolorem (badge text "Beta"); status indicators z ikona + tekstem.
+- **Tabs (Install):** `role="tablist"`, `role="tab"`, `aria-selected`, keyboard arrows.
 
 ---
 
-## 7. Beta badge — 2 warianty
+## 8. Beta badge — 2 warianty
 
 ### Wariant A (REKOMENDOWANY) — pill outline crimson + dot pulse
 
-```html
-<span class="badge badge--beta" aria-label="Beta version">
-  <span class="badge__pulse" aria-hidden="true">
-    <span class="badge__dot" />
-    <span class="badge__ring" />
-  </span>
-  Beta
-</span>
-```
-
-CSS:
-- Container: `--text-xs font-weight-medium tracking-wide`, padding `2px 10px 2px 8px`, radius `--radius-full`, bg `rgba(196,75,110,0.12)`, border 1px `var(--color-accent-danger)` (crimson `#c44b6e`), color `var(--color-accent-danger-text)` (`#ff6b8a`), gap 6px
-- Dot: 6px circle, bg `currentColor`, full opacity
-- Ring: 6px circle, border 1px `currentColor`, animate `pulse 1.6s var(--ease-out-quad) infinite` (scale 1 -> 1.6, opacity 0.8 -> 0)
-- Reduced-motion: ring opacity 0 (statyczny dot)
-
-**Zalety:** wyrazny, nie krzykliwy, pasuje do tech-aesthetic, dot daje "live" feeling bez bycia denerwujacym.
+CSS: bg `rgba(196,75,110,0.12)`, border 1px `var(--color-accent-danger)` (crimson `#c44b6e`), color `var(--color-accent-danger-text)` (`#ff6b8a`), dot 6px + ring pulse `1.6s infinite`, reduced-motion: ring hidden.
 
 ### Wariant B — textual muted
 
-```html
-<h1>
-  Power user wallet for Hive.
-  <small class="hero__version">v0.1 · Work in Progress</small>
-</h1>
-```
+`<small>v0.1 · Work in Progress</small>` pod H1.
 
-CSS: small jako block element pod H1, `--text-sm --color-text-subtle font-weight-regular tracking-normal`.
-
-**Zalety:** zerowy szum wizualny. **Wady:** mniej widoczny, latwo przeoczyc — nie spelnia roli "ostrzezenia" dla power-userow ktorzy chca wiedziec co instaluja.
-
-### Rekomendacja: **Wariant A**.
-Pasuje do toolstack-style aesthetic, dot pulse to sprawdzony patern dla "live/beta status" (Linear, GitHub, Vercel uzywaja podobnego). W navi top + raz w hero (obok H1 lub jako eyebrow). NIE powtarzac w kazdej sekcji.
+**Rekomendacja: Wariant A.** Dot pulse to sprawdzony pattern dla "live/beta status".
 
 ---
 
-## 8. Brand integration — Hive `#e31337`
+## 9. Brand integration — Hive `#e31337`
 
-**Zasada:** sparingly. Klin wizualny, nie struktura.
+**Zasada:** sparingly — max 3 lokacje.
 
 **Gdzie UZYWAC:**
-1. **Footer link** "Built for Hive blockchain" — slowo "Hive" w `--color-hive`, hover `--color-hive-muted`
-2. **Favicon accent** — maly element (np. dot lub akcent litery `c` w mark) w `--color-hive`, reszta w `--color-text`
-3. **Network status indicator** (jesli pojawi sie w v1.1+) — kropka z `--color-hive` przy "Connected to Hive mainnet"
-4. **Optional:** Card variant `tint-hive` rezerwowany dla rzadkich akcentow Hive-related (nie uzywac w hero/features)
+1. Footer — slowo "Hive" w `--color-hive`
+2. Favicon accent
+3. Network status indicator (v1.1+)
 
-**Gdzie NIE UZYWAC:**
-- Primary CTA (kolizja z indigo, podswiadome "alarm")
-- Error states (nadal `--color-accent-danger #ef4444` — Hive red jest brand, nie semantic)
-- Backgrounds wieksze niz 24x24px (zbyt agresywne na czarnym)
-- Linki w prose (mylace — uzytkownik bedzie myslal o akcji destruktywnej)
-
-**Bordowy fallback `--color-hive-muted #b81530`:** uzywaj kiedy Hive red wystepuje obok indigo (zeby nie konkurowaly), np. card tint glow `rgba(184, 21, 48, 0.14)` zamiast `rgba(227, 19, 55, 0.14)`.
+**Gdzie NIE UZYWAC:** CTA, error states, backgrounds >24x24px, linki w prose.
 
 ---
 
-## 9. Performance budgets
+## 10. TUI-specific tokens
+
+Nowe tokeny dodane w redesignie 2026-05-07:
+
+| Token | Wartosc | Zastosowanie |
+|---|---|---|
+| `--font-display` | `var(--font-mono)` | Display/headline font — globalny flip do mono |
+| `--cursor-blink-duration` | `1.06s` | Hero cursor animation |
+| `--cursor-glyph-width` | `0.6em` | Cursor `▊` width reserve |
+| `--tui-border` | `1px solid var(--color-border-bright)` | Fully-bright TUI panel border |
+| `--tui-border-dim` | `1px solid color-mix(...40%)` | Dimmed/resting panel border |
+| `--tui-radius` | `var(--radius-xs)` = 2px | Sharp TUI edges (zamiast rounded) |
+| `--tui-title-bar-h` | `1.5rem` | Rezerva wysokosci title bar kart |
+| `--tracking-mono-display` | `-0.02em` | Mono headline letter-spacing |
+| `--leading-mono-display` | `1.08` | Mono headline line-height |
+
+---
+
+## 11. Performance budgets
 
 | Metric | Budget | Notes |
 |---|---|---|
-| LCP | < 2.0s | Hero H1 jest LCP — text-only, font preload obowiazkowy |
-| CLS | < 0.05 | Reserve aspect-ratio na obrazach + terminal frame |
-| INP | < 200ms | Tabsy: setState pure JS, brak heavy frameworkow |
-| TBT | < 100ms | islands tylko 4 (CopyButton, MobileNav, InstallTabs + ewentualny TOC) |
-| Total JS (landing, gzipped) | < 50kb | Astro static + 4 mini islandy = ~25kb realistic |
+| LCP | < 2.0s | Hero H1 text-only (mono font preload obowiazkowy) |
+| CLS | < 0.05 | Aspect-ratio reserve na terminal frame |
+| INP | < 200ms | Tabs: pure JS, brak heavy frameworkow |
+| TBT | < 100ms | 4 mini islandy |
+| Total JS (gzipped) | < 50kb | Astro static + ~25kb realistic |
 | Total CSS (gzipped) | < 20kb | Tailwind 4 JIT + tokens |
-| Hero LCP image (jesli) | nie | LCP to text, NIE image — zero blokady |
-| Fonts | Inter + JetBrains Mono local woff2, `font-display: swap`, `<link rel="preload">` dla Inter regular+semibold |
-| External fonts CDN | **ZAKAZANE** (Google Fonts, etc.) |
 
-**Asset strategy:**
-- Inter: `inter-regular.woff2`, `inter-medium.woff2`, `inter-semibold.woff2`, `inter-bold.woff2` w `public/fonts/` z `@font-face` w `tokens.css` lub osobnym `fonts.css`
-- JetBrains Mono: `jetbrains-mono-regular.woff2`, `jetbrains-mono-medium.woff2`
-- Subset Latin only (woff2-subset jesli dostepny)
-- Preload tylko Inter regular (najczesciej widoczny) — pozostale lazy
-
-**Images:**
-- Astro `<Image>` z `format="avif,webp"`, `loading="lazy"` poza fold
-- OG images: 1200x630 PNG, jednorazowo wygenerowane (nie real-time)
+**Fonts:** Inter + JetBrains Mono Variable woff2 lokalne, `font-display: swap`, `<link rel="preload">`. **Zakaz zewnetrznych CDN (Google Fonts etc.).**
 
 ---
 
 ## Pozostale dokumenty
 
-- [docs/HANDOFF.md](docs/HANDOFF.md) — priorytety implementacji (P0/P1/P2), pakiety, A11y test plan, kolejnosc plikow, czego nie robic
+- [docs/HANDOFF.md](docs/HANDOFF.md) — priorytety implementacji (P0/P1/P2), pakiety, A11y test plan
 - [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) — nierozstrzygniete decyzje wymagajace eskalacji
-- [docs/SEO_ASSETS.md](docs/SEO_ASSETS.md) — favicon, OG images, workflow generowania (source of truth)
+- [docs/SEO_ASSETS.md](docs/SEO_ASSETS.md) — favicon, OG images, workflow generowania

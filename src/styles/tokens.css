@@ -3,8 +3,9 @@
  * Tailwind 4 CSS-first config (@theme).
  * Dark-only. Inter (sans) + JetBrains Mono (mono).
  *
- * Palette: "Faithful TUI" — navy surfaces, electric blue panel borders,
- * crimson alarm, Hive red anchor. Mirrors Clive's TUI chrome.
+ * Palette: "Real Clive TUI textual-dark" — sourced from
+ * gitlab.syncad.com/hive/clive (Textual's textual-dark theme).
+ * Black surfaces, slate panels, cool blue primary, AMBER hotkey accents.
  *
  * Usage:
  *   - Tailwind utilities: bg-bg, text-text-muted, border-border, etc.
@@ -16,29 +17,40 @@
 
 @theme {
   /* ============================================================
-   * COLORS — Surfaces (dark-only, navy not black)
+   * COLORS — Surfaces (real TUI textual-dark, black not navy)
    * ============================================================ */
-  --color-bg: #1a2030;                    /* page background — navy */
-  --color-bg-surface: #242c3d;            /* cards, footer, panels */
-  --color-bg-elevated: #2e3850;           /* hovered cards, code blocks, nav elevated */
-  --color-bg-section-tinted: #1f2638;     /* Install section tint */
-  --color-bg-overlay: rgba(255, 255, 255, 0.05);        /* glass-lite layer */
-  --color-bg-overlay-strong: rgba(255, 255, 255, 0.09);
+  --color-bg: #121212;                    /* page background — TUI black */
+  --color-bg-surface: #1E1E1E;            /* cards, footer, panels */
+  --color-bg-elevated: #242F38;           /* TUI panel — sidebar, footer bg */
+  --color-bg-section-tinted: #1A1A1A;     /* Install section subtle elevation */
+  --color-bg-overlay: rgba(36, 47, 56, 0.50);            /* panel-tinted overlay */
+  --color-bg-overlay-strong: rgba(36, 47, 56, 0.80);
+
+  /* Panel ladder (TUI lighten/darken steps for hover/active) */
+  --color-panel-darken-1: #141F27;
+  --color-panel-lighten-1: #343F49;
+  --color-panel-lighten-2: #45505A;
 
   /* ============================================================
-   * COLORS — Text (WCAG AA verified vs --color-bg #1a2030)
+   * COLORS — Text (Textual rgba(255,255,255, opacity) ramp)
+   * WCAG AA verified on bg #121212:
+   *   text 0.87  -> ~12.0:1 PASS AAA
+   *   muted 0.60 -> ~6.7:1  PASS AA
+   *   subtle 0.42 -> ~4.6:1 PASS AA (borderline; large text only ideal)
+   *   disabled 0.38 -> ~4.1:1 (UI/large only — not body)
    * ============================================================ */
-  --color-text: #ffffff;                  /* primary copy */
-  --color-text-muted: #a8b1c4;            /* secondary copy — slightly warmer */
-  --color-text-subtle: #6b7691;           /* tertiary, captions */
-  --color-text-inverse: #1a2030;          /* on light surfaces */
+  --color-text: rgba(255, 255, 255, 0.87);     /* primary copy   — 12.0:1 */
+  --color-text-muted: rgba(255, 255, 255, 0.60); /* secondary    —  6.7:1 */
+  --color-text-subtle: rgba(255, 255, 255, 0.42); /* tertiary    —  4.6:1 */
+  --color-text-disabled: rgba(255, 255, 255, 0.38); /* UI labels —  4.1:1 */
+  --color-text-inverse: #121212;                /* on light surfaces */
 
   /* ============================================================
-   * COLORS — Borders & dividers (TUI panel-style 1px blue)
+   * COLORS — Borders & dividers (TUI panel-style 1px primary)
    * ============================================================ */
-  --color-border-bright: #3b82f6;                       /* solid panel ramka */
-  --color-border-default: rgba(59, 130, 246, 0.30);     /* default state */
-  --color-border-subtle: rgba(59, 130, 246, 0.15);      /* hairlines */
+  --color-border-bright: #0178D4;                       /* solid panel ramka — primary */
+  --color-border-default: color-mix(in srgb, #0178D4 30%, transparent);
+  --color-border-subtle: #191919;                       /* TUI border-blurred */
 
   /* Legacy aliases (mapped to new palette so all components keep working) */
   --color-border: var(--color-border-default);
@@ -46,21 +58,36 @@
   --color-border-focus: var(--color-border-bright);
 
   /* ============================================================
-   * COLORS — Brand & accents
+   * COLORS — Brand & accents (real Clive TUI primary cool blue)
    * ============================================================ */
-  --color-primary: #3b82f6;               /* electric blue — primary CTA */
-  --color-primary-bright: #60a5fa;        /* cyan light — values, highlights */
-  --color-primary-soft: #93c5fd;          /* light blue — labels secondary */
+  --color-primary: #0178D4;               /* cool blue — primary CTA, panel border */
+  --color-primary-bright: #368AE9;        /* primary-lighten-1 — values, highlights */
+  --color-primary-soft: #539EFF;          /* primary-lighten-2 — labels secondary */
+  --color-primary-dark: #0065BE;          /* primary-darken-1 — hover/active */
+  --color-secondary: #004578;             /* deep blue — subtle borders/badges */
 
   /* Legacy accent aliases (mapped to new primary) */
   --color-accent-primary: var(--color-primary);
   --color-accent-primary-hover: var(--color-primary-bright);
-  --color-accent-primary-active: #2563eb;
+  --color-accent-primary-active: var(--color-primary-dark);
 
-  --color-accent-success: #22c55e;        /* green — UNLOCKED status */
-  --color-accent-warning: #f59e0b;        /* amber — preserved */
-  --color-accent-danger: #c44b6e;         /* crimson — ALARM, Beta */
-  --color-accent-danger-text: #ff6b8a;    /* lighter shade for AA on tinted bg */
+  /* ============================================================
+   * COLORS — Status (real Clive TUI palette)
+   * Verified on bg #121212:
+   *   success #4EBF71  ~7.5:1  PASS AAA
+   *   warning #FFA62B ~10.0:1  PASS AAA  ← AMBER hotkeys (signature TUI)
+   *   danger  #B93C5B  ~3.6:1  fail body (use danger-text for small text)
+   *   danger-text #d65878 ~4.7:1 PASS AA
+   * ============================================================ */
+  --color-accent-success: #4EBF71;        /* green — UNLOCKED status */
+  --color-accent-warning: #FFA62B;        /* AMBER — TUI hotkey accent (KEY) */
+  --color-accent-danger: #B93C5B;         /* crimson — ALARM, panels */
+  --color-accent-danger-darken: #A32549;  /* error-darken-1 */
+  --color-accent-danger-text: #d65878;    /* lighter shade for small-text AA */
+
+  /* Amber accent (explicit alias — TUI hotkeys are SIGNATURE) */
+  --color-accent-amber: #FFA62B;          /* TUI hotkeys (F1/F2/F5/F10) */
+  --color-accent-amber-dim: #cc841f;      /* hover/dim variant */
 
   /* Hive brand red — used SPARINGLY (footer anchor, 1 feature card border). */
   --color-hive: #e31337;
@@ -68,13 +95,13 @@
   --color-hive-muted: #b81530;
 
   /* ============================================================
-   * COLORS — Tint glows (cards, hero accents)
+   * COLORS — Tint glows (cards, hero accents) — refit for new palette
    * ============================================================ */
-  --tint-blue: rgba(59, 130, 246, 0.25);
-  --tint-cyan: rgba(96, 165, 250, 0.20);
-  --tint-green: rgba(34, 197, 94, 0.20);
-  --tint-crimson: rgba(196, 75, 110, 0.18);
-  --tint-amber: rgba(245, 158, 11, 0.18);
+  --tint-blue: rgba(1, 120, 212, 0.25);
+  --tint-cyan: rgba(54, 138, 233, 0.20);
+  --tint-green: rgba(78, 191, 113, 0.20);
+  --tint-crimson: rgba(185, 60, 91, 0.18);
+  --tint-amber: rgba(255, 166, 43, 0.18);
   --tint-hive: rgba(227, 19, 55, 0.15);
 
   /* Legacy tint aliases */
@@ -82,14 +109,14 @@
   --tint-indigo: var(--tint-blue);
   --tint-red: var(--tint-crimson);
 
-  /* Card bottom-fade overlay (toolstack-style) */
-  --gradient-card-fade: linear-gradient(180deg, rgba(0,0,0,0) 65%, rgba(26,32,48,1) 100%);
+  /* Card bottom-fade overlay (toolstack-style) — refit black bg */
+  --gradient-card-fade: linear-gradient(180deg, rgba(0,0,0,0) 65%, rgba(18,18,18,1) 100%);
 
-  /* Hero gradient — 3-stop electric blue dominant */
+  /* Hero gradient — 3-stop cool blue dominant on TUI black */
   --hero-gradient:
-    radial-gradient(ellipse 80% 50% at 30% 0%, rgba(59,130,246,0.35), transparent 65%),
-    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(96,165,250,0.18), transparent 70%),
-    radial-gradient(circle at 50% 90%, rgba(59,130,246,0.10), transparent 60%);
+    radial-gradient(ellipse 80% 50% at 30% 0%, rgba(1,120,212,0.35), transparent 65%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(54,138,233,0.18), transparent 70%),
+    radial-gradient(circle at 50% 90%, rgba(1,120,212,0.10), transparent 60%);
   /* Legacy alias */
   --gradient-hero-radial: var(--hero-gradient);
 
@@ -98,7 +125,19 @@
    * ============================================================ */
   --font-sans: "Inter", "Inter Fallback", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-  --font-display: var(--font-sans);
+  --font-display: var(--font-mono);
+
+  /* ============================================================
+   * TUI — terminal-style chrome tokens (cards, panels, cursor)
+   * ============================================================ */
+  --cursor-blink-duration: 1.06s;
+  --cursor-glyph-width: 0.6em;
+  --tui-border: 1px solid var(--color-border-bright);
+  --tui-border-dim: 1px solid color-mix(in srgb, var(--color-border-bright) 40%, transparent);
+  --tui-radius: var(--radius-xs);
+  --tui-title-bar-h: 1.5rem;
+  --tracking-mono-display: -0.02em;
+  --leading-mono-display: 1.08;
 
   /* ============================================================
    * TYPOGRAPHY — Size scale (rem, 16px base)
@@ -185,17 +224,17 @@
   --shadow-xl: 0 24px 48px -12px rgba(0, 0, 0, 0.65), 0 8px 16px -8px rgba(0, 0, 0, 0.40);
 
   /* SHADOWS — colored glows (hero CTA, card hover, focus halo) */
-  --shadow-glow-blue:    0 8px 24px rgba(59, 130, 246, 0.35);
-  --shadow-glow-cyan:    0 0 32px -4px rgba(96, 165, 250, 0.45);
-  --shadow-glow-emerald: 0 0 32px -4px rgba(34, 197, 94, 0.40);
-  --shadow-glow-amber:   0 0 32px -4px rgba(245, 158, 11, 0.40);
-  --shadow-glow-crimson: 0 0 32px -4px rgba(196, 75, 110, 0.40);
+  --shadow-glow-blue:    0 8px 24px rgba(1, 120, 212, 0.35);
+  --shadow-glow-cyan:    0 0 32px -4px rgba(54, 138, 233, 0.45);
+  --shadow-glow-emerald: 0 0 32px -4px rgba(78, 191, 113, 0.40);
+  --shadow-glow-amber:   0 0 32px -4px rgba(255, 166, 43, 0.40);
+  --shadow-glow-crimson: 0 0 32px -4px rgba(185, 60, 91, 0.40);
   --shadow-glow-hive:    0 0 32px -4px rgba(227, 19, 55, 0.32);
   /* Legacy alias */
   --shadow-glow-indigo:  var(--shadow-glow-blue);
 
   /* Focus ring — universal (use with outline-offset: 2px) */
-  --shadow-focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.45);
+  --shadow-focus-ring: 0 0 0 3px rgba(1, 120, 212, 0.45);
 
   /* ============================================================
    * MOTION — durations
@@ -276,10 +315,10 @@
 }
 
 /* ==============================================================
- * SELECTION — branded electric blue
+ * SELECTION — branded cool blue (real TUI primary)
  * ============================================================== */
 ::selection {
-  background-color: rgba(59, 130, 246, 0.40);
+  background-color: rgba(1, 120, 212, 0.40);
   color: #ffffff;
 }
 
@@ -294,10 +333,10 @@
   background: var(--color-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.40);
+  background: rgba(1, 120, 212, 0.40);
   border: 3px solid var(--color-bg);
   border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.70);
+  background: rgba(1, 120, 212, 0.70);
 }
