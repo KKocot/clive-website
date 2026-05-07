@@ -1,52 +1,60 @@
 ---
 import Card from "../ui/Card.astro";
 
-type Glow = "indigo" | "emerald" | "amber";
+type Glow = "blue" | "cyan" | "green" | "crimson" | "hive";
 
 interface Feature {
   title: string;
   desc: string;
   glow: Glow;
-  iconKey: "split" | "key" | "mouse" | "user" | "zap";
+  iconKey: "split" | "key" | "mouse" | "user" | "zap" | "cart";
 }
 
 const features: Feature[] = [
   {
     title: "Dual interface",
-    desc: "Run `clive` for full TUI or pass commands for CLI scripting. One tool, two modes.",
-    glow: "indigo",
+    desc: "Run interactively as a full TUI, or pipe commands through CLI for scripting.",
+    glow: "blue",
     iconKey: "split",
   },
   {
-    title: "Beekeeper encryption",
-    desc: "Keys live in encrypted wallets, not raw on disk. Unlock once, sign many.",
-    glow: "emerald",
+    title: "Encrypted wallets",
+    desc: "Beekeeper stores keys in encrypted wallets — never raw on disk. Unlock once.",
+    glow: "green",
     iconKey: "key",
   },
   {
     title: "Mouse-driven TUI",
-    desc: "Click buttons in your terminal. Inspired by Midnight Commander, modernized.",
-    glow: "amber",
+    desc: "Click buttons inside your terminal. Midnight Commander aesthetics, modern ergonomics.",
+    glow: "cyan",
     iconKey: "mouse",
   },
   {
     title: "Profile system",
-    desc: "Working account, watched accounts, key aliases, multi-node — all in one profile.",
-    glow: "indigo",
+    desc: "Working account, watched accounts, key aliases, and node list — bundled per profile.",
+    glow: "blue",
     iconKey: "user",
   },
   {
-    title: "Full blockchain ops",
-    desc: "Transfers, delegations, witness votes, governance — every operation, terminal-native.",
-    glow: "emerald",
+    title: "Transaction cart",
+    desc: "Batch operations, auto-pick the right key, sign and broadcast atomically.",
+    glow: "crimson",
+    iconKey: "cart",
+  },
+  {
+    title: "Hive blockchain native",
+    desc: "Transfers, delegations, votes, governance, recovery, RC — every Hive op, terminal-native.",
+    glow: "hive",
     iconKey: "zap",
   },
 ];
 
 const glowToColorVar: Record<Glow, string> = {
-  indigo: "var(--color-accent-primary)",
-  emerald: "var(--color-accent-success)",
-  amber: "var(--color-accent-warning)",
+  blue: "var(--color-primary)",
+  cyan: "var(--color-primary-bright)",
+  green: "var(--color-accent-success)",
+  crimson: "var(--color-accent-danger-text)",
+  hive: "var(--color-hive-text)",
 };
 ---
 
@@ -57,18 +65,19 @@ const glowToColorVar: Record<Glow, string> = {
 >
   <div class="container-x">
     <header class="features__header reveal">
+      <p class="features__eyebrow">Why Clive</p>
       <h2 id="features-heading" class="features__title">
         Built for power users
       </h2>
       <p class="features__lead">
-        Five things Clive gets right — encrypted, scriptable, terminal-native.
+        Six things Clive gets right — encrypted, scriptable, terminal-native.
       </p>
     </header>
 
     <ul class="features__grid" role="list">
       {
         features.map((f, i) => (
-          <li class={`reveal reveal--delay-${(i % 4) + 1}`}>
+          <li class={`reveal reveal--delay-${(i % 3) + 1}`}>
             <Card glow={f.glow} fade>
               <div
                 class="feature__icon"
@@ -82,7 +91,7 @@ const glowToColorVar: Record<Glow, string> = {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="1.5"
+                    stroke-width="1.75"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   >
@@ -97,7 +106,7 @@ const glowToColorVar: Record<Glow, string> = {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="1.5"
+                    stroke-width="1.75"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   >
@@ -114,12 +123,12 @@ const glowToColorVar: Record<Glow, string> = {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="1.5"
+                    stroke-width="1.75"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   >
-                    <path d="M3 3l7.5 18 2.5-7 7-2.5L3 3z" />
-                    <line x1="13" y1="13" x2="20" y2="20" />
+                    <path d="M5 3l14 8-6 2-3 7-5-17z" />
+                    <line x1="11" y1="13" x2="18" y2="20" />
                   </svg>
                 )}
                 {f.iconKey === "user" && (
@@ -129,13 +138,13 @@ const glowToColorVar: Record<Glow, string> = {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="1.5"
+                    stroke-width="1.75"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   >
                     <circle cx="12" cy="8" r="4" />
                     <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
-                    <circle cx="18" cy="6" r="2" />
+                    <circle cx="18" cy="6" r="1.5" />
                   </svg>
                 )}
                 {f.iconKey === "zap" && (
@@ -145,11 +154,27 @@ const glowToColorVar: Record<Glow, string> = {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="1.5"
+                    stroke-width="1.75"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   >
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                  </svg>
+                )}
+                {f.iconKey === "cart" && (
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="9" cy="20" r="1.75" />
+                    <circle cx="18" cy="20" r="1.75" />
+                    <path d="M3 4h2.2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 8H6" />
                   </svg>
                 )}
               </div>
@@ -165,6 +190,7 @@ const glowToColorVar: Record<Glow, string> = {
 
 <style>
   .features {
+    background-color: var(--color-bg-surface);
     padding-block: var(--section-y);
   }
   @media (min-width: 64rem) {
@@ -176,6 +202,16 @@ const glowToColorVar: Record<Glow, string> = {
   .features__header {
     max-width: 48rem;
     margin-bottom: var(--space-12);
+  }
+
+  .features__eyebrow {
+    margin: 0 0 var(--space-3);
+    font-size: 0.8125rem;            /* 13px */
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary-bright);
+    opacity: 0.9;
   }
 
   .features__title {
@@ -214,6 +250,20 @@ const glowToColorVar: Record<Glow, string> = {
     }
   }
 
+  .features__grid > li {
+    display: flex;
+  }
+  .features__grid > li > :global(.card) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .features__grid > li > :global(.card) > :global(.card__inner) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   .feature__icon {
     width: 40px;
     height: 40px;
@@ -221,14 +271,17 @@ const glowToColorVar: Record<Glow, string> = {
     align-items: center;
     justify-content: center;
     border-radius: var(--radius-md);
-    background-color: var(--color-bg-overlay);
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border-subtle);
     margin-bottom: var(--space-4);
+    transition: background-color var(--duration-base) var(--ease-out-quint);
   }
 
   .feature__title {
     font-size: var(--text-xl);
     font-weight: var(--font-weight-semibold);
     letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
     margin: 0 0 var(--space-2);
     color: var(--color-text);
   }
@@ -237,6 +290,7 @@ const glowToColorVar: Record<Glow, string> = {
     font-size: var(--text-base);
     line-height: var(--leading-relaxed);
     color: var(--color-text-muted);
+    max-width: 38ch;
     margin: 0;
   }
 </style>
