@@ -5,124 +5,107 @@ const currentYear = new Date().getFullYear();
 const VERSION = "v1.28.8.1";
 ---
 
-<footer class="footer">
-  <div class="container-x footer__bar">
-    <p class="footer__copy">© {currentYear} clive contributors</p>
-    <div class="footer__meta">
-      <a
-        href={LINKS.MIT_LICENSE}
+<footer class="tmux-status" role="contentinfo">
+  <div class="tmux-status__bar">
+    <span class="tmux-status__segment"
+      ><a
+        href={LINKS.GITLAB_RELEASES}
+        class="tmux-status__link"
         target="_blank"
         rel="noopener noreferrer"
-        class="footer__license-link"
-        aria-label="MIT license — opens in new tab"
-      ><span aria-hidden="true">[</span>MIT<span aria-hidden="true">]</span></a>
-      <span aria-hidden="true" class="footer__sep">·</span>
-      <span class="footer__version tag-bracket"
-        ><span aria-hidden="true">[</span>{VERSION}<span aria-hidden="true">]</span></span>
-      <span aria-hidden="true" class="footer__sep">·</span>
-      <a
-        href={LINKS.HIVE}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="footer__hive-link"
-        aria-label="Hive blockchain — opens in new tab"
-      >
-        <span aria-hidden="true">// </span>built for <span class="footer__hive-mark">hive</span> blockchain
-      </a>
-    </div>
+        aria-label={`Clive ${VERSION} — releases on GitLab`}
+        >[clive {VERSION}]</a
+      ></span
+    ><span class="tmux-status__sep" aria-hidden="true">│</span><span
+      class="tmux-status__segment"
+      >© {currentYear}</span
+    ><span class="tmux-status__sep" aria-hidden="true">│</span><a
+      href={LINKS.MIT_LICENSE}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="tmux-status__link"
+      aria-label="MIT License — opens in new tab"
+      >MIT License</a
+    ><span class="tmux-status__sep" aria-hidden="true">│</span><a
+      href={LINKS.HIVE}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="tmux-status__link"
+      aria-label="Hive blockchain ecosystem — opens in new tab"
+      >built for <span class="tmux-status__hive">hive</span></a
+    ><span class="tmux-status__sep" aria-hidden="true">│</span><span
+      class="tmux-status__dot"
+      aria-label="Status: online">●</span
+    >
   </div>
 </footer>
 
 <style>
-  .footer {
-    position: relative;
-    background-color: #0d0d0d;
-    padding-block: var(--space-4);
-  }
-  .footer::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(1, 120, 212, 0.5),
-      transparent
-    );
-    pointer-events: none;
-  }
-
-  .footer__bar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--space-3) var(--space-4);
-  }
-
-  .footer__copy {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.04em;
-    color: var(--color-text-subtle);
-  }
-
-  .footer__meta {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-2);
+  .tmux-status {
+    background-color: var(--color-bg-surface);
+    border-top: 1px solid var(--tui-panel-border-color);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: 0.04em;
     color: var(--color-text-muted);
+    line-height: 1;
   }
 
-  .footer__license-link {
-    font-family: var(--font-mono);
-    font-size: inherit;
+  .tmux-status__bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    padding: var(--space-2) var(--space-4);
+    min-height: 2rem;
+  }
+
+  .tmux-status__segment {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .tmux-status__sep {
     color: var(--color-text-subtle);
+    padding-inline: var(--space-2);
+    user-select: none;
+  }
+
+  .tmux-status__link {
+    color: var(--color-text-muted);
     text-decoration: none;
+    white-space: nowrap;
     transition: color var(--duration-fast) var(--ease-out-quad);
   }
-  .footer__license-link:hover {
+
+  .tmux-status__link:hover,
+  .tmux-status__link:focus-visible {
     color: var(--color-primary-bright);
+    text-shadow: var(--glow-intensity) var(--glow-color);
   }
 
-  .footer__sep {
-    color: var(--color-text-subtle);
+  .tmux-status__link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
   }
 
-  .footer__version {
-    font-family: var(--font-mono);
-    color: var(--color-text-subtle);
-  }
-
-  .footer__hive-link {
-    font-family: var(--font-mono);
-    color: var(--color-text-subtle);
-    text-decoration: none;
-    text-transform: lowercase;
-    transition: color var(--duration-fast) var(--ease-out-quad);
-  }
-  .footer__hive-link:hover {
-    color: var(--color-hive-text);
-  }
-  .footer__hive-mark {
+  .tmux-status__hive {
     color: var(--color-hive-text);
     font-weight: var(--font-weight-semibold);
   }
 
+  .tmux-status__dot {
+    color: var(--color-accent-success);
+    font-size: 0.625rem;
+    line-height: 1;
+  }
+
   @media (max-width: 40rem) {
-    .footer__bar {
-      justify-content: center;
-      text-align: center;
-    }
-    .footer__meta {
+    .tmux-status__bar {
+      padding: var(--space-2) var(--space-3);
       justify-content: center;
     }
   }
