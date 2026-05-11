@@ -1,6 +1,7 @@
 ---
 import Button from "../ui/Button.astro";
 import TerminalFrame from "../ui/TerminalFrame.astro";
+import TypewriterText from "../islands/TypewriterText.tsx";
 import { LINKS } from "../../config/links";
 
 const GITLAB_URL = LINKS.GITLAB;
@@ -33,9 +34,13 @@ Operations          Status
         id="hero-heading"
         class="h-display reveal reveal--delay-2 hero__heading"
       >
-        clive — power-user wallet for <span class="hero__heading-accent"
-          >hive<span class="hero__cursor" aria-hidden="true">▊</span></span
-        >
+        <TypewriterText
+          client:visible
+          text="clive — power-user wallet for "
+          accentText="hive"
+          speed={50}
+          delay={400}
+        />
       </h1>
 
       <p class="reveal reveal--delay-3 hero__subhead">
@@ -139,15 +144,42 @@ Operations          Status
     line-height: var(--leading-mono-display);
     text-transform: lowercase;
   }
-  .hero__heading-accent {
-    color: var(--color-primary-bright);
-    display: inline-block;
-    white-space: nowrap;
+  /* Typewriter island — grid-stack technique for zero CLS
+   * SSR: sizer visible (full text + cursor), overlay hidden
+   * After hydration: sizer hidden, overlay active with typing animation */
+  .hero__heading :global(.typewriter) {
+    display: inline-grid;
   }
-  .hero__cursor {
-    display: inline-block;
-    margin-left: 0.08em;
+  .hero__heading :global(.typewriter__sizer),
+  .hero__heading :global(.typewriter__overlay) {
+    grid-area: 1 / 1;
+  }
+
+  /* Sizer: visible on SSR, hidden after JS hydration */
+  .hero__heading :global(.typewriter__sizer) {
+    /* visible by default — SSR shows full text */
+  }
+  .hero__heading :global(.typewriter__sizer--hidden) {
+    visibility: hidden;
+  }
+
+  /* Overlay: hidden on SSR, visible after JS hydration */
+  .hero__heading :global(.typewriter__overlay) {
+    visibility: hidden;
+  }
+  .hero__heading :global(.typewriter__overlay--active) {
+    visibility: visible;
+  }
+
+  .hero__heading :global(.typewriter__accent) {
     color: var(--color-primary-bright);
+  }
+  .hero__heading :global(.typewriter__cursor) {
+    display: inline-block;
+    margin-left: 0.02em;
+    color: var(--color-primary-bright);
+  }
+  .hero__heading :global(.typewriter__cursor--blink) {
     animation: clive-cursor-blink var(--cursor-blink-duration) steps(2, end) infinite;
   }
   @keyframes clive-cursor-blink {
@@ -155,7 +187,7 @@ Operations          Status
     50%, 100% { opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .hero__cursor {
+    .hero__heading :global(.typewriter__cursor--blink) {
       animation: none;
       opacity: 1;
     }
