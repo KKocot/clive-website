@@ -1,5 +1,6 @@
 ---
 import Card from "../ui/Card.astro";
+import TuiPanel from "../ui/TuiPanel.astro";
 
 type Glow = "blue" | "cyan" | "green" | "crimson" | "hive";
 
@@ -57,11 +58,7 @@ const features: Feature[] = [
 ];
 ---
 
-<section
-  id="features"
-  class="features"
-  aria-labelledby="features-heading"
->
+<TuiPanel title="$ clive --help" id="features" class="features reveal-scroll">
   <div class="container-x">
     <header class="features__header reveal">
       <p class="features__eyebrow"><span aria-hidden="true">// </span>why clive</p>
@@ -93,7 +90,7 @@ const features: Feature[] = [
       }
     </ul>
   </div>
-</section>
+</TuiPanel>
 
 <style>
   .features {
@@ -203,6 +200,7 @@ const features: Feature[] = [
     text-wrap: balance;
     margin: 0 0 var(--space-2);
     color: var(--color-text);
+    text-shadow: 0 0 8px rgba(1, 120, 212, 0.15);
   }
 
   .feature__desc {

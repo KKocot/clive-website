@@ -1,11 +1,12 @@
 ---
 import TerminalFrame from "../ui/TerminalFrame.astro";
+import TuiPanel from "../ui/TuiPanel.astro";
 ---
 
-<section id="demo" class="demo" aria-labelledby="demo-heading">
+<TuiPanel title="$ clive --tui" id="demo" class="demo reveal-scroll">
   <div class="container-x">
     <header class="demo__header reveal">
-      <p class="demo__eyebrow"><span aria-hidden="true">// </span>live demo</p>
+      <p class="demo__eyebrow"><span aria-hidden="true">// </span>see it in action</p>
       <h2 id="demo-heading" class="demo__title">
         <span class="section-title__prefix" aria-hidden="true">## </span>demo
       </h2>
@@ -82,7 +83,7 @@ import TerminalFrame from "../ui/TerminalFrame.astro";
 
     <p class="demo__caption">Demo coming soon · Asciinema cast in preparation</p>
   </div>
-</section>
+</TuiPanel>
 
 <style>
   .demo {

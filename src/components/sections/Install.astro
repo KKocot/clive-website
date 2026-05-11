@@ -1,40 +1,37 @@
 ---
 import CopyButton from "../islands/CopyButton";
 import TerminalFrame from "../ui/TerminalFrame.astro";
+import TuiPanel from "../ui/TuiPanel.astro";
 import { LINKS } from "../../config/links";
 
 const INSTALL_CMD = `bash <(curl -s ${LINKS.INSTALL_SCRIPT})`;
 
-const firstStepsHtml = `<span class="t-comment"># 1. TUI launches automatically</span>
+const firstStepsHtml = `<span class="install-step install-step--1"><span class="t-comment"># 1. TUI launches automatically</span>
 <span class="t-comment"># After install, the Clive window opens inside Docker.</span>
-<span class="t-comment"># Detach without stopping it:</span> <span class="t-accent">Ctrl-@, Ctrl-Q</span>
+<span class="t-comment"># Detach without stopping it:</span> <span class="t-accent">Ctrl-@, Ctrl-Q</span></span>
 
-<span class="t-comment"># 2. Create your profile</span>
+<span class="install-step install-step--2"><span class="t-comment"># 2. Create your profile</span>
 <span class="t-prompt">$</span> clive configure profile create
-<span class="t-comment"># Holds your accounts and wallet references.</span>
+<span class="t-comment"># Holds your accounts and wallet references.</span></span>
 
-<span class="t-comment"># 3. Set your Hive account</span>
+<span class="install-step install-step--3"><span class="t-comment"># 3. Set your Hive account</span>
 <span class="t-prompt">$</span> clive configure working-account switch
-<span class="t-comment"># Choose which Hive account this profile operates as.</span>
+<span class="t-comment"># Choose which Hive account this profile operates as.</span></span>
 
-<span class="t-comment"># 4. Add a private key</span>
+<span class="install-step install-step--4"><span class="t-comment"># 4. Add a private key</span>
 <span class="t-prompt">$</span> clive configure key add
-<span class="t-comment"># Stored in the encrypted Beekeeper wallet — never plaintext.</span>
+<span class="t-comment"># Stored in the encrypted Beekeeper wallet — never plaintext.</span></span>
 
-<span class="t-comment"># 5. Verify setup</span>
+<span class="install-step install-step--5"><span class="t-comment"># 5. Verify setup</span>
 <span class="t-prompt">$</span> clive show balances
 <span class="t-subtle">  HIVE: 0.000   HBD: 0.000   HP: 0.000</span>
-<span class="t-prompt">$</span> <span class="t-cursor" aria-hidden="true">▌</span>`;
+<span class="t-prompt">$</span> <span class="t-cursor" aria-hidden="true">▌</span></span>`;
 ---
 
-<section
-  id="install"
-  class="install"
-  aria-labelledby="install-heading"
->
+<TuiPanel title="$ bash <(curl -s get.clive.sh)" statusLeft="supported: linux, macos" id="install" class="install reveal-scroll">
   <div class="container-x">
     <header class="install__header reveal">
-      <p class="install__eyebrow"><span aria-hidden="true">$ </span>install</p>
+      <p class="install__eyebrow"><span aria-hidden="true">$ </span>get clive</p>
       <h2 id="install-heading" class="install__title">
         <span class="section-title__prefix" aria-hidden="true">## </span>install
       </h2>
@@ -133,7 +130,7 @@ const firstStepsHtml = `<span class="t-comment"># 1. TUI launches automatically<
       </a>
     </p>
   </div>
-</section>
+</TuiPanel>
 
 <style>
   .install {
@@ -352,6 +349,30 @@ const firstStepsHtml = `<span class="t-comment"># 1. TUI launches automatically<
     :global(.t-cursor) {
       animation: none;
       opacity: 0.85;
+    }
+  }
+
+  /* Sequential step reveal — typing feel for first-steps code block */
+  :global(.install-step) {
+    display: inline;
+    opacity: 0;
+    animation: install-step-in var(--duration-normal) var(--ease-out) forwards;
+  }
+  :global(.install-step--1) { animation-delay: 0ms; }
+  :global(.install-step--2) { animation-delay: 200ms; }
+  :global(.install-step--3) { animation-delay: 400ms; }
+  :global(.install-step--4) { animation-delay: 600ms; }
+  :global(.install-step--5) { animation-delay: 800ms; }
+
+  @keyframes install-step-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.install-step) {
+      animation: none;
+      opacity: 1;
     }
   }
 
