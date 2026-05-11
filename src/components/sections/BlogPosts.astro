@@ -20,19 +20,10 @@ import TuiPanel from "../ui/TuiPanel.astro";
 </TuiPanel>
 
 <style>
-  .blog {
+  :global(.blog) {
     background-color: var(--color-bg-surface);
-    padding-block: var(--section-y);
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  @media (min-width: 64rem) {
-    .blog {
-      padding-block: var(--section-y-lg);
-    }
+    padding: var(--space-3);
+    min-height: max(calc(100dvh - var(--header-h)), 32rem);
   }
 
   .blog__header {

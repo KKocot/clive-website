@@ -93,19 +93,10 @@ const features: Feature[] = [
 </TuiPanel>
 
 <style>
-  .features {
+  :global(.features) {
     background-color: var(--color-bg-surface);
-    padding-block: var(--section-y);
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  @media (min-width: 64rem) {
-    .features {
-      padding-block: var(--section-y-lg);
-    }
+    padding: var(--space-3);
+    min-height: calc(100dvh - var(--header-h));
   }
 
   .features__header {

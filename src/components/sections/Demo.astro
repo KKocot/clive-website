@@ -86,18 +86,9 @@ import TuiPanel from "../ui/TuiPanel.astro";
 </TuiPanel>
 
 <style>
-  .demo {
-    padding-block: var(--section-y);
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  @media (min-width: 64rem) {
-    .demo {
-      padding-block: var(--section-y-lg);
-    }
+  :global(.demo) {
+    padding: var(--space-3);
+    min-height: calc(100dvh - var(--header-h));
   }
 
   .demo__header {

@@ -133,19 +133,10 @@ const firstStepsHtml = `<span class="install-step install-step--1"><span class="
 </TuiPanel>
 
 <style>
-  .install {
+  :global(.install) {
     background-color: var(--color-bg-section-tinted);
-    padding-block: var(--section-y);
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  @media (min-width: 64rem) {
-    .install {
-      padding-block: var(--section-y-lg);
-    }
+    padding: var(--space-3);
+    min-height: calc(100dvh - var(--header-h));
   }
 
   .install__header {
