@@ -139,6 +139,25 @@
   --tracking-mono-display: -0.02em;
   --leading-mono-display: 1.08;
 
+  /* TUI Panel — double-border frames, panel chrome */
+  --tui-border-double: ╔═╗║╚═╝;
+  --tui-panel-padding: var(--space-4);
+  --tui-panel-title-bg: var(--color-bg-surface);
+  --tui-panel-status-bg: var(--color-bg-surface);
+  --tui-panel-border-color: var(--color-border);
+
+  /* Phosphor glow — CRT text glow effect */
+  --glow-color: var(--color-primary);
+  --glow-intensity: 0 0 10px;
+
+  /* Scan lines — CRT overlay */
+  --scanline-opacity: 0.03;
+  --scanline-size: 2px;
+
+  /* Typewriter — character-by-character reveal */
+  --typewriter-speed: 50ms;
+  --typewriter-cursor-width: 2px;
+
   /* ============================================================
    * TYPOGRAPHY — Size scale (rem, 16px base)
    * Modular: 1.200 (minor third) on body, 1.250 on display
@@ -242,6 +261,7 @@
   --duration-instant: 75ms;
   --duration-fast:    150ms;   /* hover, micro-feedback */
   --duration-base:    250ms;   /* card hover, dropdown */
+  --duration-normal:  var(--duration-base);   /* alias — scroll reveals */
   --duration-slow:    400ms;   /* section reveals */
   --duration-slower:  600ms;   /* hero entry */
 

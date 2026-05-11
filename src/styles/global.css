@@ -178,3 +178,100 @@ video {
   letter-spacing: 0.04em;
   color: var(--color-primary-soft);
 }
+
+/* ============================================================
+ * TYPEWRITER — cursor blink keyframe
+ * ============================================================ */
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Typewriter reveal — used with clip-path or max-width */
+@keyframes typewriter-reveal {
+  from { max-width: 0; }
+  to { max-width: 100%; }
+}
+
+/* ============================================================
+ * SCAN LINES — CRT overlay (opt-in via class)
+ * ============================================================ */
+.tui-scanlines {
+  position: relative;
+}
+
+.tui-scanlines::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent var(--scanline-size),
+    rgba(0, 0, 0, var(--scanline-opacity)) var(--scanline-size),
+    rgba(0, 0, 0, var(--scanline-opacity)) calc(var(--scanline-size) * 2)
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Disable scan lines on mobile — performance safety */
+@media (max-width: 40rem) {
+  .tui-scanlines::after {
+    display: none;
+  }
+}
+
+/* ============================================================
+ * PHOSPHOR GLOW — CRT text glow (opt-in via class)
+ * ============================================================ */
+.tui-glow {
+  text-shadow: var(--glow-intensity) var(--glow-color);
+}
+
+.tui-glow-hover:hover {
+  text-shadow: var(--glow-intensity) var(--glow-color);
+}
+
+/* ============================================================
+ * REVEAL-SCROLL — JS-driven scroll entrance
+ * (Separate from .reveal which uses @starting-style CSS-only)
+ * Toggle .reveal-scroll--visible via IntersectionObserver.
+ * ============================================================ */
+.reveal-scroll {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--duration-normal) var(--ease-out),
+              transform var(--duration-normal) var(--ease-out);
+}
+
+.reveal-scroll--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+ * REDUCED MOTION — disable CRT effects & scroll reveals
+ * ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .tui-scanlines::after {
+    display: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .reveal-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .reveal-scroll--visible {
+    opacity: 1;
+    transform: none;
+  }
+}
