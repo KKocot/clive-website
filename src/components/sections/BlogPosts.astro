@@ -1,0 +1,82 @@
+---
+import BlogPostsSolid from "../islands/BlogPosts.tsx";
+---
+
+<section id="blog" class="blog" aria-labelledby="blog-heading">
+  <div class="container-x">
+    <header class="blog__header reveal">
+      <p class="blog__eyebrow"><span aria-hidden="true">// </span>blog</p>
+      <h2 id="blog-heading" class="blog__title">
+        <span class="section-title__prefix" aria-hidden="true">## </span>latest posts
+      </h2>
+      <p class="blog__lead">Updates, guides, and announcements from the Clive team.</p>
+    </header>
+
+    <div class="blog__content reveal">
+      <BlogPostsSolid client:only="solid-js" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .blog {
+    background-color: var(--color-bg-surface);
+    padding-block: var(--section-y);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  @media (min-width: 64rem) {
+    .blog {
+      padding-block: var(--section-y-lg);
+    }
+  }
+
+  .blog__header {
+    max-width: 48rem;
+    margin-bottom: var(--space-10);
+  }
+
+  .blog__eyebrow {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.04em;
+    color: var(--color-primary-bright);
+    text-transform: lowercase;
+  }
+
+  .blog__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-mono-display);
+    line-height: var(--leading-mono-display);
+    text-transform: lowercase;
+    margin: 0 0 var(--space-3);
+  }
+
+  .section-title__prefix {
+    color: var(--color-text-subtle);
+  }
+
+  .blog__lead {
+    font-family: var(--font-sans);
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  .blog__content {
+    max-width: 60rem;
+    margin-inline: auto;
+  }
+
+  .blog__content :global(.flex.items-center.justify-between) {
+    display: none;
+  }
+</style>
