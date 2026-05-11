@@ -1,0 +1,270 @@
+---
+interface Props {
+  title?: string;
+  statusLeft?: string;
+  statusRight?: string;
+  class?: string;
+  id?: string;
+}
+
+const {
+  title,
+  statusLeft,
+  statusRight,
+  class: className,
+  id,
+} = Astro.props;
+
+const hasStatus = !!(statusLeft || statusRight);
+const titleId = title && id ? `${id}-title` : title ? `tui-panel-title-${Math.random().toString(36).slice(2, 8)}` : undefined;
+---
+
+<section
+  class:list={["tui-panel", "reveal-scroll", className]}
+  id={id}
+  aria-labelledby={titleId}
+>
+  {title && (
+    <div class="tui-panel__title-bar" aria-hidden="true">
+      <span class="tui-panel__corner tui-panel__corner--tl" aria-hidden="true"></span>
+      <span class="tui-panel__h-rule" aria-hidden="true"></span>
+      <span class="tui-panel__corner tui-panel__corner--tr" aria-hidden="true"></span>
+    </div>
+  )}
+
+  {title && (
+    <div class="tui-panel__title-row">
+      <span class="tui-panel__v-border" aria-hidden="true"></span>
+      <span class="tui-panel__title-text" id={titleId}>{title}</span>
+      <span class="tui-panel__v-border" aria-hidden="true"></span>
+    </div>
+  )}
+
+  {title && (
+    <div class="tui-panel__separator" aria-hidden="true">
+      <span class="tui-panel__corner tui-panel__corner--ml" aria-hidden="true"></span>
+      <span class="tui-panel__h-rule" aria-hidden="true"></span>
+      <span class="tui-panel__corner tui-panel__corner--mr" aria-hidden="true"></span>
+    </div>
+  )}
+
+  {!title && (
+    <div class="tui-panel__title-bar" aria-hidden="true">
+      <span class="tui-panel__corner tui-panel__corner--tl" aria-hidden="true"></span>
+      <span class="tui-panel__h-rule" aria-hidden="true"></span>
+      <span class="tui-panel__corner tui-panel__corner--tr" aria-hidden="true"></span>
+    </div>
+  )}
+
+  <div class="tui-panel__body">
+    <span class="tui-panel__v-border" aria-hidden="true"></span>
+    <div class="tui-panel__content">
+      <slot />
+    </div>
+    <span class="tui-panel__v-border" aria-hidden="true"></span>
+  </div>
+
+  {hasStatus && (
+    <div class="tui-panel__separator" aria-hidden="true">
+      <span class="tui-panel__corner tui-panel__corner--ml" aria-hidden="true"></span>
+      <span class="tui-panel__h-rule" aria-hidden="true"></span>
+      <span class="tui-panel__corner tui-panel__corner--mr" aria-hidden="true"></span>
+    </div>
+  )}
+
+  {hasStatus && (
+    <div class="tui-panel__status-row">
+      <span class="tui-panel__v-border" aria-hidden="true"></span>
+      <span class="tui-panel__status-left">{statusLeft}</span>
+      <span class="tui-panel__status-right">{statusRight}</span>
+      <span class="tui-panel__v-border" aria-hidden="true"></span>
+    </div>
+  )}
+
+  <div class="tui-panel__bottom-bar" aria-hidden="true">
+    <span class="tui-panel__corner tui-panel__corner--bl" aria-hidden="true"></span>
+    <span class="tui-panel__h-rule" aria-hidden="true"></span>
+    <span class="tui-panel__corner tui-panel__corner--br" aria-hidden="true"></span>
+  </div>
+</section>
+
+<style>
+  /* ============================================================
+   * TuiPanel — terminal-style section wrapper with double borders
+   * Uses CSS-rendered box-drawing characters for cross-font safety.
+   * ============================================================ */
+  .tui-panel {
+    --_border-color: var(--tui-panel-border-color);
+    --_border-width: 2px;
+    position: relative;
+    width: 100%;
+  }
+
+  /* ------------------------------------------------------------
+   * Shared bar layout: corners + horizontal rule
+   * ------------------------------------------------------------ */
+  .tui-panel__title-bar,
+  .tui-panel__separator,
+  .tui-panel__bottom-bar {
+    display: flex;
+    align-items: center;
+    line-height: 0;
+  }
+
+  .tui-panel__h-rule {
+    flex: 1;
+    height: var(--_border-width);
+    background-color: var(--_border-color);
+  }
+
+  /* ------------------------------------------------------------
+   * Corners — CSS box-drawing via borders
+   * ------------------------------------------------------------ */
+  .tui-panel__corner {
+    display: block;
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Top-left */
+  .tui-panel__corner--tl {
+    border-top: var(--_border-width) solid var(--_border-color);
+    border-left: var(--_border-width) solid var(--_border-color);
+    border-top-left-radius: var(--tui-radius);
+  }
+
+  /* Top-right */
+  .tui-panel__corner--tr {
+    border-top: var(--_border-width) solid var(--_border-color);
+    border-right: var(--_border-width) solid var(--_border-color);
+    border-top-right-radius: var(--tui-radius);
+  }
+
+  /* Middle-left (T-junction) */
+  .tui-panel__corner--ml {
+    border-left: var(--_border-width) solid var(--_border-color);
+    border-top: var(--_border-width) solid transparent;
+    border-bottom: var(--_border-width) solid transparent;
+  }
+
+  /* Middle-right (T-junction) */
+  .tui-panel__corner--mr {
+    border-right: var(--_border-width) solid var(--_border-color);
+    border-top: var(--_border-width) solid transparent;
+    border-bottom: var(--_border-width) solid transparent;
+  }
+
+  /* Bottom-left */
+  .tui-panel__corner--bl {
+    border-bottom: var(--_border-width) solid var(--_border-color);
+    border-left: var(--_border-width) solid var(--_border-color);
+    border-bottom-left-radius: var(--tui-radius);
+  }
+
+  /* Bottom-right */
+  .tui-panel__corner--br {
+    border-bottom: var(--_border-width) solid var(--_border-color);
+    border-right: var(--_border-width) solid var(--_border-color);
+    border-bottom-right-radius: var(--tui-radius);
+  }
+
+  /* ------------------------------------------------------------
+   * Vertical borders (left/right rails)
+   * ------------------------------------------------------------ */
+  .tui-panel__v-border {
+    display: block;
+    width: var(--_border-width);
+    flex-shrink: 0;
+    background-color: var(--_border-color);
+    align-self: stretch;
+  }
+
+  /* ------------------------------------------------------------
+   * Title row
+   * ------------------------------------------------------------ */
+  .tui-panel__title-row {
+    display: flex;
+    align-items: stretch;
+    background-color: var(--tui-panel-title-bg);
+  }
+
+  .tui-panel__title-text {
+    flex: 1;
+    padding: var(--space-2) var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-primary-bright);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ------------------------------------------------------------
+   * Body / content area
+   * ------------------------------------------------------------ */
+  .tui-panel__body {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .tui-panel__content {
+    flex: 1;
+    min-width: 0;
+    padding: var(--tui-panel-padding);
+  }
+
+  @media (min-width: 48rem) {
+    .tui-panel__content {
+      padding: var(--space-6) var(--space-7);
+    }
+  }
+
+  /* ------------------------------------------------------------
+   * Status bar row
+   * ------------------------------------------------------------ */
+  .tui-panel__status-row {
+    display: flex;
+    align-items: stretch;
+    background-color: var(--tui-panel-status-bg);
+  }
+
+  .tui-panel__status-left {
+    flex: 1;
+    padding: var(--space-1) var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tui-panel__status-right {
+    padding: var(--space-1) var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-subtle);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  /* ------------------------------------------------------------
+   * Responsive — tighter padding on mobile
+   * ------------------------------------------------------------ */
+  @media (max-width: 47.999rem) {
+    .tui-panel__title-text {
+      padding: var(--space-1) var(--space-3);
+      font-size: var(--text-xs);
+    }
+
+    .tui-panel__status-left,
+    .tui-panel__status-right {
+      padding: var(--space-1) var(--space-3);
+    }
+  }
+</style>
