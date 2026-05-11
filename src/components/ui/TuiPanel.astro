@@ -98,6 +98,8 @@ const titleId = title && id ? `${id}-title` : title ? `tui-panel-title-${Math.ra
     --_border-width: 2px;
     position: relative;
     width: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   /* ------------------------------------------------------------
@@ -208,12 +210,16 @@ const titleId = title && id ? `${id}-title` : title ? `tui-panel-title-${Math.ra
   .tui-panel__body {
     display: flex;
     align-items: stretch;
+    flex: 1;
   }
 
   .tui-panel__content {
     flex: 1;
     min-width: 0;
     padding: var(--tui-panel-padding);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   @media (min-width: 48rem) {
