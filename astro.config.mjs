@@ -7,6 +7,7 @@ import sitemap from "@astrojs/sitemap";
 import solidJs from "@astrojs/solid-js";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import { wasmUrlPlugin } from "@hiveio/honeycomb-solid/plugins";
 
 // https://astro.build/config
 export default defineConfig({
@@ -23,7 +24,7 @@ export default defineConfig({
     allowedHosts: true,
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), wasmUrlPlugin()],
     build: {
       cssMinify: "lightningcss",
     },

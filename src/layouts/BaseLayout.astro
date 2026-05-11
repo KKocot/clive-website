@@ -1,6 +1,7 @@
 ---
 import "@fontsource-variable/jetbrains-mono";
 import "../styles/global.css";
+import "@hiveio/honeycomb-solid/base.css";
 import SEO from "../components/seo/SEO.astro";
 import Footer from "../components/sections/Footer.astro";
 import { LINKS } from "../config/links";
@@ -53,7 +54,7 @@ const isCurrent = (href: string): boolean => {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./tokens.css";
+@import "@hiveio/honeycomb-solid/theme.css";
 
 /* ============================================================
  * FONTS — JetBrains Mono Variable: symbols subset
