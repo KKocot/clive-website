@@ -28,10 +28,10 @@ const centerNavLinks: {
   label: string;
   external?: boolean;
 }[] = [
-  { href: "/#features", label: "Features" },
-  { href: "/#install", label: "Install" },
-  { href: "/#demo", label: "Demo" },
-  { href: "/#blog", label: "Blog" },
+  { href: "/#features", label: "features" },
+  { href: "/#install", label: "install" },
+  { href: "/#demo", label: "demo" },
+  { href: "/#blog", label: "blog" },
 ];
 
 const gitlabLink = {
@@ -71,147 +71,154 @@ const isCurrent = (href: string): boolean => {
     />
     <slot name="head" />
   </head>
-  <body class="min-h-dvh">
+  <body class="tui-scanlines min-h-dvh">
     <a href="#main-content" class="skip-link">Skip to content</a>
 
-    <header
-      class="sticky top-0 z-50 w-full border-b backdrop-blur-md"
-      style="background-color: rgba(26, 32, 48, 0.85); border-color: var(--color-border-subtle);"
-    >
-      <div
-        class="container-x flex h-16 items-center justify-between gap-4 md:grid md:grid-cols-3"
-      >
-        <a
-          href="/"
-          class="flex items-center gap-2 font-mono text-base font-semibold tracking-tight md:justify-self-start"
-          aria-label="Clive — home"
-        >
-          <span style="color: var(--color-primary-bright)">$</span>
-          <span style="color: var(--color-text)">clive</span>
-        </a>
-
-        <nav
-          class="hidden items-center gap-1 md:flex md:justify-self-center"
-          aria-label="Primary navigation"
-        >
-          {
-            centerNavLinks.map((link) => {
-              const current = isCurrent(link.href);
-              return (
-                <a
-                  href={link.href}
-                  class="nav-link rounded-md px-3 py-2 text-sm font-medium transition-colors"
-                  {...(current ? { "aria-current": "page" } : {})}
-                  {...(link.external
-                    ? { target: "_blank", rel: "noopener noreferrer" }
-                    : {})}
-                >
-                  {link.label}
-                  {link.external && (
-                    <span aria-hidden="true" class="ml-0.5 text-xs">
-                      {"↗"}
-                    </span>
-                  )}
-                </a>
-              );
-            })
-          }
-        </nav>
-
-        <a
-          href={gitlabLink.href}
-          class="nav-link nav-link-icon hidden h-10 w-10 items-center justify-center rounded-md text-sm font-medium transition-colors md:flex md:justify-self-end"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={gitlabLink.label}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            width="20"
-            height="20"
-            fill="currentColor"
-            aria-hidden="true"
+    <header class="tmux-bar sticky top-0 z-50 w-full">
+      <div class="tmux-bar__inner container-x flex items-center justify-between">
+        <!-- Left: home tab + nav tabs -->
+        <div class="tmux-bar__tabs flex items-center">
+          <a
+            href="/"
+            class="tmux-tab tmux-tab--home"
+            aria-label="Clive — home"
+            {...(isCurrent("/") ? { "aria-current": "page" } : {})}
           >
-            <path d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.4049L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4997-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z" />
-          </svg>
-        </a>
+            <span class="tmux-tab__index">0:</span>clive
+          </a>
 
-        <details class="md:hidden">
-          <summary
-            class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md"
-            style="color: var(--color-text);"
-            aria-label="Toggle menu"
+          <nav
+            class="hidden items-center md:flex"
+            aria-label="Primary navigation"
+          >
+            {
+              centerNavLinks.map((link, i) => {
+                const current = isCurrent(link.href);
+                return (
+                  <a
+                    href={link.href}
+                    class="tmux-tab"
+                    {...(current ? { "aria-current": "page" } : {})}
+                    {...(link.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
+                    <span class="tmux-tab__index">{i + 1}:</span>
+                    {link.label}
+                    {link.external && (
+                      <span aria-hidden="true" class="ml-0.5 text-xs">
+                        {"↗"}
+                      </span>
+                    )}
+                  </a>
+                );
+              })
+            }
+          </nav>
+        </div>
+
+        <!-- Right: GitLab link + mobile hamburger -->
+        <div class="flex items-center">
+          <a
+            href={gitlabLink.href}
+            class="tmux-tab tmux-tab--gitlab hidden md:flex"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={gitlabLink.label}
           >
             <svg
-              width="20"
-              height="20"
               viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.75"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              width="14"
+              height="14"
+              fill="currentColor"
               aria-hidden="true"
+              class="tmux-tab__gitlab-icon"
             >
-              <line x1="4" y1="7" x2="20" y2="7"></line>
-              <line x1="4" y1="12" x2="20" y2="12"></line>
-              <line x1="4" y1="17" x2="20" y2="17"></line>
+              <path d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.4049L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4997-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z" />
             </svg>
-          </summary>
-          <div
-            class="absolute inset-x-0 top-16 border-b p-4"
-            style="background-color: var(--color-bg-elevated); border-color: var(--color-border-subtle);"
-          >
-            <nav aria-label="Mobile navigation">
-              <ul class="flex flex-col gap-1">
-                {
-                  centerNavLinks.map((link) => {
-                    const current = isCurrent(link.href);
-                    return (
-                      <li>
-                        <a
-                          href={link.href}
-                          class="nav-link-mobile block rounded-md px-3 py-3 text-base font-medium"
-                          {...(current ? { "aria-current": "page" } : {})}
-                          {...(link.external
-                            ? { target: "_blank", rel: "noopener noreferrer" }
-                            : {})}
-                        >
-                          {link.label}
-                          {link.external && (
-                            <span aria-hidden="true" class="ml-1 text-xs">
-                              {"↗"}
-                            </span>
-                          )}
-                        </a>
-                      </li>
-                    );
-                  })
-                }
-                <li>
-                  <a
-                    href={gitlabLink.href}
-                    class="nav-link-mobile flex items-center gap-2 rounded-md px-3 py-3 text-base font-medium"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      aria-hidden="true"
+            GitLab
+          </a>
+
+          <details class="md:hidden">
+            <summary
+              class="tmux-tab tmux-tab--hamburger flex cursor-pointer items-center justify-center"
+              aria-label="Toggle menu"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="4" y1="7" x2="20" y2="7"></line>
+                <line x1="4" y1="12" x2="20" y2="12"></line>
+                <line x1="4" y1="17" x2="20" y2="17"></line>
+              </svg>
+            </summary>
+            <div class="tmux-mobile-dropdown absolute inset-x-0 border-b p-3">
+              <nav aria-label="Mobile navigation">
+                <ul class="flex flex-col gap-0.5">
+                  {
+                    centerNavLinks.map((link, i) => {
+                      const current = isCurrent(link.href);
+                      return (
+                        <li>
+                          <a
+                            href={link.href}
+                            class="tmux-tab tmux-tab--mobile"
+                            {...(current ? { "aria-current": "page" } : {})}
+                            {...(link.external
+                              ? {
+                                  target: "_blank",
+                                  rel: "noopener noreferrer",
+                                }
+                              : {})}
+                          >
+                            <span class="tmux-tab__index">{i + 1}:</span>
+                            {link.label}
+                            {link.external && (
+                              <span aria-hidden="true" class="ml-1 text-xs">
+                                {"↗"}
+                              </span>
+                            )}
+                          </a>
+                        </li>
+                      );
+                    })
+                  }
+                  <li>
+                    <a
+                      href={gitlabLink.href}
+                      class="tmux-tab tmux-tab--mobile flex items-center gap-1.5"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <path d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.4049L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4997-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z" />
-                    </svg>
-                    {gitlabLink.label}
-                    <span aria-hidden="true" class="ml-1 text-xs">{"↗"}</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </details>
+                      <span class="tmux-tab__index"
+                        >{centerNavLinks.length + 1}:</span
+                      >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="14"
+                        height="14"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.4049L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4997-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z" />
+                      </svg>
+                      gitlab
+                      <span aria-hidden="true" class="text-xs">{"↗"}</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </details>
+        </div>
       </div>
     </header>
 
@@ -241,32 +248,183 @@ const isCurrent = (href: string): boolean => {
       });
     </script>
 
+    <script>
+      // Scroll-triggered reveal — IntersectionObserver for .reveal-scroll elements.
+      // Elements get .reveal-scroll--visible once 15% visible, then unobserved.
+      const initRevealObserver = () => {
+        const elements = document.querySelectorAll('.reveal-scroll');
+        if (!elements.length) return;
+
+        const prefersReducedMotion = window.matchMedia(
+          '(prefers-reduced-motion: reduce)',
+        ).matches;
+
+        if (prefersReducedMotion) {
+          elements.forEach((el) => el.classList.add('reveal-scroll--visible'));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('reveal-scroll--visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.15 },
+        );
+
+        elements.forEach((el) => observer.observe(el));
+      };
+
+      initRevealObserver();
+    </script>
+
     <style>
-      .nav-link {
+      /* ============================================================
+       * TMUX TAB BAR — status line style navigation
+       * ============================================================ */
+      .tmux-bar {
+        background-color: var(--color-bg-surface);
+        border-bottom: 1px solid var(--tui-panel-border-color);
+        font-family: var(--font-mono);
+      }
+
+      .tmux-bar__inner {
+        height: 2.5rem; /* 40px — compact like tmux status bar */
+      }
+
+      /* --- Individual tab --- */
+      .tmux-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.125rem;
+        padding: 0.25rem 0.625rem; /* 4px 10px */
+        font-size: var(--text-sm);
+        font-weight: var(--font-weight-medium);
+        line-height: 1;
         color: var(--color-text-muted);
+        text-decoration: none;
+        white-space: nowrap;
+        border-radius: var(--radius-xs);
         transition:
           color var(--duration-fast) var(--ease-out),
           background-color var(--duration-fast) var(--ease-out);
       }
-      .nav-link:hover,
-      .nav-link:focus-visible {
-        color: var(--color-primary-bright);
+
+      .tmux-tab:hover,
+      .tmux-tab:focus-visible {
+        color: var(--color-text);
         background-color: var(--color-bg-overlay);
+        text-shadow: var(--glow-intensity) var(--glow-color);
       }
-      .nav-link[aria-current="page"] {
+
+      .tmux-tab[aria-current="page"] {
+        color: var(--color-bg);
+        background-color: var(--color-primary);
+      }
+
+      .tmux-tab[aria-current="page"] .tmux-tab__index {
+        color: var(--color-bg);
+        opacity: 0.7;
+      }
+
+      /* --- Tab index prefix (the "0:", "1:" etc.) --- */
+      .tmux-tab__index {
+        color: var(--color-text-subtle);
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* --- Home tab --- */
+      .tmux-tab--home {
+        font-weight: var(--font-weight-semibold);
         color: var(--color-primary-bright);
       }
 
-      .nav-link-mobile {
-        color: var(--color-text);
-        transition: background-color var(--duration-fast) var(--ease-out);
-      }
-      .nav-link-mobile:hover,
-      .nav-link-mobile:focus-visible {
+      .tmux-tab--home:hover,
+      .tmux-tab--home:focus-visible {
+        color: var(--color-primary-soft);
         background-color: var(--color-bg-overlay);
       }
-      .nav-link-mobile[aria-current="page"] {
-        color: var(--color-primary-bright);
+
+      .tmux-tab--home .tmux-tab__index {
+        color: var(--color-primary);
+        opacity: 0.6;
+      }
+
+      .tmux-tab--home[aria-current="page"] {
+        color: var(--color-bg);
+        background-color: var(--color-primary);
+      }
+
+      .tmux-tab--home[aria-current="page"] .tmux-tab__index {
+        color: var(--color-bg);
+        opacity: 0.7;
+      }
+
+      /* --- GitLab tab (right side) --- */
+      .tmux-tab--gitlab {
+        gap: 0.375rem;
+      }
+
+      .tmux-tab__gitlab-icon {
+        flex-shrink: 0;
+      }
+
+      /* --- Hamburger tab (mobile) --- */
+      .tmux-tab--hamburger {
+        width: 2.5rem;
+        height: 100%;
+        padding: 0;
+        justify-content: center;
+        list-style: none; /* remove details marker */
+      }
+
+      .tmux-tab--hamburger::-webkit-details-marker {
+        display: none;
+      }
+
+      /* --- Mobile dropdown --- */
+      .tmux-mobile-dropdown {
+        background-color: var(--color-bg-surface);
+        border-color: var(--tui-panel-border-color);
+        font-family: var(--font-mono);
+        /* Position below the bar (height = 2.5rem = 40px) */
+        top: 2.5rem;
+      }
+
+      /* --- Mobile tab variant --- */
+      .tmux-tab--mobile {
+        display: flex;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        font-size: var(--text-sm);
+        border-radius: var(--radius-xs);
+      }
+
+      .tmux-tab--mobile:hover,
+      .tmux-tab--mobile:focus-visible {
+        color: var(--color-text);
+        background-color: var(--color-bg-overlay);
+      }
+
+      .tmux-tab--mobile[aria-current="page"] {
+        color: var(--color-bg);
+        background-color: var(--color-primary);
+      }
+
+      .tmux-tab--mobile[aria-current="page"] .tmux-tab__index {
+        color: var(--color-bg);
+        opacity: 0.7;
+      }
+
+      /* --- Reduced motion --- */
+      @media (prefers-reduced-motion: reduce) {
+        .tmux-tab {
+          transition: none;
+        }
       }
     </style>
   </body>
