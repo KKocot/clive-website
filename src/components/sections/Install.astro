@@ -60,33 +60,6 @@ const firstStepsHtml = `<span class="install-step install-step--1"><span class="
       </span>
     </div>
 
-    <div
-      class="install__warning"
-      role="note"
-      aria-label="Development notice"
-    >
-      <span class="install__warning-icon" aria-hidden="true">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.75"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-          <line x1="12" y1="9" x2="12" y2="13"></line>
-          <line x1="12" y1="17" x2="12.01" y2="17"></line>
-        </svg>
-      </span>
-      <p>
-        Clive is in active development. Installation may require Hive
-        infrastructure access — see docs.
-      </p>
-    </div>
-
     <div class="install__cmd">
       <div class="install__code-wrap">
         <pre class="install__code"><code>{INSTALL_CMD}</code></pre>
@@ -228,32 +201,6 @@ const firstStepsHtml = `<span class="install-step install-step--1"><span class="
     color: var(--color-primary-soft);
     border-bottom-color: currentColor;
   }
-
-  .install__warning {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-3);
-    padding: var(--space-4) var(--space-5);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-accent-warning);
-    background-color: rgba(255, 166, 43, 0.08);
-    color: var(--color-text);
-    margin-bottom: var(--space-6);
-    max-width: 42rem;
-    margin-inline: auto;
-  }
-  .install__warning p {
-    margin: 0;
-    font-size: var(--text-sm);
-    line-height: var(--leading-relaxed);
-    color: var(--color-text-muted);
-  }
-  .install__warning-icon {
-    flex-shrink: 0;
-    color: var(--color-accent-warning);
-    margin-top: 2px;
-  }
-
   .install__cmd {
     max-width: 42rem;
     margin-inline: auto;
