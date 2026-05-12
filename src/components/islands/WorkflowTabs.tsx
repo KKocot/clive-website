@@ -1,4 +1,3 @@
-import { Show } from "solid-js";
 import { useStore } from "@nanostores/solid";
 import { $appMode } from "../../stores/appMode";
 
@@ -13,25 +12,25 @@ export default function WorkflowTabs(props: WorkflowTabsProps) {
   const mode = useStore($appMode);
 
   return (
-    <>
-      <Show when={mode() === "tui"}>
-        <div
-          role="tabpanel"
-          id={`${props.panelId}-panel-tui`}
-          class="workflow-tabs__panel"
-          aria-labelledby={`${props.panelId}-tui`}
-          innerHTML={props.tuiHtml}
-        />
-      </Show>
-      <Show when={mode() === "cli"}>
-        <div
-          role="tabpanel"
-          id={`${props.panelId}-panel-cli`}
-          class="workflow-tabs__panel"
-          aria-labelledby={`${props.panelId}-cli`}
-          innerHTML={props.cliHtml}
-        />
-      </Show>
-    </>
+    <div data-mode={mode()} class="workflow-tabs__mode-root">
+      <div
+        role="tabpanel"
+        id={`${props.panelId}-panel-tui`}
+        class="workflow-tabs__panel"
+        aria-label={`${props.panelId} — TUI mode`}
+        aria-hidden={mode() !== "tui"}
+        style={{ display: mode() === "tui" ? undefined : "none" }}
+        innerHTML={props.tuiHtml}
+      />
+      <div
+        role="tabpanel"
+        id={`${props.panelId}-panel-cli`}
+        class="workflow-tabs__panel"
+        aria-label={`${props.panelId} — CLI mode`}
+        aria-hidden={mode() !== "cli"}
+        style={{ display: mode() === "cli" ? undefined : "none" }}
+        innerHTML={props.cliHtml}
+      />
+    </div>
   );
 }
