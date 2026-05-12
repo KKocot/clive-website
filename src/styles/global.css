@@ -34,6 +34,9 @@ body {
   font-size: var(--text-base);
   line-height: var(--leading-normal);
   min-height: 100dvh;
+  transition:
+    background-color var(--mode-transition, 300ms) ease,
+    color var(--mode-transition, 300ms) ease;
 }
 
 /* Container helper */

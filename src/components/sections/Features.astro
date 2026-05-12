@@ -97,6 +97,9 @@ const features: Feature[] = [
     background-color: var(--color-bg-surface);
     padding: var(--space-3);
     min-height: calc(100dvh - var(--header-h));
+    transition:
+      background-color var(--mode-transition, 300ms) ease,
+      border-color var(--mode-transition, 300ms) ease;
   }
 
   .features__header {

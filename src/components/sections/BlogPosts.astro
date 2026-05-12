@@ -24,6 +24,9 @@ import TuiPanel from "../ui/TuiPanel.astro";
     background-color: var(--color-bg-surface);
     padding: var(--space-3);
     min-height: max(calc(100dvh - var(--header-h)), 32rem);
+    transition:
+      background-color var(--mode-transition, 300ms) ease,
+      border-color var(--mode-transition, 300ms) ease;
   }
 
   .blog__header {

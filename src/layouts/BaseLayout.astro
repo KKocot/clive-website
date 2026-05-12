@@ -297,6 +297,9 @@ const isCurrent = (href: string): boolean => {
         background-color: var(--color-bg-surface);
         border-bottom: 1px solid var(--tui-panel-border-color);
         font-family: var(--font-mono);
+        transition:
+          background-color var(--mode-transition, 300ms) ease,
+          border-color var(--mode-transition, 300ms) ease;
       }
 
       .tmux-bar__inner {
@@ -331,6 +334,9 @@ const isCurrent = (href: string): boolean => {
       .tmux-tab[aria-current="page"] {
         color: var(--color-bg);
         background-color: var(--color-primary);
+        transition:
+          background-color var(--mode-transition, 300ms) ease,
+          color var(--mode-transition, 300ms) ease;
       }
 
       .tmux-tab[aria-current="page"] .tmux-tab__index {
@@ -400,6 +406,9 @@ const isCurrent = (href: string): boolean => {
         font-family: var(--font-mono);
         /* Position below the bar (height = 2.5rem = 40px) */
         top: 2.5rem;
+        transition:
+          background-color var(--mode-transition, 300ms) ease,
+          border-color var(--mode-transition, 300ms) ease;
       }
 
       /* --- Mobile tab variant --- */
