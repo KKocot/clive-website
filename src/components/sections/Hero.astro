@@ -15,19 +15,16 @@ const GITLAB_URL = LINKS.GITLAB;
 const heroTuiHtml = `<div class="hero__tui">
   <header class="hero__tui-header">
     <span class="hero__tui-header-left">
-      <span class="t-accent">+</span>
-      <span class="t-accent">alice</span>
-      <span class="t-dim">/</span>
-      <span class="t-emerald">@alice</span>
-      <span class="t-dim">&middot;</span>
-      <span>No alarms</span>
+      <span class="hero__tui-tab hero__tui-tab--active">alice</span>
+      <span class="hero__tui-indicator hero__tui-indicator--ok" aria-hidden="true"></span>
+      <span class="hero__tui-lock t-emerald">&#x1f513; UNLOCKED</span>
     </span>
     <span class="hero__tui-header-center">
-      <span class="t-emerald">UNLOCKED</span>
+      <span class="hero__tui-tab hero__tui-tab--selected">Dashboard</span>
+      <span class="hero__tui-tab">Cart <span class="t-dim">(empty)</span></span>
     </span>
     <span class="hero__tui-header-right">
-      <span class="t-dim">Dashboard</span>
-      <span class="t-dim">&middot;</span>
+      <span class="hero__tui-indicator hero__tui-indicator--ok" aria-hidden="true"></span>
       <span class="t-emerald">online</span>
     </span>
   </header>
@@ -38,24 +35,30 @@ const heroTuiHtml = `<div class="hero__tui">
       <div class="hero__tui-account-name">
         <span class="hero__tui-badge hero__tui-badge--ok">alice</span>
         <span class="hero__tui-stats">
-          <span class="t-emerald">100.00 % RC</span>
-          <span class="t-dim">&middot;</span>
-          <span class="t-emerald">100.00 % VOTING</span>
+          <span class="hero__tui-bar"><span class="hero__tui-bar-label t-dim">RC</span><span class="hero__tui-bar-track"><span class="hero__tui-bar-fill" style="width:98%"></span></span><span class="t-emerald">98%</span></span>
+          <span class="hero__tui-bar"><span class="hero__tui-bar-label t-dim">VP</span><span class="hero__tui-bar-track"><span class="hero__tui-bar-fill" style="width:100%"></span></span><span class="t-emerald">100%</span></span>
+          <span class="hero__tui-bar"><span class="hero__tui-bar-label t-dim">DP</span><span class="hero__tui-bar-track"><span class="hero__tui-bar-fill hero__tui-bar-fill--full" style="width:100%"></span></span><span class="t-emerald">100%</span></span>
         </span>
       </div>
     </div>
 
     <div class="hero__tui-section">
+      <div class="hero__tui-section-title t-accent">BALANCES</div>
       <div class="hero__tui-table">
+        <div class="hero__tui-row hero__tui-row--header">
+          <span class="hero__tui-cell-label"></span>
+          <span class="hero__tui-cell-val t-dim">HIVE</span>
+          <span class="hero__tui-cell-val t-dim">HBD</span>
+        </div>
         <div class="hero__tui-row">
           <span class="hero__tui-cell-label t-accent">LIQUID</span>
-          <span class="hero__tui-cell-val t-emerald">100,000.000 HIVE</span>
-          <span class="hero__tui-cell-val t-emerald">100,000.000 HBD</span>
+          <span class="hero__tui-cell-val t-emerald">100,000.000</span>
+          <span class="hero__tui-cell-val t-emerald">100,000.000</span>
         </div>
         <div class="hero__tui-row">
           <span class="hero__tui-cell-label t-accent">SAVINGS</span>
-          <span class="hero__tui-cell-val">100.000 HIVE</span>
-          <span class="hero__tui-cell-val">190.000 HBD</span>
+          <span class="hero__tui-cell-val">100.000</span>
+          <span class="hero__tui-cell-val">190.000</span>
         </div>
         <div class="hero__tui-row">
           <span class="hero__tui-cell-label t-accent">STAKE</span>
@@ -82,36 +85,47 @@ const heroTuiHtml = `<div class="hero__tui">
   </div>
 
   <footer class="hero__tui-footer">
-    <span><span class="t-amber">?</span> Help</span>
-    <span><span class="t-amber">d</span> Account details</span>
-    <span><span class="t-amber">o</span> Operations</span>
-    <span><span class="t-amber">w</span> Switch account</span>
-    <span><span class="t-amber">^l</span> Lock wallet</span>
+    <span><span class="hero__tui-key">esc</span> Back</span>
+    <span><span class="hero__tui-key">^d</span> Dashboard</span>
+    <span><span class="hero__tui-key">^l</span> Lock</span>
+    <span><span class="hero__tui-key">^s</span> Settings</span>
+    <span><span class="hero__tui-key">?</span> Help</span>
   </footer>
 </div>`;
 
 /* ------------------------------------------------------------------ *
  * CLI visualization — realistic Clive CLI session                    *
- * Shows `clive show balances` output + a transfer command.           *
+ * Shows `clive show account` with rich-formatted tables.             *
  * ------------------------------------------------------------------ */
-const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
-<span class="t-dim">Using beekeeper at</span> <span class="t-accent">http://127.0.0.1:39507</span>
+const heroCliHtml = `<span class="t-dim">clive@cli:~/.clive$</span> clive show account alice
 
-<span class="t-subtle">         Details of 'alice' account</span>
-<span class="t-accent">              The balances</span>
-<span class="t-dim">  ┌──────────┬──────────────────┬──────────────────┐</span>
-<span class="t-dim">  │</span> <span class="t-emerald">Liquid</span>   <span class="t-dim">│</span>  100,000.000 HIVE <span class="t-dim">│</span>  100,000.000 HBD <span class="t-dim">│</span>
-<span class="t-dim">  │</span> <span class="t-emerald">Savings</span>  <span class="t-dim">│</span>      100.000 HIVE <span class="t-dim">│</span>      190.000 HBD <span class="t-dim">│</span>
-<span class="t-dim">  │</span> <span class="t-emerald">Stake</span>    <span class="t-dim">│</span>      100.0K HP   <span class="t-dim">│</span>    180.0M VESTS  <span class="t-dim">│</span>
-<span class="t-dim">  └──────────┴──────────────────┴──────────────────┘</span>
+<span class="t-cyan">  Details of</span> <span class="t-emerald">'alice'</span> <span class="t-cyan">account</span>
 
-<span class="t-dim">clive@cli:~$</span> clive process transfer \\
-  --from alice --to bob --amount <span class="t-accent">"10.000 HIVE"</span>
+<span class="t-dim">  ┌─────────────────────────────────────────────────┐</span>
+<span class="t-dim">  │</span>  <span class="t-yellow">General info</span>                                   <span class="t-dim">│</span>
+<span class="t-dim">  ├──────────────┬──────────────────────────────────┤</span>
+<span class="t-dim">  │</span> <span class="t-cyan">Name</span>         <span class="t-dim">│</span>  <span class="t-emerald">alice</span>                           <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-cyan">Created</span>      <span class="t-dim">│</span>  2019-06-01T12:00:00            <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-cyan">Reputation</span>   <span class="t-dim">│</span>  <span class="t-emerald">75</span>                              <span class="t-dim">│</span>
+<span class="t-dim">  └──────────────┴──────────────────────────────────┘</span>
 
-<span class="t-emerald">  Transaction broadcast successfully.</span>
-<span class="t-dim">  Block:</span> 82,451,307  <span class="t-dim">TxID:</span> <span class="t-subtle">a3f9e1...c704</span>
+<span class="t-dim">  ┌─────────────────────────────────────────────────┐</span>
+<span class="t-dim">  │</span>  <span class="t-yellow">The balances</span>                                   <span class="t-dim">│</span>
+<span class="t-dim">  ├──────────┬──────────────────┬───────────────────┤</span>
+<span class="t-dim">  │</span> <span class="t-emerald">Liquid</span>   <span class="t-dim">│</span> 100,000.000 HIVE <span class="t-dim">│</span> 100,000.000 HBD  <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-emerald">Savings</span>  <span class="t-dim">│</span>     100.000 HIVE <span class="t-dim">│</span>     190.000 HBD  <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-emerald">Stake</span>    <span class="t-dim">│</span>     100.0K HP   <span class="t-dim">│</span>   180.0M VESTS   <span class="t-dim">│</span>
+<span class="t-dim">  └──────────┴──────────────────┴───────────────────┘</span>
 
-<span class="t-dim">clive@cli:~$</span> <span class="t-cursor" aria-hidden="true">▌</span>`;
+<span class="t-dim">  ┌─────────────────────────────────────────────────┐</span>
+<span class="t-dim">  │</span>  <span class="t-yellow">Voting info</span>                                    <span class="t-dim">│</span>
+<span class="t-dim">  ├──────────────┬──────────────────────────────────┤</span>
+<span class="t-dim">  │</span> <span class="t-cyan">Voting power</span> <span class="t-dim">│</span>  <span class="t-emerald">100.00 %</span>                       <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-cyan">Downvote</span>     <span class="t-dim">│</span>  <span class="t-emerald">100.00 %</span>                       <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-cyan">RC</span>           <span class="t-dim">│</span>  <span class="t-emerald">98.42 %</span>                        <span class="t-dim">│</span>
+<span class="t-dim">  └──────────────┴──────────────────────────────────┘</span>
+
+<span class="t-dim">clive@cli:~/.clive$</span> <span class="t-cursor" aria-hidden="true">▌</span>`;
 ---
 
 <section
@@ -339,6 +353,13 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
   }
 
   /* ============================================================
+   * Mode-root — transition wrapper from WorkflowTabs
+   * ============================================================ */
+  :global(.workflow-tabs__mode-root) {
+    transition: background-color 300ms ease, border-color 300ms ease;
+  }
+
+  /* ============================================================
    * TUI Dashboard — structured multi-panel layout
    * ============================================================ */
   :global(.hero__tui) {
@@ -347,8 +368,11 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
     font-family: var(--font-mono);
     font-size: clamp(0.625rem, 0.5rem + 0.45vw, 0.8125rem);
     line-height: 1.3;
-    color: var(--color-text);
+    color: var(--mode-text, var(--color-text));
     gap: 0;
+    background-color: var(--mode-bg, var(--color-bg-surface));
+    border-radius: var(--radius-md);
+    transition: background-color 300ms ease, color 300ms ease;
   }
 
   /* Header bar — top status line */
@@ -359,9 +383,11 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
     flex-wrap: wrap;
     gap: var(--space-1) var(--space-3);
     padding: var(--space-1) var(--space-2);
-    background-color: var(--color-bg-elevated);
-    border-bottom: 1px solid var(--color-border-default);
+    background-color: var(--mode-bg-header, var(--color-bg-elevated));
+    border-bottom: 1px solid var(--mode-border, var(--color-border-default));
     font-size: 0.6875em;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    transition: background-color 300ms ease, border-color 300ms ease;
   }
   :global(.hero__tui-header-left),
   :global(.hero__tui-header-center),
@@ -372,7 +398,44 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
     white-space: nowrap;
   }
   :global(.hero__tui-header-center) {
+    display: flex;
+    gap: 0;
+  }
+
+  /* Tab-style navigation in header */
+  :global(.hero__tui-tab) {
+    padding: 0.125rem 0.5rem;
+    color: var(--mode-text-muted, var(--color-text-muted));
+    font-size: 0.875em;
+  }
+  :global(.hero__tui-tab--active) {
+    color: var(--mode-accent-primary, var(--color-primary-bright));
     font-weight: var(--font-weight-semibold);
+  }
+  :global(.hero__tui-tab--selected) {
+    background-color: var(--mode-border, rgba(96, 165, 250, 0.15));
+    border-radius: var(--radius-xs);
+    color: var(--mode-text, var(--color-text));
+    font-weight: var(--font-weight-medium);
+  }
+
+  /* Status indicators */
+  :global(.hero__tui-indicator) {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+  }
+  :global(.hero__tui-indicator--ok) {
+    background-color: var(--mode-accent-success, var(--color-accent-success));
+    box-shadow: 0 0 4px var(--mode-accent-success, var(--color-accent-success));
+  }
+
+  /* Lock status */
+  :global(.hero__tui-lock) {
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.875em;
   }
 
   /* Body — account sections */
@@ -385,26 +448,27 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
 
   /* Section blocks */
   :global(.hero__tui-section) {
-    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--mode-border-active, var(--color-border-default));
     border-radius: var(--radius-xs);
     padding: var(--space-1) var(--space-2);
+    transition: border-color 300ms ease;
   }
   :global(.hero__tui-section--watched) {
-    border-color: color-mix(in srgb, var(--color-border-bright) 20%, transparent);
+    border-color: var(--mode-border, color-mix(in srgb, var(--color-border-bright) 20%, transparent));
   }
   :global(.hero__tui-section-title) {
     font-size: 0.6875em;
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-text-muted);
+    color: var(--mode-text-muted, var(--color-text-muted));
     margin-bottom: var(--space-1);
   }
 
   /* Account name + badge */
   :global(.hero__tui-account-name) {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex-wrap: wrap;
     gap: var(--space-1) var(--space-3);
     margin-bottom: var(--space-1);
@@ -415,20 +479,56 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
     border-radius: var(--radius-xs);
     font-weight: var(--font-weight-semibold);
     font-size: 0.8125em;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
   }
   :global(.hero__tui-badge--ok) {
-    background-color: var(--color-primary);
+    background-color: var(--mode-accent-success, var(--color-primary));
     color: #fff;
   }
   :global(.hero__tui-badge--warn) {
-    background-color: var(--color-accent-danger);
+    background-color: var(--mode-accent-danger, var(--color-accent-danger));
     color: #fff;
   }
+
+  /* Stats — now vertical with progress bars */
   :global(.hero__tui-stats) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1875rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Progress bars */
+  :global(.hero__tui-bar) {
     display: flex;
     align-items: center;
     gap: var(--space-1);
     font-size: 0.75em;
+  }
+  :global(.hero__tui-bar-label) {
+    width: 1.5rem;
+    text-align: right;
+    flex-shrink: 0;
+    font-size: 0.875em;
+  }
+  :global(.hero__tui-bar-track) {
+    flex: 1;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    min-width: 2rem;
+  }
+  :global(.hero__tui-bar-fill) {
+    height: 100%;
+    background-color: var(--mode-accent-success, var(--color-accent-success));
+    border-radius: 2px;
+    transition: width 600ms var(--ease-out-quint);
+  }
+  :global(.hero__tui-bar-fill--full) {
+    background-color: var(--mode-accent-primary, var(--color-primary-bright));
   }
 
   /* Balance table rows */
@@ -442,7 +542,12 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
     grid-template-columns: 5rem 1fr 1fr;
     gap: var(--space-1);
     padding: var(--space-1) 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-border-bright) 15%, transparent);
+    border-bottom: 1px solid var(--mode-border, color-mix(in srgb, var(--color-border-bright) 15%, transparent));
+    transition: border-color 300ms ease;
+  }
+  :global(.hero__tui-row--header) {
+    border-bottom: 1px solid var(--mode-border-active, color-mix(in srgb, var(--color-border-bright) 30%, transparent));
+    padding-bottom: 0.25rem;
   }
   :global(.hero__tui-row:last-child) {
     border-bottom: none;
@@ -457,8 +562,9 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
     font-size: 0.8125em;
     text-align: center;
     padding: 0.0625rem 0.25rem;
-    background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    background-color: color-mix(in srgb, var(--mode-accent-primary, var(--color-primary)) 15%, transparent);
     border-radius: var(--radius-xs);
+    transition: background-color 300ms ease;
   }
   :global(.hero__tui-cell-val) {
     text-align: right;
@@ -472,10 +578,26 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
     flex-wrap: wrap;
     gap: var(--space-1) var(--space-3);
     padding: var(--space-1) var(--space-2);
-    background-color: var(--color-bg-elevated);
-    border-top: 1px solid var(--color-border-default);
+    background-color: var(--mode-bg-header, var(--color-bg-elevated));
+    border-top: 1px solid var(--mode-border, var(--color-border-default));
     font-size: 0.625em;
-    color: var(--color-text-muted);
+    color: var(--mode-text-muted, var(--color-text-muted));
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    transition: background-color 300ms ease, border-color 300ms ease;
+  }
+
+  /* Keyboard shortcut key styling */
+  :global(.hero__tui-key) {
+    display: inline-block;
+    padding: 0 0.25rem;
+    background-color: rgba(255, 166, 43, 0.15);
+    border: 1px solid rgba(255, 166, 43, 0.30);
+    border-radius: 2px;
+    color: var(--color-accent-warning);
+    font-size: 0.9em;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.4;
+    margin-right: 0.125rem;
   }
 
   /* Mobile: hide less important elements */
@@ -495,6 +617,9 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
     :global(.hero__tui-footer > span:nth-child(n+4)) {
       display: none;
     }
+    :global(.hero__tui-header-center) {
+      display: none;
+    }
   }
 
   /* ============================================================
@@ -510,20 +635,5 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
     white-space: pre-wrap;
   }
 
-  /* Terminal token highlights */
-  :global(.t-accent) {
-    color: var(--color-primary-bright);
-  }
-  :global(.t-emerald) {
-    color: var(--color-accent-success);
-  }
-  :global(.t-amber) {
-    color: var(--color-accent-warning);
-  }
-  :global(.t-dim) {
-    color: var(--color-text-subtle);
-  }
-  :global(.t-subtle) {
-    color: var(--color-text-muted);
-  }
+  /* Terminal token highlights — defined in src/styles/tokens.css */
 </style>

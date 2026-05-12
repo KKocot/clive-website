@@ -6,9 +6,21 @@ import WorkflowTabs from "../islands/WorkflowTabs.tsx";
 /* ------------------------------------------------------------------ *
  * TUI visualization — Transfer scenario                              *
  * Two-panel layout: sidebar with menu + transfer form view            *
- * Matches section description: "unlock wallet, sign transfer, broadcast" *
+ * Enhanced with TUI chrome: tabbed nav, cart badge, status footer     *
  * ------------------------------------------------------------------ */
 const demoTuiHtml = `<div class="demo-tui">
+  <header class="demo-tui__topbar">
+    <span class="demo-tui__topbar-left">
+      <span class="demo-tui__topbar-tab demo-tui__topbar-tab--active">Operations</span>
+      <span class="demo-tui__topbar-tab">Governance</span>
+      <span class="demo-tui__topbar-tab">Power</span>
+    </span>
+    <span class="demo-tui__topbar-right">
+      <span class="demo-tui__cart-badge t-amber">Cart: 1 op</span>
+      <span class="demo-tui__topbar-status t-emerald" aria-hidden="true">&#x25CF;</span>
+    </span>
+  </header>
+
   <div class="demo-tui__panels">
     <section class="demo-tui__panel" aria-label="clive sidebar">
       <header class="demo-tui__panel-title">clive</header>
@@ -16,8 +28,8 @@ const demoTuiHtml = `<div class="demo-tui">
         <ul class="demo-tui__menu" role="list">
           <li>Dashboard</li>
           <li class="is-active"><span class="t-accent">&gt; Transfer</span></li>
-          <li>Governance</li>
-          <li>Power</li>
+          <li>Delegations</li>
+          <li>Power Up/Down</li>
           <li>Savings</li>
         </ul>
         <hr class="demo-tui__sep" />
@@ -25,6 +37,8 @@ const demoTuiHtml = `<div class="demo-tui">
         <p class="demo-tui__value"><span class="t-emerald">@alice</span></p>
         <p class="demo-tui__label t-dim">balance</p>
         <p class="demo-tui__value">1,234.567 <span class="t-emerald">HIVE</span></p>
+        <p class="demo-tui__label t-dim">hbd</p>
+        <p class="demo-tui__value">89.420 <span class="t-accent">HBD</span></p>
       </div>
       <footer class="demo-tui__panel-foot">
         <span class="t-dim">node</span>
@@ -33,7 +47,7 @@ const demoTuiHtml = `<div class="demo-tui">
       </footer>
     </section>
 
-    <section class="demo-tui__panel" aria-label="transfer form">
+    <section class="demo-tui__panel demo-tui__panel--main" aria-label="transfer form">
       <header class="demo-tui__panel-title">transfer &middot; new operation</header>
       <div class="demo-tui__panel-body">
         <div class="demo-tui__field">
@@ -53,8 +67,9 @@ const demoTuiHtml = `<div class="demo-tui">
           <span class="demo-tui__input t-subtle">payment for services</span>
         </div>
         <hr class="demo-tui__sep" />
-        <div class="demo-tui__action">
-          <span class="demo-tui__btn t-accent">[ Add to cart ]</span>
+        <div class="demo-tui__actions">
+          <span class="demo-tui__btn demo-tui__btn--primary">[ Add to cart ]</span>
+          <span class="demo-tui__btn demo-tui__btn--secondary">[ Finalize transaction ]</span>
         </div>
       </div>
       <footer class="demo-tui__panel-foot">
@@ -69,42 +84,42 @@ const demoTuiHtml = `<div class="demo-tui">
     </section>
   </div>
 
-  <p class="demo-tui__keys">
-    <span><span class="t-amber">F1</span> <span class="t-dim">help</span></span>
-    <span><span class="t-amber">F2</span> <span class="t-dim">menu</span></span>
-    <span><span class="t-amber">F5</span> <span class="t-dim">refresh</span></span>
-    <span><span class="t-amber">F10</span> <span class="t-dim">quit</span></span>
-  </p>
+  <footer class="demo-tui__bottombar">
+    <span><span class="demo-tui__key">F1</span> <span class="t-dim">help</span></span>
+    <span><span class="demo-tui__key">F2</span> <span class="t-dim">menu</span></span>
+    <span><span class="demo-tui__key">F5</span> <span class="t-dim">refresh</span></span>
+    <span><span class="demo-tui__key">Tab</span> <span class="t-dim">next field</span></span>
+    <span><span class="demo-tui__key">F10</span> <span class="t-dim">quit</span></span>
+  </footer>
 </div>`;
 
 /* ------------------------------------------------------------------ *
  * CLI visualization — same transfer scenario in CLI mode              *
+ * Shows process transfer with JSON-style output                       *
  * ------------------------------------------------------------------ */
-const demoCliHtml = `<span class="t-dim">clive@cli:~$</span> clive process transfer \\
-  --from alice --to bob --amount <span class="t-accent">"25.000 HIVE"</span>
+const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive$</span> clive process transfer-to-account \\
+  <span class="t-cyan">--from</span> alice <span class="t-cyan">--to</span> bob \\
+  <span class="t-cyan">--amount</span> <span class="t-yellow">"25.000 HIVE"</span> \\
+  <span class="t-cyan">--memo</span> <span class="t-yellow">"payment for services"</span>
 
-<span class="t-subtle">  Preparing transaction...</span>
-<span class="t-dim">  From:</span>    <span class="t-emerald">@alice</span>
-<span class="t-dim">  To:</span>      <span class="t-accent">@bob</span>
-<span class="t-dim">  Amount:</span>  25.000 HIVE
-<span class="t-dim">  Memo:</span>    payment for services
+<span class="t-dim">  Using beekeeper at</span> <span class="t-cyan">http://127.0.0.1:39507</span>
+<span class="t-subtle">  Loading profile...</span>
 
-  Broadcast transaction? [<span class="t-emerald">Y</span>/n]: <span class="t-emerald">Y</span>
+<span class="t-dim">  ┌─────────────────────────────────────────────┐</span>
+<span class="t-dim">  │</span>  <span class="t-yellow">Transaction summary</span>                       <span class="t-dim">│</span>
+<span class="t-dim">  ├────────────┬────────────────────────────────┤</span>
+<span class="t-dim">  │</span> <span class="t-cyan">From</span>       <span class="t-dim">│</span>  <span class="t-emerald">alice</span>                         <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-cyan">To</span>         <span class="t-dim">│</span>  <span class="t-accent">bob</span>                           <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-cyan">Amount</span>     <span class="t-dim">│</span>  25.000 HIVE                    <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-cyan">Memo</span>       <span class="t-dim">│</span>  payment for services           <span class="t-dim">│</span>
+<span class="t-dim">  └────────────┴────────────────────────────────┘</span>
 
-<span class="t-emerald">  Transaction broadcast successfully.</span>
+  Broadcast? [<span class="t-emerald">Y</span>/n]: <span class="t-emerald">Y</span>
+
+<span class="t-emerald">  Transaction was successfully broadcast.</span>
 <span class="t-dim">  Block:</span> 82,451,307  <span class="t-dim">TxID:</span> <span class="t-subtle">a3f9e1...c704</span>
 
-<span class="t-dim">clive@cli:~$</span> clive show balances
-
-<span class="t-subtle">         Details of 'alice' account</span>
-<span class="t-accent">              The balances</span>
-<span class="t-dim">  ┌──────────┬──────────────────┬──────────────────┐</span>
-<span class="t-dim">  │</span> <span class="t-emerald">Liquid</span>   <span class="t-dim">│</span>    1,209.567 HIVE <span class="t-dim">│</span>     89.420 HBD  <span class="t-dim">│</span>
-<span class="t-dim">  │</span> <span class="t-emerald">Savings</span>  <span class="t-dim">│</span>      100.000 HIVE <span class="t-dim">│</span>    190.000 HBD  <span class="t-dim">│</span>
-<span class="t-dim">  │</span> <span class="t-emerald">Stake</span>    <span class="t-dim">│</span>    4,500.000 HP   <span class="t-dim">│</span>      8.1M VESTS <span class="t-dim">│</span>
-<span class="t-dim">  └──────────┴──────────────────┴──────────────────┘</span>
-
-<span class="t-dim">clive@cli:~$</span> <span class="t-cursor" aria-hidden="true">▌</span>`;
+<span class="t-dim">clive@cli:~/.clive$</span> <span class="t-cursor" aria-hidden="true">▌</span>`;
 ---
 
 <TuiPanel title="$ clive --tui" id="demo" class="demo reveal-scroll">
@@ -196,21 +211,65 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~$</span> clive process trans
    * ============================================================ */
   :global(.demo-tui) {
     white-space: normal;
-    font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-family: var(--font-mono);
     font-size: var(--text-sm);
     line-height: 1.5;
-    color: var(--color-text);
+    color: var(--mode-text, var(--color-text));
     font-feature-settings:
       "calt" 0,
       "liga" 0;
     font-variant-ligatures: none;
     font-variant-numeric: tabular-nums;
+    background-color: var(--mode-bg, transparent);
+    border-radius: var(--radius-md);
+    transition: background-color 300ms ease, color 300ms ease;
+  }
+
+  /* Top bar — tabbed navigation + cart badge */
+  :global(.demo-tui__topbar) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    background-color: var(--mode-bg-header, var(--color-bg-elevated));
+    border-bottom: 1px solid var(--mode-border, var(--color-border-default));
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    font-size: var(--text-xs);
+    transition: background-color 300ms ease, border-color 300ms ease;
+  }
+  :global(.demo-tui__topbar-left),
+  :global(.demo-tui__topbar-right) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+  :global(.demo-tui__topbar-tab) {
+    padding: 0.125rem 0.5rem;
+    color: var(--mode-text-muted, var(--color-text-muted));
+    border-radius: var(--radius-xs);
+  }
+  :global(.demo-tui__topbar-tab--active) {
+    background-color: var(--mode-border, rgba(96, 165, 250, 0.15));
+    color: var(--mode-text, var(--color-text));
+    font-weight: var(--font-weight-medium);
+  }
+  :global(.demo-tui__cart-badge) {
+    padding: 0.0625rem 0.375rem;
+    border: 1px solid rgba(255, 166, 43, 0.25);
+    border-radius: var(--radius-xs);
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.875em;
+  }
+  :global(.demo-tui__topbar-status) {
+    font-size: 0.625em;
   }
 
   :global(.demo-tui__panels) {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-3);
+    grid-template-columns: 10rem 1fr;
+    gap: 0;
   }
 
   @media (max-width: 40rem) {
@@ -220,25 +279,35 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~$</span> clive process trans
   }
 
   :global(.demo-tui__panel) {
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
+    border: 1px solid var(--mode-border, var(--color-border-default));
     background: transparent;
     display: flex;
     flex-direction: column;
-    min-height: 16rem;
+    min-height: 14rem;
+    transition: border-color 300ms ease;
+  }
+  :global(.demo-tui__panel--main) {
+    border-left: none;
+  }
+  @media (max-width: 40rem) {
+    :global(.demo-tui__panel--main) {
+      border-left: 1px solid var(--mode-border, var(--color-border-default));
+      border-top: none;
+    }
   }
 
   :global(.demo-tui__panel-title) {
-    padding: var(--space-2) var(--space-4);
+    padding: var(--space-2) var(--space-3);
     font-size: var(--text-xs);
-    color: var(--color-text-muted);
-    border-bottom: 1px solid var(--color-border-default);
+    color: var(--mode-text-muted, var(--color-text-muted));
+    border-bottom: 1px solid var(--mode-border, var(--color-border-default));
     letter-spacing: 0.02em;
+    transition: border-color 300ms ease;
   }
 
   :global(.demo-tui__panel-body) {
     flex: 1;
-    padding: var(--space-3) var(--space-4);
+    padding: var(--space-3) var(--space-3);
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
@@ -249,14 +318,15 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~$</span> clive process trans
   }
 
   :global(.demo-tui__panel-foot) {
-    padding: var(--space-2) var(--space-4);
-    border-top: 1px solid var(--color-border-default);
+    padding: var(--space-1) var(--space-3);
+    border-top: 1px solid var(--mode-border, var(--color-border-default));
     font-size: var(--text-xs);
-    color: var(--color-text-muted);
+    color: var(--mode-text-muted, var(--color-text-muted));
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     gap: var(--space-2);
+    transition: border-color 300ms ease;
   }
 
   :global(.demo-tui__sep-dot) {
@@ -270,17 +340,23 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~$</span> clive process trans
     display: flex;
     flex-direction: column;
     gap: 2px;
+    font-size: var(--text-xs);
   }
 
   :global(.demo-tui__menu li) {
-    padding-inline: var(--space-2);
+    padding: 0.0625rem var(--space-2);
+    border-radius: var(--radius-xs);
+  }
+  :global(.demo-tui__menu li.is-active) {
+    background-color: var(--mode-border, rgba(96, 165, 250, 0.10));
   }
 
   :global(.demo-tui__sep) {
     border: none;
-    border-top: 1px solid var(--color-border-default);
+    border-top: 1px solid var(--mode-border, var(--color-border-default));
     margin: var(--space-2) 0;
     width: 60%;
+    transition: border-color 300ms ease;
   }
 
   :global(.demo-tui__label) {
@@ -290,17 +366,35 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~$</span> clive process trans
 
   :global(.demo-tui__value) {
     margin: 0;
+    font-size: var(--text-xs);
   }
 
-  :global(.demo-tui__keys) {
-    margin: var(--space-3) 0 0;
-    text-align: center;
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
+  /* Bottom bar — keyboard shortcuts */
+  :global(.demo-tui__bottombar) {
     display: flex;
-    justify-content: center;
-    gap: var(--space-3);
     flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-1) var(--space-3);
+    background-color: var(--mode-bg-header, var(--color-bg-elevated));
+    border-top: 1px solid var(--mode-border, var(--color-border-default));
+    font-size: 0.6875rem;
+    color: var(--mode-text-muted, var(--color-text-muted));
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    transition: background-color 300ms ease, border-color 300ms ease;
+  }
+
+  /* Keyboard shortcut key styling */
+  :global(.demo-tui__key) {
+    display: inline-block;
+    padding: 0 0.25rem;
+    background-color: rgba(255, 166, 43, 0.15);
+    border: 1px solid rgba(255, 166, 43, 0.30);
+    border-radius: 2px;
+    color: var(--color-accent-warning);
+    font-size: 0.9em;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.4;
+    margin-right: 0.125rem;
   }
 
   /* ============================================================
@@ -321,19 +415,30 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~$</span> clive process trans
   :global(.demo-tui__input) {
     flex: 1;
     padding: var(--space-1) var(--space-2);
-    border-bottom: 1px solid color-mix(in srgb, var(--color-border-bright) 30%, transparent);
+    border: 1px solid var(--mode-border, color-mix(in srgb, var(--color-border-bright) 30%, transparent));
+    border-radius: var(--radius-xs);
     font-size: var(--text-sm);
+    transition: border-color 300ms ease;
   }
 
-  :global(.demo-tui__action) {
+  :global(.demo-tui__actions) {
     display: flex;
     justify-content: center;
+    gap: var(--space-3);
     padding-top: var(--space-2);
+    flex-wrap: wrap;
   }
 
   :global(.demo-tui__btn) {
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.02em;
+    font-size: var(--text-xs);
+  }
+  :global(.demo-tui__btn--primary) {
+    color: var(--mode-accent-success, var(--color-accent-success));
+  }
+  :global(.demo-tui__btn--secondary) {
+    color: var(--mode-accent-primary, var(--color-primary-bright));
   }
 
   /* ============================================================
@@ -353,5 +458,12 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~$</span> clive process trans
 
   :global(.demo-tui__bal td:nth-child(2)) {
     text-align: right;
+  }
+
+  /* Hide top bar tabs on very narrow screens */
+  @media (max-width: 25rem) {
+    :global(.demo-tui__topbar-left .demo-tui__topbar-tab:nth-child(n+3)) {
+      display: none;
+    }
   }
 </style>
