@@ -2,19 +2,117 @@
 import Button from "../ui/Button.astro";
 import TerminalFrame from "../ui/TerminalFrame.astro";
 import TypewriterText from "../islands/TypewriterText.tsx";
+import InstallModeSwitch from "../islands/InstallModeSwitch.tsx";
+import WorkflowTabs from "../islands/WorkflowTabs.tsx";
 import { LINKS } from "../../config/links";
 
 const GITLAB_URL = LINKS.GITLAB;
 
-const heroTerminalHtml = `<span class="t-accent">Clive</span> <span class="t-dim">·</span> <span class="t-emerald">@alice</span> <span class="t-dim">·</span> <span class="t-accent">HIVE 1,234.567</span>
+/* ------------------------------------------------------------------ *
+ * TUI visualization — realistic Clive Dashboard                      *
+ * Mirrors the real Textual-based TUI: header bar, dashboard panel    *
+ * with account balances, RC/voting info, and bottom key hints.       *
+ * ------------------------------------------------------------------ */
+const heroTuiHtml = `<div class="hero__tui">
+  <header class="hero__tui-header">
+    <span class="hero__tui-header-left">
+      <span class="t-accent">+</span>
+      <span class="t-accent">alice</span>
+      <span class="t-dim">/</span>
+      <span class="t-emerald">@alice</span>
+      <span class="t-dim">&middot;</span>
+      <span>No alarms</span>
+    </span>
+    <span class="hero__tui-header-center">
+      <span class="t-emerald">UNLOCKED</span>
+    </span>
+    <span class="hero__tui-header-right">
+      <span class="t-dim">Dashboard</span>
+      <span class="t-dim">&middot;</span>
+      <span class="t-emerald">online</span>
+    </span>
+  </header>
 
-Operations          Status
-<span class="t-dim">─────────────</span>       <span class="t-dim">──────────</span>
-<span class="t-accent">></span> Transfer          HBD <span class="t-emerald">89.42</span>
-  Delegate          HP  <span class="t-emerald">4,500.00</span>
-  Vote witness      Voting <span class="t-amber">100%</span>
+  <div class="hero__tui-body">
+    <div class="hero__tui-section">
+      <div class="hero__tui-section-title">WORKING ACCOUNT</div>
+      <div class="hero__tui-account-name">
+        <span class="hero__tui-badge hero__tui-badge--ok">alice</span>
+        <span class="hero__tui-stats">
+          <span class="t-emerald">100.00 % RC</span>
+          <span class="t-dim">&middot;</span>
+          <span class="t-emerald">100.00 % VOTING</span>
+        </span>
+      </div>
+    </div>
 
-<span class="t-subtle">Press [^/v] navigate  [Enter] select</span>`;
+    <div class="hero__tui-section">
+      <div class="hero__tui-table">
+        <div class="hero__tui-row">
+          <span class="hero__tui-cell-label t-accent">LIQUID</span>
+          <span class="hero__tui-cell-val t-emerald">100,000.000 HIVE</span>
+          <span class="hero__tui-cell-val t-emerald">100,000.000 HBD</span>
+        </div>
+        <div class="hero__tui-row">
+          <span class="hero__tui-cell-label t-accent">SAVINGS</span>
+          <span class="hero__tui-cell-val">100.000 HIVE</span>
+          <span class="hero__tui-cell-val">190.000 HBD</span>
+        </div>
+        <div class="hero__tui-row">
+          <span class="hero__tui-cell-label t-accent">STAKE</span>
+          <span class="hero__tui-cell-val">100.0K HP</span>
+          <span class="hero__tui-cell-val t-dim">180.0M VESTS</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__tui-section hero__tui-section--watched">
+      <div class="hero__tui-section-title t-dim">WATCHED ACCOUNTS</div>
+      <div class="hero__tui-account-name">
+        <span class="hero__tui-badge hero__tui-badge--warn">bob</span>
+        <span class="hero__tui-stats">
+          <span class="t-amber">1 ALARM</span>
+        </span>
+      </div>
+      <div class="hero__tui-row hero__tui-row--compact">
+        <span class="hero__tui-cell-label t-accent">LIQUID</span>
+        <span class="hero__tui-cell-val">1,000.000 HIVE</span>
+        <span class="hero__tui-cell-val">1,000.000 HBD</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="hero__tui-footer">
+    <span><span class="t-amber">?</span> Help</span>
+    <span><span class="t-amber">d</span> Account details</span>
+    <span><span class="t-amber">o</span> Operations</span>
+    <span><span class="t-amber">w</span> Switch account</span>
+    <span><span class="t-amber">^l</span> Lock wallet</span>
+  </footer>
+</div>`;
+
+/* ------------------------------------------------------------------ *
+ * CLI visualization — realistic Clive CLI session                    *
+ * Shows `clive show balances` output + a transfer command.           *
+ * ------------------------------------------------------------------ */
+const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show balances
+<span class="t-dim">Using beekeeper at</span> <span class="t-accent">http://127.0.0.1:39507</span>
+
+<span class="t-subtle">         Details of 'alice' account</span>
+<span class="t-accent">              The balances</span>
+<span class="t-dim">  ┌──────────┬──────────────────┬──────────────────┐</span>
+<span class="t-dim">  │</span> <span class="t-emerald">Liquid</span>   <span class="t-dim">│</span>  100,000.000 HIVE <span class="t-dim">│</span>  100,000.000 HBD <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-emerald">Savings</span>  <span class="t-dim">│</span>      100.000 HIVE <span class="t-dim">│</span>      190.000 HBD <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-emerald">Stake</span>    <span class="t-dim">│</span>      100.0K HP   <span class="t-dim">│</span>    180.0M VESTS  <span class="t-dim">│</span>
+<span class="t-dim">  └──────────┴──────────────────┴──────────────────┘</span>
+
+<span class="t-dim">clive@cli:~$</span> clive process transfer \\
+  --from alice --to bob --amount <span class="t-accent">"10.000 HIVE"</span>
+
+<span class="t-emerald">  Transaction broadcast successfully.</span>
+<span class="t-dim">  Block:</span> 82,451,307  <span class="t-dim">TxID:</span> <span class="t-subtle">a3f9e1...c704</span>
+
+<span class="t-dim">clive@cli:~$</span> <span class="t-cursor" aria-hidden="true">▌</span>`;
 ---
 
 <section
@@ -71,9 +169,28 @@ Operations          Status
     </div>
 
     <div class="hero__visual reveal reveal--delay-3">
-      <TerminalFrame title="clive — main view" ariaLabel="Clive TUI preview">
-        <Fragment set:html={heroTerminalHtml} />
-      </TerminalFrame>
+      <InstallModeSwitch
+        client:visible
+        channel="hero-mode"
+        class="hero-mode-switch"
+        ariaLabel="Hero preview mode"
+      />
+
+      {/* TUI panel — structured HTML layout */}
+      <div class="hero__panel hero__panel--tui">
+        <TerminalFrame
+          title="clive — dashboard"
+          ariaLabel="Clive TUI dashboard preview"
+          as="div"
+        >
+          <WorkflowTabs
+            client:visible
+            channel="hero-mode"
+            tuiHtml={heroTuiHtml}
+            cliHtml={heroCliHtml}
+          />
+        </TerminalFrame>
+      </div>
     </div>
   </div>
 </section>
@@ -223,6 +340,196 @@ Operations          Status
     width: 100%;
     min-width: 0;
     overflow: hidden;
+  }
+
+  .hero__panel {
+    /* wrapper for the terminal frame inside hero__visual */
+  }
+
+  /* ============================================================
+   * Hero mode switch — compact variant of install-mode-switch
+   * ============================================================ */
+  :global(.hero-mode-switch) {
+    display: flex;
+    gap: var(--space-1);
+    margin-bottom: var(--space-4);
+    padding: var(--space-1);
+    background-color: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    max-width: 12rem;
+  }
+
+  /* ============================================================
+   * TUI Dashboard — structured multi-panel layout
+   * ============================================================ */
+  :global(.hero__tui) {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-mono);
+    font-size: clamp(0.625rem, 0.5rem + 0.45vw, 0.8125rem);
+    line-height: 1.3;
+    color: var(--color-text);
+    gap: 0;
+  }
+
+  /* Header bar — top status line */
+  :global(.hero__tui-header) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-1) var(--space-2);
+    background-color: var(--color-bg-elevated);
+    border-bottom: 1px solid var(--color-border-default);
+    font-size: 0.6875em;
+  }
+  :global(.hero__tui-header-left),
+  :global(.hero__tui-header-center),
+  :global(.hero__tui-header-right) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    white-space: nowrap;
+  }
+  :global(.hero__tui-header-center) {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Body — account sections */
+  :global(.hero__tui-body) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-2);
+  }
+
+  /* Section blocks */
+  :global(.hero__tui-section) {
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-xs);
+    padding: var(--space-1) var(--space-2);
+  }
+  :global(.hero__tui-section--watched) {
+    border-color: color-mix(in srgb, var(--color-border-bright) 20%, transparent);
+  }
+  :global(.hero__tui-section-title) {
+    font-size: 0.6875em;
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-1);
+  }
+
+  /* Account name + badge */
+  :global(.hero__tui-account-name) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    margin-bottom: var(--space-1);
+  }
+  :global(.hero__tui-badge) {
+    display: inline-block;
+    padding: 0.0625rem 0.375rem;
+    border-radius: var(--radius-xs);
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.8125em;
+  }
+  :global(.hero__tui-badge--ok) {
+    background-color: var(--color-primary);
+    color: #fff;
+  }
+  :global(.hero__tui-badge--warn) {
+    background-color: var(--color-accent-danger);
+    color: #fff;
+  }
+  :global(.hero__tui-stats) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: 0.75em;
+  }
+
+  /* Balance table rows */
+  :global(.hero__tui-table) {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  :global(.hero__tui-row) {
+    display: grid;
+    grid-template-columns: 5rem 1fr 1fr;
+    gap: var(--space-1);
+    padding: var(--space-1) 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-border-bright) 15%, transparent);
+  }
+  :global(.hero__tui-row:last-child) {
+    border-bottom: none;
+  }
+  :global(.hero__tui-row--compact) {
+    padding: 0.125rem 0;
+    border-bottom: none;
+    margin-top: var(--space-1);
+  }
+  :global(.hero__tui-cell-label) {
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.8125em;
+    text-align: center;
+    padding: 0.0625rem 0.25rem;
+    background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    border-radius: var(--radius-xs);
+  }
+  :global(.hero__tui-cell-val) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* Footer — key hints */
+  :global(.hero__tui-footer) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-1) var(--space-2);
+    background-color: var(--color-bg-elevated);
+    border-top: 1px solid var(--color-border-default);
+    font-size: 0.625em;
+    color: var(--color-text-muted);
+  }
+
+  /* Mobile: hide less important elements */
+  @media (max-width: 25rem) {
+    :global(.hero__tui-header-right) {
+      display: none;
+    }
+    :global(.hero__tui-section--watched) {
+      display: none;
+    }
+    :global(.hero__tui-row) {
+      grid-template-columns: 4rem 1fr;
+    }
+    :global(.hero__tui-cell-val:last-child) {
+      display: none;
+    }
+    :global(.hero__tui-footer > span:nth-child(n+4)) {
+      display: none;
+    }
+  }
+
+  /* ============================================================
+   * CLI view — pre-formatted terminal output
+   * Inherits white-space:pre from workflow-tabs panel override
+   * ============================================================ */
+  :global(.hero__panel--tui .workflow-tabs__panel) {
+    white-space: normal;
+  }
+
+  /* When CLI content is active, switch to pre-wrapped whitespace */
+  :global(.hero__panel--tui [id$="-panel-cli"].workflow-tabs__panel) {
+    white-space: pre-wrap;
   }
 
   /* Terminal token highlights */

@@ -1,6 +1,111 @@
 ---
 import TerminalFrame from "../ui/TerminalFrame.astro";
 import TuiPanel from "../ui/TuiPanel.astro";
+import InstallModeSwitch from "../islands/InstallModeSwitch.tsx";
+import WorkflowTabs from "../islands/WorkflowTabs.tsx";
+
+/* ------------------------------------------------------------------ *
+ * TUI visualization — Transfer scenario                              *
+ * Two-panel layout: sidebar with menu + transfer form view            *
+ * Matches section description: "unlock wallet, sign transfer, broadcast" *
+ * ------------------------------------------------------------------ */
+const demoTuiHtml = `<div class="demo-tui">
+  <div class="demo-tui__panels">
+    <section class="demo-tui__panel" aria-label="clive sidebar">
+      <header class="demo-tui__panel-title">clive</header>
+      <div class="demo-tui__panel-body">
+        <ul class="demo-tui__menu" role="list">
+          <li>Dashboard</li>
+          <li class="is-active"><span class="t-accent">&gt; Transfer</span></li>
+          <li>Governance</li>
+          <li>Power</li>
+          <li>Savings</li>
+        </ul>
+        <hr class="demo-tui__sep" />
+        <p class="demo-tui__label t-dim">profile</p>
+        <p class="demo-tui__value"><span class="t-emerald">@alice</span></p>
+        <p class="demo-tui__label t-dim">balance</p>
+        <p class="demo-tui__value">1,234.567 <span class="t-emerald">HIVE</span></p>
+      </div>
+      <footer class="demo-tui__panel-foot">
+        <span class="t-dim">node</span>
+        <span>api.hive.blog</span>
+        <span class="t-emerald" aria-hidden="true">&bull;</span>
+      </footer>
+    </section>
+
+    <section class="demo-tui__panel" aria-label="transfer form">
+      <header class="demo-tui__panel-title">transfer &middot; new operation</header>
+      <div class="demo-tui__panel-body">
+        <div class="demo-tui__field">
+          <span class="demo-tui__label t-dim">from</span>
+          <span class="demo-tui__input"><span class="t-emerald">@alice</span></span>
+        </div>
+        <div class="demo-tui__field">
+          <span class="demo-tui__label t-dim">to</span>
+          <span class="demo-tui__input"><span class="t-accent">@bob</span></span>
+        </div>
+        <div class="demo-tui__field">
+          <span class="demo-tui__label t-dim">amount</span>
+          <span class="demo-tui__input">25.000 <span class="t-emerald">HIVE</span></span>
+        </div>
+        <div class="demo-tui__field">
+          <span class="demo-tui__label t-dim">memo</span>
+          <span class="demo-tui__input t-subtle">payment for services</span>
+        </div>
+        <hr class="demo-tui__sep" />
+        <div class="demo-tui__action">
+          <span class="demo-tui__btn t-accent">[ Add to cart ]</span>
+        </div>
+      </div>
+      <footer class="demo-tui__panel-foot">
+        <span class="t-dim">cart</span>
+        <span class="t-amber">1 op</span>
+        <span class="demo-tui__sep-dot" aria-hidden="true">&middot;</span>
+        <span class="t-dim">unlocked</span>
+        <span class="t-emerald" aria-hidden="true">&bull;</span>
+        <span class="demo-tui__sep-dot" aria-hidden="true">&middot;</span>
+        <span class="t-dim">14:32</span>
+      </footer>
+    </section>
+  </div>
+
+  <p class="demo-tui__keys">
+    <span><span class="t-amber">F1</span> <span class="t-dim">help</span></span>
+    <span><span class="t-amber">F2</span> <span class="t-dim">menu</span></span>
+    <span><span class="t-amber">F5</span> <span class="t-dim">refresh</span></span>
+    <span><span class="t-amber">F10</span> <span class="t-dim">quit</span></span>
+  </p>
+</div>`;
+
+/* ------------------------------------------------------------------ *
+ * CLI visualization — same transfer scenario in CLI mode              *
+ * ------------------------------------------------------------------ */
+const demoCliHtml = `<span class="t-dim">clive@cli:~$</span> clive process transfer \\
+  --from alice --to bob --amount <span class="t-accent">"25.000 HIVE"</span>
+
+<span class="t-subtle">  Preparing transaction...</span>
+<span class="t-dim">  From:</span>    <span class="t-emerald">@alice</span>
+<span class="t-dim">  To:</span>      <span class="t-accent">@bob</span>
+<span class="t-dim">  Amount:</span>  25.000 HIVE
+<span class="t-dim">  Memo:</span>    payment for services
+
+  Broadcast transaction? [<span class="t-emerald">Y</span>/n]: <span class="t-emerald">Y</span>
+
+<span class="t-emerald">  Transaction broadcast successfully.</span>
+<span class="t-dim">  Block:</span> 82,451,307  <span class="t-dim">TxID:</span> <span class="t-subtle">a3f9e1...c704</span>
+
+<span class="t-dim">clive@cli:~$</span> clive show balances
+
+<span class="t-subtle">         Details of 'alice' account</span>
+<span class="t-accent">              The balances</span>
+<span class="t-dim">  ┌──────────┬──────────────────┬──────────────────┐</span>
+<span class="t-dim">  │</span> <span class="t-emerald">Liquid</span>   <span class="t-dim">│</span>    1,209.567 HIVE <span class="t-dim">│</span>     89.420 HBD  <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-emerald">Savings</span>  <span class="t-dim">│</span>      100.000 HIVE <span class="t-dim">│</span>    190.000 HBD  <span class="t-dim">│</span>
+<span class="t-dim">  │</span> <span class="t-emerald">Stake</span>    <span class="t-dim">│</span>    4,500.000 HP   <span class="t-dim">│</span>      8.1M VESTS <span class="t-dim">│</span>
+<span class="t-dim">  └──────────┴──────────────────┴──────────────────┘</span>
+
+<span class="t-dim">clive@cli:~$</span> <span class="t-cursor" aria-hidden="true">▌</span>`;
 ---
 
 <TuiPanel title="$ clive --tui" id="demo" class="demo reveal-scroll">
@@ -14,74 +119,22 @@ import TuiPanel from "../ui/TuiPanel.astro";
     </header>
 
     <div class="demo__frame reveal">
-      {/* TODO: replace with asciinema cast or MP4 demo */}
-      <TerminalFrame title="clive — main view" ariaLabel="Clive TUI demo placeholder" as="div">
-        <div class="demo-tui">
-          <div class="demo-tui__panels">
-            <section class="demo-tui__panel" aria-label="clive sidebar">
-              <header class="demo-tui__panel-title">clive</header>
-              <div class="demo-tui__panel-body">
-                <ul class="demo-tui__menu" role="list">
-                  <li class="is-active"><span class="t-accent">&gt; Wallet</span></li>
-                  <li>Accounts</li>
-                  <li>Transfer</li>
-                  <li>History</li>
-                  <li>Settings</li>
-                </ul>
-                <hr class="demo-tui__sep" />
-                <p class="demo-tui__label t-dim">profile</p>
-                <p class="demo-tui__value"><span class="t-emerald">@alice</span></p>
-              </div>
-              <footer class="demo-tui__panel-foot">
-                <span class="t-dim">node</span>
-                <span>api.hive.blog</span>
-                <span class="t-emerald" aria-hidden="true">●</span>
-              </footer>
-            </section>
+      <InstallModeSwitch
+        client:visible
+        channel="demo-mode"
+        class="demo-mode-switch"
+        ariaLabel="Demo preview mode"
+      />
 
-            <section class="demo-tui__panel" aria-label="wallet for @alice">
-              <header class="demo-tui__panel-title">wallet · @alice</header>
-              <div class="demo-tui__panel-body">
-                <p class="demo-tui__label t-dim">balance</p>
-                <table class="demo-tui__bal">
-                  <tbody>
-                    <tr><td class="t-emerald">HIVE</td><td>1,234.567</td></tr>
-                    <tr><td class="t-emerald">HBD</td><td>89.420</td></tr>
-                    <tr><td class="t-accent">HP</td><td>4,500.000</td></tr>
-                  </tbody>
-                </table>
-                <p class="demo-tui__label t-dim">last activity</p>
-                <table class="demo-tui__act">
-                  <tbody>
-                    <tr><td class="t-amber">12:04</td><td>transfer</td><td>-25.000 HIVE</td></tr>
-                    <tr><td class="t-amber">11:51</td><td>vote</td><td>witness gtg</td></tr>
-                    <tr><td class="t-amber">10:22</td><td>delegate</td><td>+500.000 HP</td></tr>
-                  </tbody>
-                </table>
-              </div>
-              <footer class="demo-tui__panel-foot">
-                <span class="t-dim">cart</span>
-                <span>0 ops</span>
-                <span class="demo-tui__sep-dot" aria-hidden="true">·</span>
-                <span class="t-dim">unlocked</span>
-                <span class="t-emerald" aria-hidden="true">●</span>
-                <span class="demo-tui__sep-dot" aria-hidden="true">·</span>
-                <span class="t-dim">14:32</span>
-              </footer>
-            </section>
-          </div>
-
-          <p class="demo-tui__keys">
-            <span><span class="t-amber">F1</span> <span class="t-dim">help</span></span>
-            <span><span class="t-amber">F2</span> <span class="t-dim">menu</span></span>
-            <span><span class="t-amber">F5</span> <span class="t-dim">refresh</span></span>
-            <span><span class="t-amber">F10</span> <span class="t-dim">quit</span></span>
-          </p>
-        </div>
+      <TerminalFrame title="clive — transfer" ariaLabel="Clive TUI/CLI demo preview" as="div">
+        <WorkflowTabs
+          client:visible
+          channel="demo-mode"
+          tuiHtml={demoTuiHtml}
+          cliHtml={demoCliHtml}
+        />
       </TerminalFrame>
     </div>
-
-    <p class="demo__caption">Demo coming soon · Asciinema cast in preparation</p>
   </div>
 </TuiPanel>
 
@@ -133,20 +186,37 @@ import TuiPanel from "../ui/TuiPanel.astro";
     margin-inline: auto;
   }
 
-  .demo__caption {
-    margin: var(--space-4) 0 0;
-    text-align: center;
-    font-size: var(--text-sm);
-    color: var(--color-text-subtle);
-    font-family: var(--font-mono);
+  /* ============================================================
+   * Demo mode switch — compact TUI/CLI toggle
+   * ============================================================ */
+  :global(.demo-mode-switch) {
+    display: flex;
+    gap: var(--space-1);
+    margin-bottom: var(--space-4);
+    padding: var(--space-1);
+    background-color: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    max-width: 12rem;
+  }
+
+  /* ============================================================
+   * White-space overrides for WorkflowTabs panels
+   * TUI content = normal flow, CLI content = pre-wrapped
+   * ============================================================ */
+  :global(.demo__frame .workflow-tabs__panel) {
+    white-space: normal;
+  }
+
+  :global(.demo__frame [id$="-panel-cli"].workflow-tabs__panel) {
+    white-space: pre-wrap;
   }
 
   /* ============================================================
    * TUI panels — CSS borders replacing unicode box-drawing.
-   * Lives inside <TerminalFrame>'s <pre class="terminal__body">,
-   * so we reset whitespace handling to flow as normal HTML.
+   * Lives inside innerHTML, so all selectors must be :global().
    * ============================================================ */
-  .demo-tui {
+  :global(.demo-tui) {
     white-space: normal;
     font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
     font-size: var(--text-sm);
@@ -159,19 +229,19 @@ import TuiPanel from "../ui/TuiPanel.astro";
     font-variant-numeric: tabular-nums;
   }
 
-  .demo-tui__panels {
+  :global(.demo-tui__panels) {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-3);
   }
 
   @media (max-width: 40rem) {
-    .demo-tui__panels {
+    :global(.demo-tui__panels) {
       grid-template-columns: 1fr;
     }
   }
 
-  .demo-tui__panel {
+  :global(.demo-tui__panel) {
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md);
     background: transparent;
@@ -180,7 +250,7 @@ import TuiPanel from "../ui/TuiPanel.astro";
     min-height: 16rem;
   }
 
-  .demo-tui__panel-title {
+  :global(.demo-tui__panel-title) {
     padding: var(--space-2) var(--space-4);
     font-size: var(--text-xs);
     color: var(--color-text-muted);
@@ -188,7 +258,7 @@ import TuiPanel from "../ui/TuiPanel.astro";
     letter-spacing: 0.02em;
   }
 
-  .demo-tui__panel-body {
+  :global(.demo-tui__panel-body) {
     flex: 1;
     padding: var(--space-3) var(--space-4);
     display: flex;
@@ -196,11 +266,11 @@ import TuiPanel from "../ui/TuiPanel.astro";
     gap: var(--space-2);
   }
 
-  .demo-tui__panel-body > p {
+  :global(.demo-tui__panel-body > p) {
     margin: 0;
   }
 
-  .demo-tui__panel-foot {
+  :global(.demo-tui__panel-foot) {
     padding: var(--space-2) var(--space-4);
     border-top: 1px solid var(--color-border-default);
     font-size: var(--text-xs);
@@ -211,11 +281,11 @@ import TuiPanel from "../ui/TuiPanel.astro";
     gap: var(--space-2);
   }
 
-  .demo-tui__sep-dot {
+  :global(.demo-tui__sep-dot) {
     color: var(--color-text-subtle);
   }
 
-  .demo-tui__menu {
+  :global(.demo-tui__menu) {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -224,43 +294,27 @@ import TuiPanel from "../ui/TuiPanel.astro";
     gap: 2px;
   }
 
-  .demo-tui__menu li {
+  :global(.demo-tui__menu li) {
     padding-inline: var(--space-2);
   }
 
-  .demo-tui__sep {
+  :global(.demo-tui__sep) {
     border: none;
     border-top: 1px solid var(--color-border-default);
     margin: var(--space-2) 0;
     width: 60%;
   }
 
-  .demo-tui__label {
+  :global(.demo-tui__label) {
     font-size: var(--text-xs);
     letter-spacing: 0.02em;
   }
 
-  .demo-tui__value {
+  :global(.demo-tui__value) {
     margin: 0;
   }
 
-  .demo-tui__bal,
-  .demo-tui__act {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .demo-tui__bal td,
-  .demo-tui__act td {
-    padding: 1px var(--space-3) 1px 0;
-    vertical-align: baseline;
-  }
-
-  .demo-tui__bal td:nth-child(2) {
-    text-align: right;
-  }
-
-  .demo-tui__keys {
+  :global(.demo-tui__keys) {
     margin: var(--space-3) 0 0;
     text-align: center;
     font-size: var(--text-xs);
@@ -269,5 +323,57 @@ import TuiPanel from "../ui/TuiPanel.astro";
     justify-content: center;
     gap: var(--space-3);
     flex-wrap: wrap;
+  }
+
+  /* ============================================================
+   * Transfer form fields — right panel
+   * ============================================================ */
+  :global(.demo-tui__field) {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
+  :global(.demo-tui__field .demo-tui__label) {
+    min-width: 3.5rem;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  :global(.demo-tui__input) {
+    flex: 1;
+    padding: var(--space-1) var(--space-2);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-border-bright) 30%, transparent);
+    font-size: var(--text-sm);
+  }
+
+  :global(.demo-tui__action) {
+    display: flex;
+    justify-content: center;
+    padding-top: var(--space-2);
+  }
+
+  :global(.demo-tui__btn) {
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.02em;
+  }
+
+  /* ============================================================
+   * Balance table (reused from previous demo, kept for sidebar)
+   * ============================================================ */
+  :global(.demo-tui__bal),
+  :global(.demo-tui__act) {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  :global(.demo-tui__bal td),
+  :global(.demo-tui__act td) {
+    padding: 1px var(--space-3) 1px 0;
+    vertical-align: baseline;
+  }
+
+  :global(.demo-tui__bal td:nth-child(2)) {
+    text-align: right;
   }
 </style>

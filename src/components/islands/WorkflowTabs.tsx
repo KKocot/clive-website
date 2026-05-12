@@ -5,9 +5,13 @@ type Tab = "tui" | "cli";
 interface WorkflowTabsProps {
   tuiHtml: string;
   cliHtml: string;
+  /** CustomEvent name to listen for. Must match the paired `InstallModeSwitch` channel. Default: `"install-mode"`. */
+  channel?: string;
 }
 
 export default function WorkflowTabs(props: WorkflowTabsProps) {
+  const channel = () => props.channel ?? "install-mode";
+  const idPrefix = () => channel();
   const [active, setActive] = createSignal<Tab>("tui");
 
   onMount(() => {
@@ -15,8 +19,8 @@ export default function WorkflowTabs(props: WorkflowTabsProps) {
       const detail = (e as CustomEvent<Tab>).detail;
       setActive(detail);
     };
-    document.addEventListener("install-mode", handler);
-    onCleanup(() => document.removeEventListener("install-mode", handler));
+    document.addEventListener(channel(), handler);
+    onCleanup(() => document.removeEventListener(channel(), handler));
   });
 
   return (
@@ -24,18 +28,18 @@ export default function WorkflowTabs(props: WorkflowTabsProps) {
       <Show when={active() === "tui"}>
         <div
           role="tabpanel"
-          id="panel-tui"
+          id={`${idPrefix()}-panel-tui`}
           class="workflow-tabs__panel"
-          aria-labelledby="mode-tui"
+          aria-labelledby={`${idPrefix()}-tui`}
           innerHTML={props.tuiHtml}
         />
       </Show>
       <Show when={active() === "cli"}>
         <div
           role="tabpanel"
-          id="panel-cli"
+          id={`${idPrefix()}-panel-cli`}
           class="workflow-tabs__panel"
-          aria-labelledby="mode-cli"
+          aria-labelledby={`${idPrefix()}-cli`}
           innerHTML={props.cliHtml}
         />
       </Show>

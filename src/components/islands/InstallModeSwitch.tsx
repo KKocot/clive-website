@@ -2,12 +2,23 @@ import { createSignal } from "solid-js";
 
 type Mode = "tui" | "cli";
 
-export default function InstallModeSwitch() {
+interface InstallModeSwitchProps {
+  /** CustomEvent name dispatched on `document`. Default: `"install-mode"`. */
+  channel?: string;
+  /** Extra CSS class added to the root element. */
+  class?: string;
+  /** Accessible label for the tablist. */
+  ariaLabel?: string;
+}
+
+export default function InstallModeSwitch(props: InstallModeSwitchProps) {
+  const channel = () => props.channel ?? "install-mode";
+  const idPrefix = () => channel();
   const [mode, setMode] = createSignal<Mode>("tui");
 
   const switchMode = (m: Mode) => {
     setMode(m);
-    document.dispatchEvent(new CustomEvent("install-mode", { detail: m }));
+    document.dispatchEvent(new CustomEvent(channel(), { detail: m }));
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -24,21 +35,21 @@ export default function InstallModeSwitch() {
     if (next !== null) {
       e.preventDefault();
       switchMode(modes[next]);
-      document.getElementById(`mode-${modes[next]}`)?.focus();
+      document.getElementById(`${idPrefix()}-${modes[next]}`)?.focus();
     }
   };
 
   return (
     <div
-      class="install-mode-switch"
+      class={`install-mode-switch${props.class ? ` ${props.class}` : ""}`}
       role="tablist"
-      aria-label="Installation mode"
+      aria-label={props.ariaLabel ?? "Installation mode"}
       onKeyDown={handleKeyDown}
     >
       <button
         type="button"
         role="tab"
-        id="mode-tui"
+        id={`${idPrefix()}-tui`}
         class="install-mode-switch__tab"
         classList={{ "install-mode-switch__tab--active": mode() === "tui" }}
         aria-selected={mode() === "tui"}
@@ -50,7 +61,7 @@ export default function InstallModeSwitch() {
       <button
         type="button"
         role="tab"
-        id="mode-cli"
+        id={`${idPrefix()}-cli`}
         class="install-mode-switch__tab"
         classList={{ "install-mode-switch__tab--active": mode() === "cli" }}
         aria-selected={mode() === "cli"}
