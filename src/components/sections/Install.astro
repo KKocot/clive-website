@@ -10,11 +10,13 @@ const INSTALL_CMD = `bash <(curl -s ${LINKS.INSTALL_SCRIPT})`;
 const firstStepsHtml = `<div class="install-tui">
   <header class="install-tui__header">
     <span class="install-tui__header-left">
-      <span class="t-emerald">&#x25CF;</span>
-      <span class="t-accent">Clive Setup</span>
+      <span class="install-tui__header-user">alice / <span class="t-emerald">@alice</span></span>
+      <span class="install-tui__header-unlock t-emerald">UNLOCKED</span>
     </span>
     <span class="install-tui__header-right">
-      <span class="t-dim">Step 1 of 4</span>
+      <span class="install-tui__header-tab">Dashboard</span>
+      <span class="install-tui__header-tab install-tui__header-tab--active">Setup</span>
+      <span class="install-tui__header-step t-dim">Step 1 of 4</span>
     </span>
   </header>
 
@@ -22,11 +24,11 @@ const firstStepsHtml = `<div class="install-tui">
     <div class="install-tui__section">
       <div class="install-tui__section-title">PROFILE SETUP</div>
       <div class="install-tui__field">
-        <span class="install-tui__label t-dim">profile name</span>
+        <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Profile name</span>
         <span class="install-tui__input"><span class="t-emerald">default</span></span>
       </div>
       <div class="install-tui__field">
-        <span class="install-tui__label t-dim">working account</span>
+        <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Working account</span>
         <span class="install-tui__input"><span class="t-accent">alice</span></span>
       </div>
     </div>
@@ -43,24 +45,27 @@ const firstStepsHtml = `<div class="install-tui">
     <div class="install-tui__section">
       <div class="install-tui__section-title">KEY MANAGEMENT</div>
       <div class="install-tui__field">
-        <span class="install-tui__label t-dim">wallet</span>
+        <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Wallet</span>
         <span class="install-tui__input"><span class="t-emerald">&#x1f512; encrypted (Beekeeper)</span></span>
       </div>
-      <div class="install-tui__status">
-        <span class="install-tui__btn t-accent">[ Add private key ]</span>
+      <div class="install-tui__actions">
+        <span class="install-tui__btn install-tui__btn--primary">Continue &rarr;</span>
       </div>
     </div>
   </div>
 
   <footer class="install-tui__footer">
-    <span><span class="install-tui__key">Tab</span> next</span>
-    <span><span class="install-tui__key">Enter</span> confirm</span>
-    <span><span class="install-tui__key">esc</span> back</span>
+    <span><span class="install-tui__key">Tab</span> <span class="t-dim">next</span></span>
+    <span><span class="install-tui__key">Enter</span> <span class="t-dim">confirm</span></span>
+    <span><span class="install-tui__key">esc</span> <span class="t-dim">back</span></span>
+    <span><span class="install-tui__key">^l</span> <span class="t-dim">Lock</span></span>
+    <span><span class="install-tui__key">^s</span> <span class="t-dim">Settings</span></span>
   </footer>
 </div>`;
 
 const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-comment"># 1. Run Clive in CLI mode (non-interactive)</span>
 <span class="t-prompt">$</span> clive <span class="t-cyan">-n</span>
+<span class="t-accent">  Using beekeeper at http://127.0.0.1:39507</span>
 <span class="t-comment"># Skip the TUI — work directly from your shell.</span></span>
 
 <span class="install-step install-step--2"><span class="t-comment"># 2. Create your profile</span>
@@ -168,6 +173,7 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     background-color: var(--color-bg-section-tinted);
     padding: var(--space-3);
     min-height: calc(100dvh - var(--header-h));
+    transition: background-color var(--mode-transition, 300ms) ease;
   }
 
   .install__header {
@@ -303,7 +309,7 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
   }
 
   /* Workflow panel — inherits font/color from terminal__body */
-  :global(.workflow-tabs__panel) {
+  .install__steps :global(.workflow-tabs__panel) {
     white-space: pre-wrap;
   }
 
@@ -330,11 +336,13 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-1);
     padding: var(--space-1) var(--space-3);
     background-color: var(--mode-bg-header, var(--color-bg-elevated));
     border-bottom: 1px solid var(--mode-border, var(--color-border-default));
     border-radius: var(--radius-md) var(--radius-md) 0 0;
-    font-size: 0.75em;
+    font-size: var(--text-xs);
     transition: background-color 300ms ease, border-color 300ms ease;
   }
   :global(.install-tui__header-left),
@@ -342,6 +350,28 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     display: flex;
     align-items: center;
     gap: var(--space-1);
+  }
+  :global(.install-tui__header-user) {
+    font-size: 0.875em;
+  }
+  :global(.install-tui__header-unlock) {
+    font-size: 0.75em;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.04em;
+  }
+  :global(.install-tui__header-tab) {
+    padding: 0.125rem 0.5rem;
+    color: var(--mode-text-muted, var(--color-text-muted));
+    border-radius: var(--radius-xs);
+  }
+  :global(.install-tui__header-tab--active) {
+    background-color: var(--mode-border, rgba(96, 165, 250, 0.15));
+    color: var(--mode-text, var(--color-text));
+    font-weight: var(--font-weight-medium);
+  }
+  :global(.install-tui__header-step) {
+    margin-left: var(--space-1);
+    font-size: 0.875em;
   }
 
   :global(.install-tui__body) {
@@ -352,7 +382,7 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
   }
 
   :global(.install-tui__section) {
-    border: 1px solid var(--mode-border-active, var(--color-border-default));
+    border: 1px solid var(--mode-border, var(--color-border-default));
     border-radius: var(--radius-xs);
     padding: var(--space-2) var(--space-3);
     transition: border-color 300ms ease;
@@ -379,12 +409,20 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     text-align: right;
     flex-shrink: 0;
     font-size: 0.8125em;
+    color: var(--mode-text-muted, var(--color-text-muted));
+  }
+  :global(.install-tui__label--req) {
+    color: var(--mode-accent-success, var(--color-accent-success));
+  }
+  :global(.install-tui__asterisk) {
+    color: var(--mode-accent-success, var(--color-accent-success));
+    font-weight: var(--font-weight-bold);
   }
 
   :global(.install-tui__input) {
     flex: 1;
     padding: 0.125rem var(--space-2);
-    border: 1px solid var(--mode-border, color-mix(in srgb, var(--color-border-bright) 25%, transparent));
+    border: 1px solid var(--mode-accent-success, #22c55e);
     border-radius: var(--radius-xs);
     font-size: 0.875em;
     transition: border-color 300ms ease;
@@ -406,16 +444,24 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     background-color: var(--mode-border, rgba(96, 165, 250, 0.10));
   }
 
-  :global(.install-tui__status) {
+  :global(.install-tui__actions) {
     display: flex;
     justify-content: center;
-    padding-top: var(--space-1);
+    gap: var(--space-3);
+    padding-top: var(--space-2);
+    flex-wrap: wrap;
   }
 
   :global(.install-tui__btn) {
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.02em;
     font-size: 0.875em;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-xs);
+  }
+  :global(.install-tui__btn--primary) {
+    background-color: var(--mode-accent-success, #22c55e);
+    color: #fff;
   }
 
   :global(.install-tui__footer) {
@@ -425,7 +471,7 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     padding: var(--space-1) var(--space-3);
     background-color: var(--mode-bg-header, var(--color-bg-elevated));
     border-top: 1px solid var(--mode-border, var(--color-border-default));
-    font-size: 0.625rem;
+    font-size: 0.6875rem;
     color: var(--mode-text-muted, var(--color-text-muted));
     border-radius: 0 0 var(--radius-md) var(--radius-md);
     transition: background-color 300ms ease, border-color 300ms ease;
