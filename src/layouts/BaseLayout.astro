@@ -43,12 +43,12 @@ const gitlabLink = {
 
 const currentPath = Astro.url.pathname;
 
+const isHomePage = currentPath === "/" || currentPath === "/index.html";
+
 const isCurrent = (href: string): boolean => {
   if (href.startsWith("#") || href.includes("#")) return false;
   if (/^https?:\/\//.test(href)) return false;
-  if (href === "/") {
-    return currentPath === "/" || currentPath === "/index.html";
-  }
+  if (href === "/") return !isHomePage;
   return currentPath === href || currentPath.startsWith(href + "/");
 };
 ---
@@ -290,23 +290,33 @@ const isCurrent = (href: string): boolean => {
       // Highlights the matching nav tab when a section scrolls into the
       // upper 20-60% of the viewport (the "under navbar" sweet spot).
       const initSectionObserver = () => {
-        const sectionIds = ['features', 'install', 'demo', 'blog'];
+        const sectionIds = ['hero', 'features', 'install', 'demo', 'blog'];
         const sections = sectionIds
           .map((id) => document.getElementById(id))
           .filter((el): el is HTMLElement => el !== null);
 
         if (!sections.length) return;
 
-        const navLinks = document.querySelectorAll<HTMLAnchorElement>(
+        const homeLinks = document.querySelectorAll<HTMLAnchorElement>('a.tmux-tab--home');
+        const hashLinks = document.querySelectorAll<HTMLAnchorElement>(
           'a.tmux-tab[href*="#"], a.tmux-tab--mobile[href*="#"]',
         );
+        const allNavLinks = [...homeLinks, ...hashLinks];
 
         const clearActive = () => {
-          navLinks.forEach((link) => link.removeAttribute('aria-current'));
+          allNavLinks.forEach((link) => link.removeAttribute('aria-current'));
         };
 
         const setActive = (sectionId: string) => {
-          navLinks.forEach((link) => {
+          allNavLinks.forEach((link) => {
+            if (sectionId === 'hero') {
+              if (link.classList.contains('tmux-tab--home')) {
+                link.setAttribute('aria-current', 'true');
+              } else {
+                link.removeAttribute('aria-current');
+              }
+              return;
+            }
             const hash = new URL(link.href, location.origin).hash.replace('#', '');
             if (hash === sectionId) {
               link.setAttribute('aria-current', 'true');
