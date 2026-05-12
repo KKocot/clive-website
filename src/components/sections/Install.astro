@@ -10,56 +10,46 @@ const INSTALL_CMD = `bash <(curl -s ${LINKS.INSTALL_SCRIPT})`;
 const firstStepsHtml = `<div class="install-tui">
   <header class="install-tui__header">
     <span class="install-tui__header-left">
-      <span class="install-tui__header-user">alice / <span class="t-emerald">@alice</span></span>
-      <span class="install-tui__header-unlock t-emerald">UNLOCKED</span>
-    </span>
-    <span class="install-tui__header-right">
-      <span class="install-tui__header-tab">Dashboard</span>
-      <span class="install-tui__header-tab install-tui__header-tab--active">Setup</span>
-      <span class="install-tui__header-step t-dim">Step 1 of 4</span>
+      <span class="install-tui__header-toggle t-dim">+</span>
+      <span class="install-tui__header-sep" aria-hidden="true"></span>
+      <span class="install-tui__header-title t-emerald">clive</span>
     </span>
   </header>
 
   <div class="install-tui__body">
+    <div class="install-tui__big-title" aria-label="create profile">
+      <span>create</span> <span>profile</span>
+    </div>
+
     <div class="install-tui__section">
-      <div class="install-tui__section-title">PROFILE SETUP</div>
+      <div class="install-tui__section-title">Enter profile data</div>
       <div class="install-tui__field">
         <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Profile name</span>
-        <span class="install-tui__input"><span class="t-emerald">default</span></span>
+        <span class="install-tui__input"><span class="t-emerald">my-profile</span></span>
       </div>
       <div class="install-tui__field">
-        <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Working account</span>
-        <span class="install-tui__input"><span class="t-accent">alice</span></span>
+        <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Password</span>
+        <span class="install-tui__input"><span class="t-dim">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span></span>
+      </div>
+      <div class="install-tui__field">
+        <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Repeat password</span>
+        <span class="install-tui__input"><span class="t-dim">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span></span>
+      </div>
+      <div class="install-tui__actions install-tui__actions--spread">
+        <span class="install-tui__btn install-tui__btn--ghost">&larr; Previous</span>
+        <span class="install-tui__btn install-tui__btn--primary">Next &rarr;</span>
       </div>
     </div>
 
-    <div class="install-tui__section">
-      <div class="install-tui__section-title">NODE SELECTION</div>
-      <div class="install-tui__nodes">
-        <span class="install-tui__node install-tui__node--active"><span class="t-emerald">&#x25CF;</span> api.hive.blog</span>
-        <span class="install-tui__node"><span class="t-dim">&#x25CB;</span> api.deathwing.me</span>
-        <span class="install-tui__node"><span class="t-dim">&#x25CB;</span> api.openhive.network</span>
-      </div>
-    </div>
-
-    <div class="install-tui__section">
-      <div class="install-tui__section-title">KEY MANAGEMENT</div>
-      <div class="install-tui__field">
-        <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Wallet</span>
-        <span class="install-tui__input"><span class="t-emerald">&#x1f512; encrypted (Beekeeper)</span></span>
-      </div>
-      <div class="install-tui__actions">
-        <span class="install-tui__btn install-tui__btn--primary">Continue &rarr;</span>
-      </div>
+    <div class="install-tui__hint">
+      <span class="install-tui__hint-icon t-dim">&#x25B6;</span>
+      <span class="t-dim">How to select, copy and paste text inside TUI app like Clive?</span>
     </div>
   </div>
 
   <footer class="install-tui__footer">
-    <span><span class="install-tui__key">Tab</span> <span class="t-dim">next</span></span>
-    <span><span class="install-tui__key">Enter</span> <span class="t-dim">confirm</span></span>
     <span><span class="install-tui__key">esc</span> <span class="t-dim">back</span></span>
-    <span><span class="install-tui__key">^l</span> <span class="t-dim">Lock</span></span>
-    <span><span class="install-tui__key">^s</span> <span class="t-dim">Settings</span></span>
+    <span><span class="install-tui__key">?</span> <span class="t-dim">help</span></span>
   </footer>
 </div>`;
 
@@ -73,8 +63,8 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
 <span class="t-emerald">  Profile 'my-profile' created.</span></span>
 
 <span class="install-step install-step--3"><span class="t-comment"># 3. Set your Hive account</span>
-<span class="t-prompt">$</span> clive configure working-account set alice <span class="t-cyan">-n</span>
-<span class="t-emerald">  Working account set to 'alice'.</span></span>
+<span class="t-prompt">$</span> clive configure working-account switch alice <span class="t-cyan">-n</span>
+<span class="t-emerald">  Working account switched to 'alice'.</span></span>
 
 <span class="install-step install-step--4"><span class="t-comment"># 4. Add a key to the wallet</span>
 <span class="t-prompt">$</span> clive configure key add <span class="t-cyan">-n</span>
@@ -351,27 +341,23 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     align-items: center;
     gap: var(--space-1);
   }
-  :global(.install-tui__header-user) {
+  :global(.install-tui__header-toggle) {
     font-size: 0.875em;
+    font-weight: var(--font-weight-bold);
+    cursor: default;
   }
-  :global(.install-tui__header-unlock) {
-    font-size: 0.75em;
+  :global(.install-tui__header-sep) {
+    display: inline-block;
+    width: 1px;
+    height: 0.875em;
+    background-color: var(--mode-border, var(--color-border-default));
+    vertical-align: middle;
+    margin: 0 var(--space-1);
+  }
+  :global(.install-tui__header-title) {
+    font-size: 0.875em;
     font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.04em;
-  }
-  :global(.install-tui__header-tab) {
-    padding: 0.125rem 0.5rem;
-    color: var(--mode-text-muted, var(--color-text-muted));
-    border-radius: var(--radius-xs);
-  }
-  :global(.install-tui__header-tab--active) {
-    background-color: var(--mode-border, rgba(96, 165, 250, 0.15));
-    color: var(--mode-text, var(--color-text));
-    font-weight: var(--font-weight-medium);
-  }
-  :global(.install-tui__header-step) {
-    margin-left: var(--space-1);
-    font-size: 0.875em;
+    letter-spacing: 0.02em;
   }
 
   :global(.install-tui__body) {
@@ -379,6 +365,17 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     flex-direction: column;
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
+  }
+
+  :global(.install-tui__big-title) {
+    text-align: center;
+    font-size: clamp(1.25rem, 1rem + 1.5vw, 1.75rem);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mode-text, var(--color-text));
+    padding: var(--space-1) 0;
+    line-height: 1.2;
   }
 
   :global(.install-tui__section) {
@@ -428,22 +425,6 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     transition: border-color 300ms ease;
   }
 
-  :global(.install-tui__nodes) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-    font-size: 0.875em;
-  }
-
-  :global(.install-tui__node) {
-    padding: 0.0625rem var(--space-2);
-    border-radius: var(--radius-xs);
-  }
-
-  :global(.install-tui__node--active) {
-    background-color: var(--mode-border, rgba(96, 165, 250, 0.10));
-  }
-
   :global(.install-tui__actions) {
     display: flex;
     justify-content: center;
@@ -462,6 +443,27 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
   :global(.install-tui__btn--primary) {
     background-color: var(--mode-accent-success, #22c55e);
     color: #fff;
+  }
+  :global(.install-tui__btn--ghost) {
+    background-color: transparent;
+    border: 1px solid var(--mode-border, var(--color-border-default));
+    color: var(--mode-text-muted, var(--color-text-muted));
+  }
+  :global(.install-tui__actions--spread) {
+    justify-content: space-between;
+  }
+
+  :global(.install-tui__hint) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) 0;
+    font-size: 0.75em;
+    cursor: default;
+  }
+  :global(.install-tui__hint-icon) {
+    font-size: 0.625em;
+    transition: transform var(--duration-fast) var(--ease-out-quad);
   }
 
   :global(.install-tui__footer) {
