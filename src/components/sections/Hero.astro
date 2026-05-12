@@ -32,90 +32,152 @@ const heroTuiHtml = `<div class="hero__tui">
   </header>
 
   <div class="hero__tui-body">
-    <div class="hero__tui-section">
-      <div class="hero__tui-section-title">WORKING ACCOUNT: alice</div>
-      <div class="hero__tui-mana-grid">
-        <div class="hero__tui-mana-col">
-          <div class="hero__tui-mana-header t-dim">RC</div>
-          <div class="hero__tui-mana-value t-emerald">100.00 %</div>
-          <div class="hero__tui-mana-hp t-dim">100.0K HP</div>
-          <div class="hero__tui-mana-full t-emerald">Full!</div>
+    <!-- ====== WORKING ACCOUNT: alice ====== -->
+    <div class="hero__tui-card">
+      <div class="hero__tui-card-label">WORKING ACCOUNT</div>
+      <div class="hero__tui-card-top">
+        <div class="hero__tui-card-badge">
+          <div class="hero__tui-badge hero__tui-badge--ok">alice <span class="hero__tui-close-btn">X</span></div>
+          <div class="hero__tui-badge-status t-dim">No alarms</div>
         </div>
-        <div class="hero__tui-mana-col">
-          <div class="hero__tui-mana-header t-dim">VOTING</div>
-          <div class="hero__tui-mana-value t-emerald">100.00 %</div>
-          <div class="hero__tui-mana-hp t-dim">100.0K HP</div>
-          <div class="hero__tui-mana-full t-emerald">Full!</div>
+        <div class="hero__tui-mana-grid">
+          <div class="hero__tui-mana-col" style="--bar-fill:100%">
+            <div class="hero__tui-mana-pct">100.00 % <span class="hero__tui-mana-type">RC</span></div>
+            <div class="hero__tui-mana-detail">100.0K HP <span class="t-emerald">Full!</span></div>
+          </div>
+          <div class="hero__tui-mana-col" style="--bar-fill:100%">
+            <div class="hero__tui-mana-pct">100.00 % <span class="hero__tui-mana-type">VOTING</span></div>
+            <div class="hero__tui-mana-detail">100.0K HP <span class="t-emerald">Full!</span></div>
+          </div>
+          <div class="hero__tui-mana-col" style="--bar-fill:100%">
+            <div class="hero__tui-mana-pct">100.00 % <span class="hero__tui-mana-type">DOWNVOTING</span></div>
+            <div class="hero__tui-mana-detail">25.0K HP <span class="t-emerald">Full!</span></div>
+          </div>
         </div>
-        <div class="hero__tui-mana-col">
-          <div class="hero__tui-mana-header t-dim">DOWNVOTING</div>
-          <div class="hero__tui-mana-value t-emerald">100.00 %</div>
-          <div class="hero__tui-mana-hp t-dim">100.0K HP</div>
-          <div class="hero__tui-mana-full t-emerald">Full!</div>
+      </div>
+      <div class="hero__tui-card-bottom">
+        <div class="hero__tui-last">
+          <div class="hero__tui-last-label">LAST:</div>
+          <div class="hero__tui-last-row"><span class="t-dim">History entry:</span> 2026-02-11T13:54:45</div>
+          <div class="hero__tui-last-row"><span class="t-dim">Account update:</span> never</div>
+        </div>
+        <div class="hero__tui-table">
+          <div class="hero__tui-row">
+            <span class="hero__tui-cell-label hero__tui-label">LIQUID</span>
+            <span class="hero__tui-cell-val">100000.000 HIVE</span>
+            <span class="hero__tui-cell-val">100000.000 HBD</span>
+          </div>
+          <div class="hero__tui-row">
+            <span class="hero__tui-cell-label hero__tui-label">SAVINGS</span>
+            <span class="hero__tui-cell-val">100.000 HIVE</span>
+            <span class="hero__tui-cell-val">190.000 HBD</span>
+          </div>
+          <div class="hero__tui-row">
+            <span class="hero__tui-cell-label hero__tui-label">STAKE</span>
+            <span class="hero__tui-cell-val">100.0K HP</span>
+            <span class="hero__tui-cell-val t-dim">180.0M VESTS</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="hero__tui-section">
-      <div class="hero__tui-section-title t-accent">BALANCES</div>
-      <div class="hero__tui-table">
-        <div class="hero__tui-row hero__tui-row--header">
-          <span class="hero__tui-cell-label"></span>
-          <span class="hero__tui-cell-val t-dim">HIVE</span>
-          <span class="hero__tui-cell-val t-dim">HBD</span>
-        </div>
-        <div class="hero__tui-row">
-          <span class="hero__tui-cell-label hero__tui-label">LIQUID</span>
-          <span class="hero__tui-cell-val t-emerald">100,000.000</span>
-          <span class="hero__tui-cell-val t-emerald">100,000.000</span>
-        </div>
-        <div class="hero__tui-row">
-          <span class="hero__tui-cell-label hero__tui-label">SAVINGS</span>
-          <span class="hero__tui-cell-val">100.000</span>
-          <span class="hero__tui-cell-val">190.000</span>
-        </div>
-        <div class="hero__tui-row">
-          <span class="hero__tui-cell-label hero__tui-label">STAKE</span>
-          <span class="hero__tui-cell-val">100.0K HP</span>
-          <span class="hero__tui-cell-val t-dim">180.0M VESTS</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="hero__tui-section">
-      <div class="hero__tui-section-title t-dim">LAST</div>
-      <div class="hero__tui-last-row">
-        <span class="t-dim">History entry:</span> <span>2026-02-11T13:54:45</span>
-      </div>
-      <div class="hero__tui-last-row">
-        <span class="t-dim">Account update:</span> <span>never</span>
-      </div>
-    </div>
-
+    <!-- ====== WATCHED ACCOUNTS ====== -->
     <div class="hero__tui-section hero__tui-section--watched">
       <div class="hero__tui-section-title t-dim">WATCHED ACCOUNTS</div>
-      <div class="hero__tui-watched-account">
-        <div class="hero__tui-watched-header">
-          <span class="hero__tui-badge hero__tui-badge--warn">bob</span>
-          <span class="hero__tui-alarm-badge">1 ALARM</span>
-          <span class="hero__tui-close-btn t-dim">X</span>
+
+      <!-- bob -->
+      <div class="hero__tui-card hero__tui-card--watched">
+        <div class="hero__tui-card-top">
+          <div class="hero__tui-card-badge">
+            <div class="hero__tui-badge hero__tui-badge--watched">bob <span class="hero__tui-close-btn">X</span></div>
+            <div class="hero__tui-alarm-badge">1 ALARM</div>
+          </div>
+          <div class="hero__tui-mana-grid">
+            <div class="hero__tui-mana-col" style="--bar-fill:100%">
+              <div class="hero__tui-mana-pct">100.00 % <span class="hero__tui-mana-type">RC</span></div>
+              <div class="hero__tui-mana-detail">1.0K HP <span class="t-emerald">Full!</span></div>
+            </div>
+            <div class="hero__tui-mana-col" style="--bar-fill:100%">
+              <div class="hero__tui-mana-pct">100.00 % <span class="hero__tui-mana-type">VOTING</span></div>
+              <div class="hero__tui-mana-detail">1.0K HP <span class="t-emerald">Full!</span></div>
+            </div>
+            <div class="hero__tui-mana-col" style="--bar-fill:100%">
+              <div class="hero__tui-mana-pct">100.00 % <span class="hero__tui-mana-type">DOWNVOTING</span></div>
+              <div class="hero__tui-mana-detail">250.000 HP <span class="t-emerald">Full!</span></div>
+            </div>
+          </div>
         </div>
-        <div class="hero__tui-row hero__tui-row--compact">
-          <span class="hero__tui-cell-label hero__tui-label">LIQUID</span>
-          <span class="hero__tui-cell-val">1,000.000 HIVE</span>
-          <span class="hero__tui-cell-val">1,000.000 HBD</span>
+        <div class="hero__tui-card-bottom">
+          <div class="hero__tui-last">
+            <div class="hero__tui-last-label">LAST:</div>
+            <div class="hero__tui-last-row"><span class="t-dim">History entry:</span> 2026-02-11T13:54:18</div>
+            <div class="hero__tui-last-row"><span class="t-dim">Account update:</span> never</div>
+          </div>
+          <div class="hero__tui-table">
+            <div class="hero__tui-row">
+              <span class="hero__tui-cell-label hero__tui-label">LIQUID</span>
+              <span class="hero__tui-cell-val">1000.000 HIVE</span>
+              <span class="hero__tui-cell-val">1000.000 HBD</span>
+            </div>
+            <div class="hero__tui-row">
+              <span class="hero__tui-cell-label hero__tui-label">SAVINGS</span>
+              <span class="hero__tui-cell-val">0.000 HIVE</span>
+              <span class="hero__tui-cell-val">0.000 HBD</span>
+            </div>
+            <div class="hero__tui-row">
+              <span class="hero__tui-cell-label hero__tui-label">STAKE</span>
+              <span class="hero__tui-cell-val">1.0K HP</span>
+              <span class="hero__tui-cell-val t-dim">1.8M VESTS</span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="hero__tui-watched-account">
-        <div class="hero__tui-watched-header">
-          <span class="hero__tui-badge hero__tui-badge--ok">witness-001</span>
-          <span class="hero__tui-alarm-badge">1 ALARM</span>
-          <span class="hero__tui-close-btn t-dim">X</span>
+
+      <!-- witness-001 -->
+      <div class="hero__tui-card hero__tui-card--watched">
+        <div class="hero__tui-card-top">
+          <div class="hero__tui-card-badge">
+            <div class="hero__tui-badge hero__tui-badge--watched">witness-001 <span class="hero__tui-close-btn">X</span></div>
+            <div class="hero__tui-alarm-badge">1 ALARM</div>
+          </div>
+          <div class="hero__tui-mana-grid">
+            <div class="hero__tui-mana-col" style="--bar-fill:100%">
+              <div class="hero__tui-mana-pct">100.00 % <span class="hero__tui-mana-type">RC</span></div>
+              <div class="hero__tui-mana-detail">10.0K HP <span class="t-emerald">Full!</span></div>
+            </div>
+            <div class="hero__tui-mana-col" style="--bar-fill:100%">
+              <div class="hero__tui-mana-pct">100.00 % <span class="hero__tui-mana-type">VOTING</span></div>
+              <div class="hero__tui-mana-detail">10.0K HP <span class="t-emerald">Full!</span></div>
+            </div>
+            <div class="hero__tui-mana-col" style="--bar-fill:100%">
+              <div class="hero__tui-mana-pct">100.00 % <span class="hero__tui-mana-type">DOWNVOTING</span></div>
+              <div class="hero__tui-mana-detail">2.5K HP <span class="t-emerald">Full!</span></div>
+            </div>
+          </div>
         </div>
-        <div class="hero__tui-row hero__tui-row--compact">
-          <span class="hero__tui-cell-label hero__tui-label">RC</span>
-          <span class="hero__tui-cell-val t-emerald">99.8%</span>
-          <span class="hero__tui-cell-val t-dim">50.0K HP</span>
+        <div class="hero__tui-card-bottom">
+          <div class="hero__tui-last">
+            <div class="hero__tui-last-label">LAST:</div>
+            <div class="hero__tui-last-row"><span class="t-dim">History entry:</span> 2026-02-11T13:54:39</div>
+            <div class="hero__tui-last-row"><span class="t-dim">Account update:</span> never</div>
+          </div>
+          <div class="hero__tui-table">
+            <div class="hero__tui-row">
+              <span class="hero__tui-cell-label hero__tui-label">LIQUID</span>
+              <span class="hero__tui-cell-val">10000.000 HIVE</span>
+              <span class="hero__tui-cell-val">9990.000 HBD</span>
+            </div>
+            <div class="hero__tui-row">
+              <span class="hero__tui-cell-label hero__tui-label">SAVINGS</span>
+              <span class="hero__tui-cell-val">0.000 HIVE</span>
+              <span class="hero__tui-cell-val">0.000 HBD</span>
+            </div>
+            <div class="hero__tui-row">
+              <span class="hero__tui-cell-label hero__tui-label">STAKE</span>
+              <span class="hero__tui-cell-val">10.0K HP</span>
+              <span class="hero__tui-cell-val t-dim">18.0M VESTS</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -408,7 +470,9 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show account 
   }
 
   /* ============================================================
-   * TUI Dashboard — structured multi-panel layout
+   * TUI Dashboard — card-based account layout
+   * Each account is a self-contained card with badge, resource
+   * bars, LAST info, and balance table.
    * ============================================================ */
   :global(.hero__tui) {
     display: flex;
@@ -456,10 +520,6 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show account 
     color: var(--mode-text-muted, var(--color-text-muted));
     font-size: 0.875em;
   }
-  :global(.hero__tui-tab--active) {
-    color: var(--mode-accent-primary, var(--color-primary-bright));
-    font-weight: var(--font-weight-semibold);
-  }
   :global(.hero__tui-tab--selected) {
     background-color: var(--mode-border, rgba(96, 165, 250, 0.15));
     border-radius: var(--radius-xs);
@@ -497,7 +557,7 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show account 
     text-transform: uppercase;
   }
 
-  /* Body — account sections */
+  /* Body — account cards */
   :global(.hero__tui-body) {
     display: flex;
     flex-direction: column;
@@ -505,17 +565,18 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show account 
     padding: var(--space-2);
   }
 
-  /* Section blocks */
-  :global(.hero__tui-section) {
+  /* ---- Account card ---- */
+  :global(.hero__tui-card) {
     border: 1px solid var(--mode-border-active, var(--color-border-default));
     border-radius: var(--radius-xs);
     padding: var(--space-1) var(--space-2);
     transition: border-color 300ms ease;
   }
-  :global(.hero__tui-section--watched) {
-    border-color: var(--mode-border, color-mix(in srgb, var(--color-border-bright) 20%, transparent));
+  :global(.hero__tui-card--watched) {
+    border-color: var(--mode-border, color-mix(in srgb, var(--color-border-bright) 30%, transparent));
+    margin-top: var(--space-1);
   }
-  :global(.hero__tui-section-title) {
+  :global(.hero__tui-card-label) {
     font-size: 0.6875em;
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
@@ -524,170 +585,48 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show account 
     margin-bottom: var(--space-1);
   }
 
-  /* Account name + badge */
-  :global(.hero__tui-account-name) {
+  /* Card top row: badge + mana columns side by side */
+  :global(.hero__tui-card-top) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-2);
+    align-items: start;
+    margin-bottom: var(--space-2);
+  }
+
+  /* Badge block (name + status) */
+  :global(.hero__tui-card-badge) {
     display: flex;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: var(--space-1) var(--space-3);
-    margin-bottom: var(--space-1);
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 5rem;
   }
   :global(.hero__tui-badge) {
-    display: inline-block;
-    padding: 0.0625rem 0.375rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.125rem 0.5rem;
     border-radius: var(--radius-xs);
     font-weight: var(--font-weight-semibold);
     font-size: 0.8125em;
-    flex-shrink: 0;
-    margin-top: 0.125rem;
+    white-space: nowrap;
   }
   :global(.hero__tui-badge--ok) {
     background-color: var(--mode-accent-success, var(--color-primary));
     color: #fff;
   }
-  :global(.hero__tui-badge--warn) {
-    background-color: var(--mode-accent-danger, var(--color-accent-danger));
+  :global(.hero__tui-badge--watched) {
+    background-color: var(--mode-accent-primary, #3b82f6);
     color: #fff;
   }
-
-  /* Stats — now vertical with progress bars */
-  :global(.hero__tui-stats) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1875rem;
-    flex: 1;
-    min-width: 0;
-  }
-
-  /* Progress bars */
-  :global(.hero__tui-bar) {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-    font-size: 0.75em;
-  }
-  :global(.hero__tui-bar-label) {
-    width: 1.5rem;
-    text-align: right;
-    flex-shrink: 0;
-    font-size: 0.875em;
-  }
-  :global(.hero__tui-bar-track) {
-    flex: 1;
-    height: 4px;
-    background-color: rgba(255, 255, 255, 0.08);
-    border-radius: 2px;
-    overflow: hidden;
-    min-width: 2rem;
-  }
-  :global(.hero__tui-bar-fill) {
-    height: 100%;
-    background-color: var(--mode-accent-success, var(--color-accent-success));
-    border-radius: 2px;
-    transition: width 600ms var(--ease-out-quint);
-  }
-  :global(.hero__tui-bar-fill--full) {
-    background-color: var(--mode-accent-primary, var(--color-primary-bright));
-  }
-
-  /* RC / Voting / Downvoting — 3-column mana grid */
-  :global(.hero__tui-mana-grid) {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: var(--space-1);
-  }
-  :global(.hero__tui-mana-col) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: var(--space-1);
-    background-color: var(--mode-bg-elevated, #2a3444);
-    border-radius: var(--radius-xs);
-    font-size: 0.8125em;
-  }
-  :global(.hero__tui-mana-header) {
-    font-size: 0.75em;
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-bottom: 0.125rem;
-  }
-  :global(.hero__tui-mana-value) {
-    font-size: 1.125em;
-    font-weight: var(--font-weight-semibold);
-    font-variant-numeric: tabular-nums;
-  }
-  :global(.hero__tui-mana-hp) {
-    font-size: 0.75em;
-    font-variant-numeric: tabular-nums;
-  }
-  :global(.hero__tui-mana-full) {
+  :global(.hero__tui-badge-status) {
     font-size: 0.6875em;
+    padding-left: 0.125rem;
+  }
+  :global(.hero__tui-close-btn) {
+    color: var(--mode-accent-danger, #ef4444);
     font-weight: var(--font-weight-semibold);
-  }
-
-  /* Balance table rows */
-  :global(.hero__tui-table) {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-  :global(.hero__tui-row) {
-    display: grid;
-    grid-template-columns: 5rem 1fr 1fr;
-    gap: var(--space-1);
-    padding: var(--space-1) 0;
-    border-bottom: 1px solid var(--mode-border, color-mix(in srgb, var(--color-border-bright) 15%, transparent));
-    transition: border-color 300ms ease;
-  }
-  :global(.hero__tui-row--header) {
-    border-bottom: 1px solid var(--mode-border-active, color-mix(in srgb, var(--color-border-bright) 30%, transparent));
-    padding-bottom: 0.25rem;
-  }
-  :global(.hero__tui-row:last-child) {
-    border-bottom: none;
-  }
-  :global(.hero__tui-row--compact) {
-    padding: 0.125rem 0;
-    border-bottom: none;
-    margin-top: var(--space-1);
-  }
-  :global(.hero__tui-cell-label) {
-    font-weight: var(--font-weight-semibold);
-    font-size: 0.8125em;
-    text-align: center;
-    padding: 0.0625rem 0.25rem;
-    border-radius: var(--radius-xs);
-    transition: background-color 300ms ease;
-  }
-  :global(.hero__tui-label) {
-    background-color: #3b82f6;
-    color: #fff;
-  }
-  :global(.hero__tui-cell-val) {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-
-  /* LAST section rows */
-  :global(.hero__tui-last-row) {
-    font-size: 0.8125em;
-    padding: 0.0625rem 0;
-  }
-
-  /* Watched account wrapper */
-  :global(.hero__tui-watched-account) {
-    margin-bottom: var(--space-1);
-  }
-  :global(.hero__tui-watched-account:last-child) {
-    margin-bottom: 0;
-  }
-  :global(.hero__tui-watched-header) {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-    margin-bottom: 0.125rem;
+    cursor: default;
   }
   :global(.hero__tui-alarm-badge) {
     display: inline-block;
@@ -698,11 +637,144 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show account 
     font-size: 0.6875em;
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.02em;
+    width: fit-content;
   }
-  :global(.hero__tui-close-btn) {
+
+  /* RC / Voting / Downvoting — 3-column mana grid */
+  :global(.hero__tui-mana-grid) {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-1);
+  }
+  :global(.hero__tui-mana-col) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.375rem;
+    border-radius: var(--radius-xs);
     font-size: 0.75em;
-    margin-left: auto;
-    cursor: default;
+    overflow: hidden;
+    background-color: var(--mode-bg-elevated, #1f2d45);
+    isolation: isolate;
+  }
+  /* Blue fill bar — pseudo-element behind text */
+  :global(.hero__tui-mana-col::before) {
+    content: "";
+    position: absolute;
+    inset: 0;
+    right: calc(100% - var(--bar-fill, 100%));
+    background: linear-gradient(
+      90deg,
+      var(--mode-accent-primary, #2563eb) 0%,
+      color-mix(in srgb, var(--mode-accent-primary, #3b82f6) 70%, transparent) 100%
+    );
+    opacity: 0.35;
+    border-radius: inherit;
+    z-index: -1;
+    transition: right 600ms ease;
+  }
+  :global(.hero__tui-mana-pct) {
+    font-weight: var(--font-weight-semibold);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  :global(.hero__tui-mana-type) {
+    font-size: 0.875em;
+    color: var(--mode-text-muted, var(--color-text-muted));
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  :global(.hero__tui-mana-detail) {
+    font-size: 0.875em;
+    font-variant-numeric: tabular-nums;
+    color: var(--mode-text-muted, var(--color-text-muted));
+    white-space: nowrap;
+  }
+
+  /* Card bottom row: LAST info + balance table side by side */
+  :global(.hero__tui-card-bottom) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-2);
+    align-items: start;
+    border-top: 1px solid var(--mode-border, color-mix(in srgb, var(--color-border-bright) 15%, transparent));
+    padding-top: var(--space-1);
+    transition: border-color 300ms ease;
+  }
+
+  /* LAST info block */
+  :global(.hero__tui-last) {
+    min-width: 0;
+  }
+  :global(.hero__tui-last-label) {
+    font-size: 0.75em;
+    font-weight: var(--font-weight-semibold);
+    color: var(--mode-text-muted, var(--color-text-muted));
+    margin-bottom: 0.125rem;
+  }
+  :global(.hero__tui-last-row) {
+    font-size: 0.75em;
+    padding: 0.0625rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Balance table */
+  :global(.hero__tui-table) {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  :global(.hero__tui-row) {
+    display: grid;
+    grid-template-columns: 4rem 1fr 1fr;
+    gap: var(--space-1);
+    padding: 0.125rem 0;
+    border-bottom: 1px solid var(--mode-border, color-mix(in srgb, var(--color-border-bright) 10%, transparent));
+    transition: border-color 300ms ease;
+  }
+  :global(.hero__tui-row:last-child) {
+    border-bottom: none;
+  }
+  :global(.hero__tui-cell-label) {
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.75em;
+    text-align: center;
+    padding: 0.0625rem 0.25rem;
+    border-radius: var(--radius-xs);
+    transition: background-color 300ms ease;
+  }
+  :global(.hero__tui-label) {
+    background-color: var(--mode-accent-primary, #3b82f6);
+    color: #fff;
+  }
+  :global(.hero__tui-cell-val) {
+    text-align: right;
+    font-size: 0.8125em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* Watched accounts section wrapper */
+  :global(.hero__tui-section) {
+    padding: 0;
+    border: none;
+  }
+  :global(.hero__tui-section--watched) {
+    border: none;
+  }
+  :global(.hero__tui-section-title) {
+    font-size: 0.6875em;
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mode-text-muted, var(--color-text-muted));
+    margin-bottom: 0;
+    margin-top: var(--space-1);
   }
 
   /* Footer — key hints */
@@ -733,7 +805,7 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show account 
     margin-right: 0.125rem;
   }
 
-  /* Mobile: hide less important elements */
+  /* Mobile: hide less important elements, stack layouts */
   @media (max-width: 25rem) {
     :global(.hero__tui-header-right) {
       display: none;
@@ -744,6 +816,12 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show account 
     :global(.hero__tui-section--watched) {
       display: none;
     }
+    :global(.hero__tui-card-top) {
+      grid-template-columns: 1fr;
+    }
+    :global(.hero__tui-card-bottom) {
+      grid-template-columns: 1fr;
+    }
     :global(.hero__tui-mana-grid) {
       grid-template-columns: 1fr;
     }
@@ -751,7 +829,7 @@ const heroCliHtml = `<span class="t-dim">clive@cli:~$</span> clive show account 
       display: none;
     }
     :global(.hero__tui-row) {
-      grid-template-columns: 4rem 1fr;
+      grid-template-columns: 3.5rem 1fr;
     }
     :global(.hero__tui-cell-val:last-child) {
       display: none;
