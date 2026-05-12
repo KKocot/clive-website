@@ -38,8 +38,10 @@
     "@hiveio/honeycomb-solid": "^1.1.0",
     "@hiveio/wax": "^2.0.2",
     "@kobalte/core": "^0.13.11",
+    "@nanostores/solid": "^1.1.1",
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^5.7.10",
+    "nanostores": "^1.3.0",
     "solid-js": "^1.9.12",
     "tailwindcss": "^4.2.4"
   },

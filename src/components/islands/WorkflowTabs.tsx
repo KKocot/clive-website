@@ -1,45 +1,34 @@
-import { createSignal, onMount, onCleanup, Show } from "solid-js";
-
-type Tab = "tui" | "cli";
+import { Show } from "solid-js";
+import { useStore } from "@nanostores/solid";
+import { $appMode } from "../../stores/appMode";
 
 interface WorkflowTabsProps {
   tuiHtml: string;
   cliHtml: string;
-  /** CustomEvent name to listen for. Must match the paired `InstallModeSwitch` channel. Default: `"install-mode"`. */
-  channel?: string;
+  /** Unique prefix for ARIA IDs (e.g. "hero", "install", "demo"). */
+  panelId: string;
 }
 
 export default function WorkflowTabs(props: WorkflowTabsProps) {
-  const channel = () => props.channel ?? "install-mode";
-  const idPrefix = () => channel();
-  const [active, setActive] = createSignal<Tab>("tui");
-
-  onMount(() => {
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent<Tab>).detail;
-      setActive(detail);
-    };
-    document.addEventListener(channel(), handler);
-    onCleanup(() => document.removeEventListener(channel(), handler));
-  });
+  const mode = useStore($appMode);
 
   return (
     <>
-      <Show when={active() === "tui"}>
+      <Show when={mode() === "tui"}>
         <div
           role="tabpanel"
-          id={`${idPrefix()}-panel-tui`}
+          id={`${props.panelId}-panel-tui`}
           class="workflow-tabs__panel"
-          aria-labelledby={`${idPrefix()}-tui`}
+          aria-labelledby={`${props.panelId}-tui`}
           innerHTML={props.tuiHtml}
         />
       </Show>
-      <Show when={active() === "cli"}>
+      <Show when={mode() === "cli"}>
         <div
           role="tabpanel"
-          id={`${idPrefix()}-panel-cli`}
+          id={`${props.panelId}-panel-cli`}
           class="workflow-tabs__panel"
-          aria-labelledby={`${idPrefix()}-cli`}
+          aria-labelledby={`${props.panelId}-cli`}
           innerHTML={props.cliHtml}
         />
       </Show>

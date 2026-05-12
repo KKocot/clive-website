@@ -5,6 +5,7 @@ import "@hiveio/honeycomb-solid/base.css";
 import SEO from "../components/seo/SEO.astro";
 import Footer from "../components/sections/Footer.astro";
 import { LINKS } from "../config/links";
+import NavbarModeSwitch from "../components/islands/NavbarModeSwitch.tsx";
 
 interface Props {
   title: string;
@@ -117,8 +118,11 @@ const isCurrent = (href: string): boolean => {
           </nav>
         </div>
 
-        <!-- Right: GitLab link + mobile hamburger -->
+        <!-- Right: mode switch + GitLab link + mobile hamburger -->
         <div class="flex items-center">
+          <div class="hidden md:flex items-center">
+            <NavbarModeSwitch client:load />
+          </div>
           <a
             href={gitlabLink.href}
             class="tmux-tab tmux-tab--gitlab hidden md:flex"
@@ -161,6 +165,9 @@ const isCurrent = (href: string): boolean => {
               </svg>
             </summary>
             <div class="tmux-mobile-dropdown absolute inset-x-0 border-b p-3">
+              <div class="mb-2 flex items-center justify-center">
+                <NavbarModeSwitch client:load />
+              </div>
               <nav aria-label="Mobile navigation">
                 <ul class="flex flex-col gap-0.5">
                   {
@@ -420,9 +427,68 @@ const isCurrent = (href: string): boolean => {
         opacity: 0.7;
       }
 
+      /* --- Mode switch (TUI/CLI segmented control) --- */
+      :global(.mode-switch) {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        margin-right: 0.5rem;
+        padding: 2px;
+        background-color: var(--color-bg);
+        border: 1px solid var(--tui-panel-border-color);
+        border-radius: var(--radius-sm);
+        font-family: var(--font-mono);
+      }
+
+      :global(.mode-switch__indicator) {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: calc(50% - 2px);
+        height: calc(100% - 4px);
+        background-color: var(--color-primary);
+        border-radius: calc(var(--radius-sm) - 2px);
+        transition: transform var(--duration-normal) var(--ease-out);
+        pointer-events: none;
+      }
+
+      :global(.mode-switch__btn) {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.25rem 0.75rem;
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-semibold);
+        line-height: 1;
+        letter-spacing: 0.05em;
+        color: var(--color-text-subtle);
+        background: transparent;
+        border: none;
+        border-radius: calc(var(--radius-sm) - 2px);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: color var(--duration-fast) var(--ease-out);
+      }
+
+      :global(.mode-switch__btn:hover) {
+        color: var(--color-text);
+      }
+
+      :global(.mode-switch__btn--active) {
+        color: var(--color-bg);
+      }
+
+      :global(.mode-switch__btn--active:hover) {
+        color: var(--color-bg);
+      }
+
       /* --- Reduced motion --- */
       @media (prefers-reduced-motion: reduce) {
-        .tmux-tab {
+        .tmux-tab,
+        :global(.mode-switch__btn),
+        :global(.mode-switch__indicator) {
           transition: none;
         }
       }

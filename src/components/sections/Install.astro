@@ -1,6 +1,5 @@
 ---
 import CopyButton from "../islands/CopyButton";
-import InstallModeSwitch from "../islands/InstallModeSwitch";
 import WorkflowTabs from "../islands/WorkflowTabs";
 import TerminalFrame from "../ui/TerminalFrame.astro";
 import TuiPanel from "../ui/TuiPanel.astro";
@@ -63,8 +62,6 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
       </p>
     </header>
 
-    <InstallModeSwitch client:visible />
-
     <div
       class="install__prereq"
       role="note"
@@ -109,7 +106,7 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
         class="install__steps-frame"
         as="div"
       >
-        <WorkflowTabs client:visible tuiHtml={firstStepsHtml} cliHtml={cliStepsHtml} />
+        <WorkflowTabs client:visible panelId="install" tuiHtml={firstStepsHtml} cliHtml={cliStepsHtml} />
       </TerminalFrame>
     </div>
 
@@ -268,46 +265,6 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     margin-top: var(--space-10);
     max-width: 48rem;
     margin-inline: auto;
-  }
-
-  /* Install mode switch (section-level toggle) */
-  :global(.install-mode-switch) {
-    display: flex;
-    gap: var(--space-1);
-    margin-bottom: var(--space-6);
-    max-width: 42rem;
-    margin-inline: auto;
-    padding: var(--space-1);
-    background-color: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
-  }
-
-  :global(.install-mode-switch__tab) {
-    flex: 1;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--color-text-subtle);
-    background: none;
-    border: none;
-    padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: color var(--duration-fast) var(--ease-out-quad),
-                background-color var(--duration-fast) var(--ease-out-quad);
-  }
-
-  :global(.install-mode-switch__tab:hover) {
-    color: var(--color-text-muted);
-  }
-
-  :global(.install-mode-switch__tab--active) {
-    color: var(--color-primary-bright);
-    background-color: var(--color-bg-surface);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
   }
 
   /* Workflow panel — inherits font/color from terminal__body */
