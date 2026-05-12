@@ -367,42 +367,138 @@
  * Applied via [data-mode] attribute set by WorkflowTabs island.
  * ============================================================== */
 
-/* --- TUI mode: warm blue-gray dashboard aesthetic --- */
+/* --- TUI mode: distinctly blue-gray (Midnight Commander / Textual feel) --- */
+/* Local scope (WorkflowTabs island) */
 [data-mode="tui"] {
-  --mode-bg: #1a2030;
-  --mode-bg-panel: #1e2433;
-  --mode-bg-header: #151b28;
-  --mode-bg-elevated: #242f3d;
+  --mode-bg: #182234;
+  --mode-bg-panel: #1c2840;
+  --mode-bg-header: #111a2e;
+  --mode-bg-elevated: #1f2d45;
   --mode-accent-primary: #60a5fa;
   --mode-accent-success: #22c55e;
   --mode-accent-danger: #ef4444;
   --mode-accent-warning: #fbbf24;
-  --mode-border: rgba(96, 165, 250, 0.20);
-  --mode-border-active: rgba(96, 165, 250, 0.40);
-  --mode-text: rgba(255, 255, 255, 0.90);
+  --mode-border: rgba(96, 165, 250, 0.35);
+  --mode-border-active: rgba(96, 165, 250, 0.55);
+  --mode-text: rgba(255, 255, 255, 0.92);
   --mode-text-muted: rgba(255, 255, 255, 0.65);
-  --mode-text-subtle: rgba(255, 255, 255, 0.50);
-  --mode-glow: 0 0 12px rgba(96, 165, 250, 0.15);
+  --mode-text-subtle: rgba(255, 255, 255, 0.45);
+  --mode-glow: 0 0 20px rgba(96, 165, 250, 0.18);
   --mode-transition: 300ms;
 }
 
-/* --- CLI mode: pure terminal black aesthetic --- */
+/* Global scope (propagated via NavbarModeSwitch to <html>) */
+:root[data-mode="tui"] {
+  --mode-bg: #182234;
+  --mode-bg-panel: #1c2840;
+  --mode-bg-header: #111a2e;
+  --mode-bg-elevated: #1f2d45;
+  --mode-accent-primary: #60a5fa;
+  --mode-accent-success: #22c55e;
+  --mode-accent-danger: #ef4444;
+  --mode-accent-warning: #fbbf24;
+  --mode-border: rgba(96, 165, 250, 0.35);
+  --mode-border-active: rgba(96, 165, 250, 0.55);
+  --mode-text: rgba(255, 255, 255, 0.92);
+  --mode-text-muted: rgba(255, 255, 255, 0.65);
+  --mode-text-subtle: rgba(255, 255, 255, 0.45);
+  --mode-glow: 0 0 20px rgba(96, 165, 250, 0.18);
+  --mode-transition: 300ms;
+}
+
+/* --- CLI mode: pure black terminal, neutral borders --- */
+/* Local scope (WorkflowTabs island) */
 [data-mode="cli"] {
-  --mode-bg: #0d1117;
-  --mode-bg-panel: #0d1117;
-  --mode-bg-header: #0a0e14;
-  --mode-bg-elevated: #161b22;
+  --mode-bg: #09090b;
+  --mode-bg-panel: #09090b;
+  --mode-bg-header: #050507;
+  --mode-bg-elevated: #111113;
   --mode-accent-primary: #67e8f9;
   --mode-accent-success: #4ade80;
   --mode-accent-danger: #f87171;
   --mode-accent-warning: #fbbf24;
-  --mode-border: rgba(103, 232, 249, 0.12);
-  --mode-border-active: rgba(103, 232, 249, 0.30);
+  --mode-border: rgba(255, 255, 255, 0.08);
+  --mode-border-active: rgba(255, 255, 255, 0.18);
   --mode-text: rgba(255, 255, 255, 0.87);
-  --mode-text-muted: rgba(255, 255, 255, 0.65);
-  --mode-text-subtle: rgba(255, 255, 255, 0.50);
+  --mode-text-muted: rgba(255, 255, 255, 0.55);
+  --mode-text-subtle: rgba(255, 255, 255, 0.38);
   --mode-glow: none;
   --mode-transition: 300ms;
+}
+
+/* Global scope (propagated via NavbarModeSwitch to <html>) */
+:root[data-mode="cli"] {
+  --mode-bg: #09090b;
+  --mode-bg-panel: #09090b;
+  --mode-bg-header: #050507;
+  --mode-bg-elevated: #111113;
+  --mode-accent-primary: #67e8f9;
+  --mode-accent-success: #4ade80;
+  --mode-accent-danger: #f87171;
+  --mode-accent-warning: #fbbf24;
+  --mode-border: rgba(255, 255, 255, 0.08);
+  --mode-border-active: rgba(255, 255, 255, 0.18);
+  --mode-text: rgba(255, 255, 255, 0.87);
+  --mode-text-muted: rgba(255, 255, 255, 0.55);
+  --mode-text-subtle: rgba(255, 255, 255, 0.38);
+  --mode-glow: none;
+  --mode-transition: 300ms;
+}
+
+/* ==============================================================
+ * CLI MODE — Global page override
+ * Overrides @theme base tokens so the ENTIRE page shifts to
+ * pure-black terminal aesthetic with cyan accents.
+ * TUI mode uses the @theme defaults (blue/navy).
+ * ============================================================== */
+:root[data-mode="cli"] {
+  /* Surfaces — pure black, no blue tint */
+  --color-bg: #09090b;
+  --color-bg-surface: #111113;
+  --color-bg-elevated: #18181a;
+  --color-bg-section-tinted: #0c0c0e;
+  --color-bg-overlay: rgba(17, 17, 19, 0.50);
+  --color-bg-overlay-strong: rgba(17, 17, 19, 0.80);
+
+  /* Panel ladder — neutral gray */
+  --color-panel-darken-1: #0a0a0c;
+  --color-panel-lighten-1: #222224;
+  --color-panel-lighten-2: #2e2e30;
+
+  /* Borders — neutral slate, NOT blue */
+  --color-border-bright: #334155;
+  --color-border-default: rgba(255, 255, 255, 0.10);
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+
+  /* Primary — CYAN instead of blue */
+  --color-primary: #22d3ee;
+  --color-primary-bright: #67e8f9;
+  --color-primary-soft: #a5f3fc;
+  --color-primary-dark: #0891b2;
+  --color-secondary: #155e75;
+
+  /* Status colors stay the same (green/amber/red are mode-independent) */
+
+  /* Tints — cyan-based, not blue */
+  --tint-blue: rgba(34, 211, 238, 0.12);
+  --tint-cyan: rgba(103, 232, 249, 0.10);
+
+  /* Hero gradient — very subtle cyan, not bold blue */
+  --hero-gradient:
+    radial-gradient(ellipse 80% 50% at 30% 0%, rgba(34, 211, 238, 0.08), transparent 65%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(103, 232, 249, 0.04), transparent 70%),
+    radial-gradient(circle at 50% 90%, rgba(34, 211, 238, 0.03), transparent 60%);
+
+  /* Card fade — to CLI black */
+  --gradient-card-fade: linear-gradient(180deg, rgba(0,0,0,0) 65%, rgba(9,9,11,1) 100%);
+
+  /* TUI chrome — neutral */
+  --tui-border: 1px solid rgba(255, 255, 255, 0.15);
+  --tui-border-dim: 1px solid rgba(255, 255, 255, 0.08);
+  --tui-panel-border-color: rgba(255, 255, 255, 0.10);
+
+  /* Glow — cyan */
+  --glow-color: #22d3ee;
 }
 
 /* --- Mode-root transition wrapper --- */

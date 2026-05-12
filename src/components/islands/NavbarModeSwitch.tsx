@@ -1,15 +1,29 @@
 import { useStore } from "@nanostores/solid";
+import { createEffect, onMount } from "solid-js";
 import { $appMode, type AppMode } from "../../stores/appMode";
 
 /**
  * NavbarModeSwitch — tmux-tab-style TUI/CLI toggle for the navbar.
  * Subscribes to the global $appMode nanostore so every section reacts.
  *
+ * Side effect: mirrors mode to document.documentElement.dataset.mode
+ * so :root[data-mode] CSS selectors can propagate --mode-* tokens globally.
+ *
  * Keyboard: ArrowLeft / ArrowRight / Home / End to switch tabs.
  * ARIA: role="tablist" with aria-selected tabs.
  */
 export default function NavbarModeSwitch() {
   const mode = useStore($appMode);
+
+  /* Set data-mode on <html> on mount (initial value) */
+  onMount(() => {
+    document.documentElement.dataset.mode = mode();
+  });
+
+  /* Keep data-mode on <html> in sync whenever $appMode changes */
+  createEffect(() => {
+    document.documentElement.dataset.mode = mode();
+  });
 
   const modes: AppMode[] = ["tui", "cli"];
 
