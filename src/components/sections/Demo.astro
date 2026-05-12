@@ -5,91 +5,78 @@ import WorkflowTabs from "../islands/WorkflowTabs.tsx";
 
 /* ------------------------------------------------------------------ *
  * TUI visualization — Transfer scenario                              *
- * Two-panel layout: sidebar with menu + transfer form view            *
- * Enhanced with TUI chrome: tabbed nav, cart badge, status footer     *
+ * Real Clive layout: header bar + main content (form) + right panel  *
+ * Sourced from actual Clive TUI screenshots (transfer flow)          *
  * ------------------------------------------------------------------ */
 const demoTuiHtml = `<div class="demo-tui">
   <header class="demo-tui__topbar">
     <span class="demo-tui__topbar-left">
-      <span class="demo-tui__topbar-tab demo-tui__topbar-tab--active">Operations</span>
-      <span class="demo-tui__topbar-tab">Governance</span>
-      <span class="demo-tui__topbar-tab">Power</span>
+      <span class="demo-tui__topbar-user">alice / <span class="t-accent">@alice</span></span>
+      <span class="demo-tui__topbar-unlock t-emerald">UNLOCKED</span>
     </span>
     <span class="demo-tui__topbar-right">
-      <span class="demo-tui__cart-badge t-amber">Cart: 1 op</span>
-      <span class="demo-tui__topbar-status t-emerald" aria-hidden="true">&#x25CF;</span>
+      <span class="demo-tui__topbar-tab">Settings</span>
+      <span class="demo-tui__topbar-tab">Dashboard</span>
+      <span class="demo-tui__topbar-tab demo-tui__topbar-tab--active">Cart (1 op)</span>
+      <span class="demo-tui__topbar-online"><span class="demo-tui__topbar-dot t-emerald" aria-hidden="true">&#x25CF;</span> online</span>
     </span>
   </header>
 
   <div class="demo-tui__panels">
-    <section class="demo-tui__panel" aria-label="clive sidebar">
-      <header class="demo-tui__panel-title">clive</header>
+    <section class="demo-tui__panel demo-tui__panel--main" aria-label="transfer form">
+      <header class="demo-tui__panel-title">
+        <span class="demo-tui__tab demo-tui__tab--active">transfer</span>
+        <span class="demo-tui__tab">pending transfers</span>
+      </header>
       <div class="demo-tui__panel-body">
-        <ul class="demo-tui__menu" role="list">
-          <li>Dashboard</li>
-          <li class="is-active"><span class="t-accent">&gt; Transfer</span></li>
-          <li>Delegations</li>
-          <li>Power Up/Down</li>
-          <li>Savings</li>
-        </ul>
-        <hr class="demo-tui__sep" />
-        <p class="demo-tui__label t-dim">profile</p>
-        <p class="demo-tui__value"><span class="t-emerald">@alice</span></p>
-        <p class="demo-tui__label t-dim">balance</p>
-        <p class="demo-tui__value">1,234.567 <span class="t-emerald">HIVE</span></p>
-        <p class="demo-tui__label t-dim">hbd</p>
-        <p class="demo-tui__value">89.420 <span class="t-accent">HBD</span></p>
+        <div class="demo-tui__field">
+          <span class="demo-tui__label demo-tui__label--req"><span class="demo-tui__asterisk">*</span> From</span>
+          <span class="demo-tui__input">alice</span>
+        </div>
+        <div class="demo-tui__field">
+          <span class="demo-tui__label demo-tui__label--req"><span class="demo-tui__asterisk">*</span> To</span>
+          <span class="demo-tui__input demo-tui__input--empty"></span>
+          <span class="demo-tui__field-hint t-accent">known account</span>
+        </div>
+        <div class="demo-tui__field demo-tui__field--amount">
+          <span class="demo-tui__label demo-tui__label--req"><span class="demo-tui__asterisk">*</span> Amount</span>
+          <span class="demo-tui__input demo-tui__input--placeholder">Amount e.g.: 1.123</span>
+          <span class="demo-tui__amount-asset">HIVE</span>
+          <span class="demo-tui__amount-all">All!</span>
+        </div>
+        <div class="demo-tui__field">
+          <span class="demo-tui__label">&nbsp; Memo</span>
+          <span class="demo-tui__input demo-tui__input--placeholder">Memo e.g.: For the coffee!</span>
+        </div>
+        <div class="demo-tui__actions">
+          <span class="demo-tui__btn demo-tui__btn--primary">Add to cart (a)</span>
+          <span class="demo-tui__btn demo-tui__btn--primary">Finalize transaction (f)</span>
+        </div>
       </div>
-      <footer class="demo-tui__panel-foot">
-        <span class="t-dim">node</span>
-        <span>api.hive.blog</span>
-        <span class="t-emerald" aria-hidden="true">&bull;</span>
-      </footer>
     </section>
 
-    <section class="demo-tui__panel demo-tui__panel--main" aria-label="transfer form">
-      <header class="demo-tui__panel-title">transfer &middot; new operation</header>
-      <div class="demo-tui__panel-body">
-        <div class="demo-tui__field">
-          <span class="demo-tui__label t-dim">from</span>
-          <span class="demo-tui__input"><span class="t-emerald">@alice</span></span>
-        </div>
-        <div class="demo-tui__field">
-          <span class="demo-tui__label t-dim">to</span>
-          <span class="demo-tui__input"><span class="t-accent">@bob</span></span>
-        </div>
-        <div class="demo-tui__field">
-          <span class="demo-tui__label t-dim">amount</span>
-          <span class="demo-tui__input">25.000 <span class="t-emerald">HIVE</span></span>
-        </div>
-        <div class="demo-tui__field">
-          <span class="demo-tui__label t-dim">memo</span>
-          <span class="demo-tui__input t-subtle">payment for services</span>
-        </div>
+    <aside class="demo-tui__right-panel" aria-label="account info">
+      <div class="demo-tui__right-panel-body">
+        <p class="demo-tui__stat"><span class="t-dim">RC:</span> 100.00 %</p>
+        <p class="demo-tui__stat"><span class="t-dim">HIVE balance:</span> 100000.000</p>
+        <p class="demo-tui__stat"><span class="t-dim">HBD balance:</span> 100000.000</p>
         <hr class="demo-tui__sep" />
-        <div class="demo-tui__actions">
-          <span class="demo-tui__btn demo-tui__btn--primary">[ Add to cart ]</span>
-          <span class="demo-tui__btn demo-tui__btn--secondary">[ Finalize transaction ]</span>
+        <p class="demo-tui__cart-title t-amber">1 OPERATION IN THE CART</p>
+        <div class="demo-tui__cart-item">
+          <span class="t-dim">1.</span> <span class="t-emerald">transfer</span>
+          <span class="t-dim">25.000 HIVE &rarr; bob</span>
         </div>
       </div>
-      <footer class="demo-tui__panel-foot">
-        <span class="t-dim">cart</span>
-        <span class="t-amber">1 op</span>
-        <span class="demo-tui__sep-dot" aria-hidden="true">&middot;</span>
-        <span class="t-dim">unlocked</span>
-        <span class="t-emerald" aria-hidden="true">&bull;</span>
-        <span class="demo-tui__sep-dot" aria-hidden="true">&middot;</span>
-        <span class="t-dim">14:32</span>
-      </footer>
-    </section>
+    </aside>
   </div>
 
   <footer class="demo-tui__bottombar">
-    <span><span class="demo-tui__key">F1</span> <span class="t-dim">help</span></span>
-    <span><span class="demo-tui__key">F2</span> <span class="t-dim">menu</span></span>
-    <span><span class="demo-tui__key">F5</span> <span class="t-dim">refresh</span></span>
-    <span><span class="demo-tui__key">Tab</span> <span class="t-dim">next field</span></span>
-    <span><span class="demo-tui__key">F10</span> <span class="t-dim">quit</span></span>
+    <span><span class="demo-tui__key">esc</span> <span class="t-dim">Back</span></span>
+    <span><span class="demo-tui__key">^d</span> <span class="t-dim">Dashboard</span></span>
+    <span><span class="demo-tui__key">^l</span> <span class="t-dim">Lock wallet</span></span>
+    <span><span class="demo-tui__key">^s</span> <span class="t-dim">Settings</span></span>
+    <span><span class="demo-tui__key">^t</span> <span class="t-dim">Transaction summary</span></span>
+    <span><span class="demo-tui__key">^p</span> <span class="t-dim">palette</span></span>
   </footer>
 </div>`;
 
@@ -97,7 +84,7 @@ const demoTuiHtml = `<div class="demo-tui">
  * CLI visualization — same transfer scenario in CLI mode              *
  * Shows process transfer with JSON-style output                       *
  * ------------------------------------------------------------------ */
-const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive$</span> clive process transfer-to-account \\
+const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_directory$</span> clive process transfer-to-account \\
   <span class="t-cyan">--from</span> alice <span class="t-cyan">--to</span> bob \\
   <span class="t-cyan">--amount</span> <span class="t-yellow">"25.000 HIVE"</span> \\
   <span class="t-cyan">--memo</span> <span class="t-yellow">"payment for services"</span>
@@ -119,7 +106,7 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive$</span> clive proces
 <span class="t-emerald">  Transaction was successfully broadcast.</span>
 <span class="t-dim">  Block:</span> 82,451,307  <span class="t-dim">TxID:</span> <span class="t-subtle">a3f9e1...c704</span>
 
-<span class="t-dim">clive@cli:~/.clive$</span> <span class="t-cursor" aria-hidden="true">▌</span>`;
+<span class="t-dim">clive@cli:~/.clive/mapped_host_directory$</span> <span class="t-cursor" aria-hidden="true">▌</span>`;
 ---
 
 <TuiPanel title="$ clive --tui" id="demo" class="demo reveal-scroll">
@@ -225,7 +212,9 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive$</span> clive proces
     transition: background-color 300ms ease, color 300ms ease;
   }
 
-  /* Top bar — tabbed navigation + cart badge */
+  /* ============================================================
+   * Top bar — real Clive header: user/status + tabs + online
+   * ============================================================ */
   :global(.demo-tui__topbar) {
     display: flex;
     justify-content: space-between;
@@ -243,7 +232,16 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive$</span> clive proces
   :global(.demo-tui__topbar-right) {
     display: flex;
     align-items: center;
-    gap: var(--space-1);
+    gap: var(--space-2);
+  }
+  :global(.demo-tui__topbar-user) {
+    color: var(--mode-text, var(--color-text));
+    font-weight: var(--font-weight-medium);
+  }
+  :global(.demo-tui__topbar-unlock) {
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.04em;
+    font-size: 0.9em;
   }
   :global(.demo-tui__topbar-tab) {
     padding: 0.125rem 0.5rem;
@@ -251,24 +249,27 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive$</span> clive proces
     border-radius: var(--radius-xs);
   }
   :global(.demo-tui__topbar-tab--active) {
-    background-color: var(--mode-border, rgba(96, 165, 250, 0.15));
+    background-color: rgba(96, 165, 250, 0.20);
     color: var(--mode-text, var(--color-text));
     font-weight: var(--font-weight-medium);
   }
-  :global(.demo-tui__cart-badge) {
-    padding: 0.0625rem 0.375rem;
-    border: 1px solid rgba(255, 166, 43, 0.25);
-    border-radius: var(--radius-xs);
-    font-weight: var(--font-weight-semibold);
-    font-size: 0.875em;
+  :global(.demo-tui__topbar-online) {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--mode-text-muted, var(--color-text-muted));
+    font-size: 0.9em;
   }
-  :global(.demo-tui__topbar-status) {
-    font-size: 0.625em;
+  :global(.demo-tui__topbar-dot) {
+    font-size: 0.5em;
   }
 
+  /* ============================================================
+   * Main panels — form (70%) + right info panel (30%)
+   * ============================================================ */
   :global(.demo-tui__panels) {
     display: grid;
-    grid-template-columns: 10rem 1fr;
+    grid-template-columns: 1fr 12rem;
     gap: 0;
   }
 
@@ -287,22 +288,34 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive$</span> clive proces
     transition: border-color 300ms ease;
   }
   :global(.demo-tui__panel--main) {
-    border-left: none;
+    border-right: none;
   }
   @media (max-width: 40rem) {
     :global(.demo-tui__panel--main) {
-      border-left: 1px solid var(--mode-border, var(--color-border-default));
-      border-top: none;
+      border-right: 1px solid var(--mode-border, var(--color-border-default));
     }
   }
 
+  /* Panel title bar with operation tabs */
   :global(.demo-tui__panel-title) {
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-1) var(--space-3);
     font-size: var(--text-xs);
     color: var(--mode-text-muted, var(--color-text-muted));
     border-bottom: 1px solid var(--mode-border, var(--color-border-default));
     letter-spacing: 0.02em;
+    display: flex;
+    gap: var(--space-1);
     transition: border-color 300ms ease;
+  }
+  :global(.demo-tui__tab) {
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-xs);
+    color: var(--mode-text-muted, var(--color-text-muted));
+  }
+  :global(.demo-tui__tab--active) {
+    background-color: rgba(96, 165, 250, 0.20);
+    color: var(--mode-text, var(--color-text));
+    font-weight: var(--font-weight-medium);
   }
 
   :global(.demo-tui__panel-body) {
@@ -317,59 +330,143 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive$</span> clive proces
     margin: 0;
   }
 
-  :global(.demo-tui__panel-foot) {
-    padding: var(--space-1) var(--space-3);
-    border-top: 1px solid var(--mode-border, var(--color-border-default));
-    font-size: var(--text-xs);
-    color: var(--mode-text-muted, var(--color-text-muted));
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--space-2);
-    transition: border-color 300ms ease;
-  }
-
-  :global(.demo-tui__sep-dot) {
-    color: var(--color-text-subtle);
-  }
-
-  :global(.demo-tui__menu) {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  /* ============================================================
+   * Right panel — RC, balances, cart
+   * ============================================================ */
+  :global(.demo-tui__right-panel) {
+    border: 1px solid var(--mode-border, var(--color-border-default));
+    background: transparent;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    transition: border-color 300ms ease;
+  }
+  :global(.demo-tui__right-panel-body) {
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
     font-size: var(--text-xs);
   }
-
-  :global(.demo-tui__menu li) {
-    padding: 0.0625rem var(--space-2);
-    border-radius: var(--radius-xs);
+  :global(.demo-tui__stat) {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
   }
-  :global(.demo-tui__menu li.is-active) {
-    background-color: var(--mode-border, rgba(96, 165, 250, 0.10));
+  :global(.demo-tui__cart-title) {
+    margin: 0;
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+  }
+  :global(.demo-tui__cart-item) {
+    font-size: var(--text-xs);
+    padding-left: var(--space-1);
   }
 
   :global(.demo-tui__sep) {
     border: none;
     border-top: 1px solid var(--mode-border, var(--color-border-default));
     margin: var(--space-2) 0;
-    width: 60%;
+    width: 100%;
     transition: border-color 300ms ease;
   }
 
+  /* ============================================================
+   * Transfer form fields — green-bordered inputs
+   * ============================================================ */
+  :global(.demo-tui__field) {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  :global(.demo-tui__field--amount) {
+    flex-wrap: nowrap;
+  }
+
   :global(.demo-tui__label) {
+    min-width: 4rem;
+    text-align: right;
+    flex-shrink: 0;
     font-size: var(--text-xs);
     letter-spacing: 0.02em;
+    color: var(--mode-text-muted, var(--color-text-muted));
+  }
+  :global(.demo-tui__label--req) {
+    color: #22c55e;
+  }
+  :global(.demo-tui__asterisk) {
+    color: #22c55e;
+    font-weight: var(--font-weight-bold);
   }
 
-  :global(.demo-tui__value) {
-    margin: 0;
+  :global(.demo-tui__input) {
+    flex: 1;
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid #22c55e;
+    border-radius: var(--radius-xs);
+    font-size: var(--text-sm);
+    color: var(--mode-text, var(--color-text));
+    min-width: 0;
+    transition: border-color 300ms ease;
+  }
+  :global(.demo-tui__input--placeholder) {
+    color: var(--mode-text-subtle, rgba(255, 255, 255, 0.38));
+    font-style: italic;
+  }
+  :global(.demo-tui__input--empty) {
+    min-height: 1.5em;
+  }
+  :global(.demo-tui__field-hint) {
+    font-size: 0.6875rem;
+    flex-basis: 100%;
+    padding-left: calc(4rem + var(--space-2));
+    margin-top: -0.25rem;
+  }
+
+  /* Amount row extras */
+  :global(.demo-tui__amount-asset) {
+    font-size: var(--text-xs);
+    color: var(--mode-text-muted, var(--color-text-muted));
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--mode-border, var(--color-border-default));
+    border-radius: var(--radius-xs);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  :global(.demo-tui__amount-all) {
+    font-size: var(--text-xs);
+    color: #4ade80;
+    font-weight: var(--font-weight-semibold);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* ============================================================
+   * Action buttons — solid green background
+   * ============================================================ */
+  :global(.demo-tui__actions) {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  :global(.demo-tui__btn) {
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.02em;
     font-size: var(--text-xs);
   }
+  :global(.demo-tui__btn--primary) {
+    background-color: #22c55e;
+    color: #fff;
+    padding: 0.15em 0.6em;
+    border-radius: 2px;
+  }
 
-  /* Bottom bar — keyboard shortcuts */
+  /* ============================================================
+   * Bottom bar — keyboard shortcuts (real Clive format)
+   * ============================================================ */
   :global(.demo-tui__bottombar) {
     display: flex;
     flex-wrap: wrap;
@@ -383,86 +480,19 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive$</span> clive proces
     transition: background-color 300ms ease, border-color 300ms ease;
   }
 
-  /* Keyboard shortcut key styling */
+  /* Keyboard shortcut key styling — amber accent */
   :global(.demo-tui__key) {
-    display: inline-block;
-    padding: 0 0.25rem;
-    background-color: rgba(255, 166, 43, 0.15);
-    border: 1px solid rgba(255, 166, 43, 0.30);
-    border-radius: 2px;
-    color: var(--color-accent-warning);
-    font-size: 0.9em;
+    color: var(--color-accent-warning, #f59e0b);
     font-weight: var(--font-weight-semibold);
-    line-height: 1.4;
+    font-size: 0.9em;
     margin-right: 0.125rem;
   }
 
   /* ============================================================
-   * Transfer form fields — right panel
+   * Responsive — hide right panel details on narrow screens
    * ============================================================ */
-  :global(.demo-tui__field) {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-3);
-  }
-
-  :global(.demo-tui__field .demo-tui__label) {
-    min-width: 3.5rem;
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  :global(.demo-tui__input) {
-    flex: 1;
-    padding: var(--space-1) var(--space-2);
-    border: 1px solid var(--mode-border, color-mix(in srgb, var(--color-border-bright) 30%, transparent));
-    border-radius: var(--radius-xs);
-    font-size: var(--text-sm);
-    transition: border-color 300ms ease;
-  }
-
-  :global(.demo-tui__actions) {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-3);
-    padding-top: var(--space-2);
-    flex-wrap: wrap;
-  }
-
-  :global(.demo-tui__btn) {
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.02em;
-    font-size: var(--text-xs);
-  }
-  :global(.demo-tui__btn--primary) {
-    color: var(--mode-accent-success, var(--color-accent-success));
-  }
-  :global(.demo-tui__btn--secondary) {
-    color: var(--mode-accent-primary, var(--color-primary-bright));
-  }
-
-  /* ============================================================
-   * Balance table (reused from previous demo, kept for sidebar)
-   * ============================================================ */
-  :global(.demo-tui__bal),
-  :global(.demo-tui__act) {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  :global(.demo-tui__bal td),
-  :global(.demo-tui__act td) {
-    padding: 1px var(--space-3) 1px 0;
-    vertical-align: baseline;
-  }
-
-  :global(.demo-tui__bal td:nth-child(2)) {
-    text-align: right;
-  }
-
-  /* Hide top bar tabs on very narrow screens */
   @media (max-width: 25rem) {
-    :global(.demo-tui__topbar-left .demo-tui__topbar-tab:nth-child(n+3)) {
+    :global(.demo-tui__topbar-right .demo-tui__topbar-tab:nth-child(-n+2)) {
       display: none;
     }
   }
