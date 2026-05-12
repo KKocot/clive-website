@@ -361,3 +361,112 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(1, 120, 212, 0.70);
 }
+
+/* ==============================================================
+ * MODE TOKENS — TUI vs CLI visual differentiation
+ * Applied via [data-mode] attribute set by WorkflowTabs island.
+ * ============================================================== */
+
+/* --- TUI mode: warm blue-gray dashboard aesthetic --- */
+[data-mode="tui"] {
+  --mode-bg: #1a2030;
+  --mode-bg-panel: #1e2433;
+  --mode-bg-header: #151b28;
+  --mode-bg-elevated: #242f3d;
+  --mode-accent-primary: #60a5fa;
+  --mode-accent-success: #22c55e;
+  --mode-accent-danger: #ef4444;
+  --mode-accent-warning: #fbbf24;
+  --mode-border: rgba(96, 165, 250, 0.20);
+  --mode-border-active: rgba(96, 165, 250, 0.40);
+  --mode-text: rgba(255, 255, 255, 0.90);
+  --mode-text-muted: rgba(255, 255, 255, 0.65);
+  --mode-text-subtle: rgba(255, 255, 255, 0.50);
+  --mode-glow: 0 0 12px rgba(96, 165, 250, 0.15);
+  --mode-transition: 300ms;
+}
+
+/* --- CLI mode: pure terminal black aesthetic --- */
+[data-mode="cli"] {
+  --mode-bg: #0d1117;
+  --mode-bg-panel: #0d1117;
+  --mode-bg-header: #0a0e14;
+  --mode-bg-elevated: #161b22;
+  --mode-accent-primary: #67e8f9;
+  --mode-accent-success: #4ade80;
+  --mode-accent-danger: #f87171;
+  --mode-accent-warning: #fbbf24;
+  --mode-border: rgba(103, 232, 249, 0.12);
+  --mode-border-active: rgba(103, 232, 249, 0.30);
+  --mode-text: rgba(255, 255, 255, 0.87);
+  --mode-text-muted: rgba(255, 255, 255, 0.65);
+  --mode-text-subtle: rgba(255, 255, 255, 0.50);
+  --mode-glow: none;
+  --mode-transition: 300ms;
+}
+
+/* --- Mode-root transition wrapper --- */
+[data-mode] .workflow-tabs__panel {
+  transition:
+    background-color var(--mode-transition, 300ms) ease,
+    border-color var(--mode-transition, 300ms) ease;
+}
+
+/* ==============================================================
+ * TERMINAL TOKEN HIGHLIGHTS — shared .t-* classes
+ * Used across Hero, Install, Demo sections via innerHTML/set:html.
+ * Moved here from :global() in individual components to avoid
+ * hidden dependencies and duplication.
+ * ============================================================== */
+.t-accent {
+  color: var(--mode-accent-primary, var(--color-primary-bright));
+}
+.t-emerald {
+  color: var(--mode-accent-success, #22c55e);
+}
+.t-amber {
+  color: var(--mode-accent-warning, #fbbf24);
+}
+.t-dim {
+  color: var(--mode-text-muted, var(--color-text-subtle));
+}
+.t-subtle {
+  color: var(--mode-text-subtle, rgba(255, 255, 255, 0.38));
+}
+.t-cyan {
+  color: var(--mode-accent-primary, #67e8f9);
+}
+.t-yellow {
+  color: var(--mode-accent-warning, #fbbf24);
+}
+.t-comment {
+  color: var(--mode-text-muted, var(--color-text-muted));
+  font-style: italic;
+}
+.t-prompt {
+  color: var(--mode-accent-success, var(--color-primary-bright));
+  font-weight: var(--font-weight-semibold);
+}
+.t-cursor {
+  display: inline-block;
+  color: var(--mode-accent-primary, var(--color-primary-bright));
+  animation: cursor-blink 1.1s steps(1, end) infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-cursor {
+    animation: none;
+    opacity: 0.85;
+  }
+}
