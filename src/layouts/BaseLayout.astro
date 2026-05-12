@@ -44,9 +44,7 @@ const gitlabLink = {
 const currentPath = Astro.url.pathname;
 
 const isCurrent = (href: string): boolean => {
-  // Hash-only or page-with-hash links never count as current page.
   if (href.startsWith("#") || href.includes("#")) return false;
-  // External links never count.
   if (/^https?:\/\//.test(href)) return false;
   if (href === "/") {
     return currentPath === "/" || currentPath === "/index.html";
@@ -287,6 +285,79 @@ const isCurrent = (href: string): boolean => {
       };
 
       initRevealObserver();
+
+      // Active section indicator — IntersectionObserver for hash nav links.
+      // Highlights the matching nav tab when a section scrolls into the
+      // upper 20-60% of the viewport (the "under navbar" sweet spot).
+      const initSectionObserver = () => {
+        const sectionIds = ['features', 'install', 'demo', 'blog'];
+        const sections = sectionIds
+          .map((id) => document.getElementById(id))
+          .filter((el): el is HTMLElement => el !== null);
+
+        if (!sections.length) return;
+
+        const navLinks = document.querySelectorAll<HTMLAnchorElement>(
+          'a.tmux-tab[href*="#"], a.tmux-tab--mobile[href*="#"]',
+        );
+
+        const clearActive = () => {
+          navLinks.forEach((link) => link.removeAttribute('aria-current'));
+        };
+
+        const setActive = (sectionId: string) => {
+          navLinks.forEach((link) => {
+            const hash = new URL(link.href, location.origin).hash.replace('#', '');
+            if (hash === sectionId) {
+              link.setAttribute('aria-current', 'true');
+            } else {
+              link.removeAttribute('aria-current');
+            }
+          });
+        };
+
+        // Track which sections are currently intersecting.
+        const visibleSections = new Map<string, IntersectionObserverEntry>();
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const id = entry.target.id;
+              if (entry.isIntersecting) {
+                visibleSections.set(id, entry);
+              } else {
+                visibleSections.delete(id);
+              }
+            });
+
+            if (visibleSections.size === 0) {
+              clearActive();
+              return;
+            }
+
+            // Pick the section closest to the top of the viewport.
+            let topSection: string | null = null;
+            let topY = Infinity;
+            visibleSections.forEach((entry, id) => {
+              const rect = entry.target.getBoundingClientRect();
+              if (rect.top < topY) {
+                topY = rect.top;
+                topSection = id;
+              }
+            });
+
+            if (topSection) setActive(topSection);
+          },
+          {
+            // Trigger when section is in the top 20-60% band of the viewport.
+            rootMargin: '-20% 0px -60% 0px',
+          },
+        );
+
+        sections.forEach((section) => observer.observe(section));
+      };
+
+      initSectionObserver();
     </script>
 
     <style>
@@ -331,7 +402,8 @@ const isCurrent = (href: string): boolean => {
         text-shadow: var(--glow-intensity) var(--glow-color);
       }
 
-      .tmux-tab[aria-current="page"] {
+      .tmux-tab[aria-current="page"],
+      .tmux-tab[aria-current="true"] {
         color: var(--color-bg);
         background-color: var(--color-primary);
         transition:
@@ -339,7 +411,8 @@ const isCurrent = (href: string): boolean => {
           color var(--mode-transition, 300ms) ease;
       }
 
-      .tmux-tab[aria-current="page"] .tmux-tab__index {
+      .tmux-tab[aria-current="page"] .tmux-tab__index,
+      .tmux-tab[aria-current="true"] .tmux-tab__index {
         color: var(--color-bg);
         opacity: 0.7;
       }
@@ -426,12 +499,14 @@ const isCurrent = (href: string): boolean => {
         background-color: var(--color-bg-overlay);
       }
 
-      .tmux-tab--mobile[aria-current="page"] {
+      .tmux-tab--mobile[aria-current="page"],
+      .tmux-tab--mobile[aria-current="true"] {
         color: var(--color-bg);
         background-color: var(--color-primary);
       }
 
-      .tmux-tab--mobile[aria-current="page"] .tmux-tab__index {
+      .tmux-tab--mobile[aria-current="page"] .tmux-tab__index,
+      .tmux-tab--mobile[aria-current="true"] .tmux-tab__index {
         color: var(--color-bg);
         opacity: 0.7;
       }
