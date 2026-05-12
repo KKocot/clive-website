@@ -94,12 +94,14 @@ const titleId = title && id ? `${id}-title` : title ? `tui-panel-title-${Math.ra
    * Uses CSS-rendered box-drawing characters for cross-font safety.
    * ============================================================ */
   .tui-panel {
-    --_border-color: var(--tui-panel-border-color);
+    --_border-color: var(--mode-border, var(--tui-panel-border-color));
     --_border-width: 2px;
     position: relative;
     width: 100%;
     display: flex;
     flex-direction: column;
+    transition:
+      border-color var(--mode-transition, 300ms) ease;
   }
 
   /* ------------------------------------------------------------
@@ -117,6 +119,8 @@ const titleId = title && id ? `${id}-title` : title ? `tui-panel-title-${Math.ra
     flex: 1;
     height: var(--_border-width);
     background-color: var(--_border-color);
+    transition:
+      background-color var(--mode-transition, 300ms) ease;
   }
 
   /* ------------------------------------------------------------
@@ -180,6 +184,8 @@ const titleId = title && id ? `${id}-title` : title ? `tui-panel-title-${Math.ra
     flex-shrink: 0;
     background-color: var(--_border-color);
     align-self: stretch;
+    transition:
+      background-color var(--mode-transition, 300ms) ease;
   }
 
   /* ------------------------------------------------------------
@@ -188,7 +194,9 @@ const titleId = title && id ? `${id}-title` : title ? `tui-panel-title-${Math.ra
   .tui-panel__title-row {
     display: flex;
     align-items: stretch;
-    background-color: var(--tui-panel-title-bg);
+    background-color: var(--mode-bg-header, var(--tui-panel-title-bg));
+    transition:
+      background-color var(--mode-transition, 300ms) ease;
   }
 
   .tui-panel__title-text {
@@ -234,7 +242,9 @@ const titleId = title && id ? `${id}-title` : title ? `tui-panel-title-${Math.ra
   .tui-panel__status-row {
     display: flex;
     align-items: stretch;
-    background-color: var(--tui-panel-status-bg);
+    background-color: var(--mode-bg-header, var(--tui-panel-status-bg));
+    transition:
+      background-color var(--mode-transition, 300ms) ease;
   }
 
   .tui-panel__status-left {

@@ -38,11 +38,15 @@ const BodyTag = as;
   .terminal {
     margin: 0;
     max-width: 100%;
-    background-color: var(--color-bg-surface);
-    border: 1px solid var(--color-border-bright);
+    background-color: var(--mode-bg, var(--color-bg-surface));
+    border: 1px solid var(--mode-border, var(--color-border-bright));
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-lg);
+    transition:
+      background-color var(--mode-transition, 300ms) ease,
+      border-color var(--mode-transition, 300ms) ease,
+      box-shadow var(--mode-transition, 300ms) ease;
   }
 
   .terminal__bar {
@@ -52,8 +56,11 @@ const BodyTag = as;
     gap: var(--space-3);
     height: 36px;
     padding: 0 var(--space-4);
-    background-color: var(--color-bg-elevated);
-    border-bottom: 1px solid var(--color-border-default);
+    background-color: var(--mode-bg-header, var(--color-bg-elevated));
+    border-bottom: 1px solid var(--mode-border, var(--color-border-default));
+    transition:
+      background-color var(--mode-transition, 300ms) ease,
+      border-color var(--mode-transition, 300ms) ease;
   }
 
   .terminal__dots {
@@ -96,9 +103,12 @@ const BodyTag = as;
     color: var(--color-text);
     overflow-x: auto;
     white-space: pre;
-    background-color: var(--color-bg-elevated);
-    border: 1px solid var(--color-border-default);
+    background-color: var(--mode-bg-elevated, var(--color-bg-elevated));
+    border: 1px solid var(--mode-border, var(--color-border-default));
     border-radius: var(--radius-md);
+    transition:
+      background-color var(--mode-transition, 300ms) ease,
+      border-color var(--mode-transition, 300ms) ease;
     font-feature-settings:
       "calt" 0,
       "liga" 0;
