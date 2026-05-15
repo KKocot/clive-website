@@ -10,39 +10,33 @@ import WorkflowTabs from "../islands/WorkflowTabs.tsx";
  * ------------------------------------------------------------------ */
 const demoTuiHtml = `<div class="demo-tui">
   <header class="demo-tui__topbar">
-    <span class="demo-tui__topbar-left">
-      <span class="demo-tui__topbar-user">alice / <span class="t-accent">@alice</span></span>
-      <span class="demo-tui__topbar-unlock t-emerald">UNLOCKED</span>
-    </span>
-    <span class="demo-tui__topbar-right">
-      <span class="demo-tui__topbar-tab">Settings</span>
-      <span class="demo-tui__topbar-tab">Dashboard</span>
-      <span class="demo-tui__topbar-tab demo-tui__topbar-tab--active">Cart (1 op)</span>
-      <span class="demo-tui__topbar-online"><span class="demo-tui__topbar-dot t-emerald" aria-hidden="true">&#x25CF;</span> online</span>
-    </span>
+    <span class="demo-tui__topbar-seg demo-tui__topbar-seg--user">+ alice / <span class="t-accent">@alice</span></span>
+    <span class="demo-tui__topbar-seg demo-tui__topbar-seg--ok">No alarms</span>
+    <span class="demo-tui__topbar-seg demo-tui__topbar-seg--unlock">UNLOCKED</span>
+    <span class="demo-tui__topbar-seg">Settings</span>
+    <span class="demo-tui__topbar-seg">Dashboard</span>
+    <span class="demo-tui__topbar-seg">Cart (empty)</span>
+    <span class="demo-tui__topbar-seg demo-tui__topbar-seg--online">online</span>
   </header>
 
   <div class="demo-tui__panels">
     <section class="demo-tui__panel demo-tui__panel--main" aria-label="transfer form">
       <header class="demo-tui__panel-title">
-        <span class="demo-tui__tab demo-tui__tab--active">transfer</span>
-        <span class="demo-tui__tab">pending transfers</span>
+        Perform a transfer to account
       </header>
       <div class="demo-tui__panel-body">
         <div class="demo-tui__field">
-          <span class="demo-tui__label demo-tui__label--req"><span class="demo-tui__asterisk">*</span> From</span>
+          <span class="demo-tui__label demo-tui__label--from">From</span>
           <span class="demo-tui__input">alice</span>
         </div>
         <div class="demo-tui__field">
           <span class="demo-tui__label demo-tui__label--req"><span class="demo-tui__asterisk">*</span> To</span>
-          <span class="demo-tui__input demo-tui__input--empty"></span>
-          <span class="demo-tui__field-hint t-accent">known account</span>
+          <span class="demo-tui__input demo-tui__input--placeholder">e.g.: alice</span>
         </div>
         <div class="demo-tui__field demo-tui__field--amount">
-          <span class="demo-tui__label demo-tui__label--req"><span class="demo-tui__asterisk">*</span> Amount</span>
+          <span class="demo-tui__label demo-tui__label--req"><span class="demo-tui__asterisk">*</span></span>
           <span class="demo-tui__input demo-tui__input--placeholder">Amount e.g.: 1.123</span>
-          <span class="demo-tui__amount-asset">HIVE</span>
-          <span class="demo-tui__amount-all">All!</span>
+          <span class="demo-tui__amount-asset">HIVE <span class="demo-tui__dropdown-arrow">&#x25BE;</span></span>
         </div>
         <div class="demo-tui__field">
           <span class="demo-tui__label">&nbsp; Memo</span>
@@ -58,25 +52,24 @@ const demoTuiHtml = `<div class="demo-tui">
     <aside class="demo-tui__right-panel" aria-label="account info">
       <div class="demo-tui__right-panel-body">
         <p class="demo-tui__stat"><span class="t-dim">RC:</span> 100.00 %</p>
-        <p class="demo-tui__stat"><span class="t-dim">HIVE balance:</span> 100000.000</p>
-        <p class="demo-tui__stat"><span class="t-dim">HBD balance:</span> 100000.000</p>
+        <p class="demo-tui__stat"><span class="t-dim">HIVE balance:</span> 0.206</p>
+        <p class="demo-tui__stat"><span class="t-dim">HBD balance:</span> 0.000</p>
         <hr class="demo-tui__sep" />
-        <p class="demo-tui__cart-title t-amber">1 OPERATION IN THE CART</p>
-        <div class="demo-tui__cart-item">
-          <span class="t-dim">1.</span> <span class="t-emerald">transfer</span>
-          <span class="t-dim">25.000 HIVE &rarr; bob</span>
-        </div>
+        <p class="demo-tui__cart-empty">CART IS EMPTY</p>
       </div>
     </aside>
   </div>
 
   <footer class="demo-tui__bottombar">
-    <span><span class="demo-tui__key">esc</span> <span class="t-dim">Back</span></span>
-    <span><span class="demo-tui__key">^d</span> <span class="t-dim">Dashboard</span></span>
-    <span><span class="demo-tui__key">^l</span> <span class="t-dim">Lock wallet</span></span>
-    <span><span class="demo-tui__key">^s</span> <span class="t-dim">Settings</span></span>
-    <span><span class="demo-tui__key">^t</span> <span class="t-dim">Transaction summary</span></span>
-    <span><span class="demo-tui__key">^p</span> <span class="t-dim">palette</span></span>
+    <span class="demo-tui__bottombar-left">
+      <span><span class="demo-tui__key">esc</span> <span class="t-dim">Back</span></span>
+      <span><span class="demo-tui__key">^l</span> <span class="t-dim">Lock wallet</span></span>
+      <span><span class="demo-tui__key">^s</span> <span class="t-dim">Settings</span></span>
+      <span><span class="demo-tui__key">^t</span> <span class="t-dim">Transaction summary</span></span>
+    </span>
+    <span class="demo-tui__bottombar-right">
+      <span><span class="demo-tui__key">^p</span> <span class="t-dim">palette</span></span>
+    </span>
   </footer>
 </div>`;
 
@@ -109,12 +102,12 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_director
 <span class="t-dim">clive@cli:~/.clive/mapped_host_directory$</span> <span class="t-cursor" aria-hidden="true">▌</span>`;
 ---
 
-<TuiPanel title="$ clive --tui" id="demo" class="demo reveal-scroll">
+<TuiPanel title="$ clive --tui" id="preview" class="demo reveal-scroll">
   <div class="container-x">
     <header class="demo__header reveal">
       <p class="demo__eyebrow"><span aria-hidden="true">// </span>see it in action</p>
-      <h2 id="demo-heading" class="demo__title">
-        <span class="section-title__prefix" aria-hidden="true">## </span>demo
+      <h2 id="preview-heading" class="demo__title">
+        <span class="section-title__prefix" aria-hidden="true">## </span>preview
       </h2>
       <p class="demo__lead">A typical session: unlock the wallet, sign a transfer, broadcast.</p>
     </header>
@@ -123,7 +116,7 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_director
       <TerminalFrame title="clive — transfer" ariaLabel="Clive TUI/CLI demo preview" as="div">
         <WorkflowTabs
           client:visible
-          panelId="demo"
+          panelId="preview"
           tuiHtml={demoTuiHtml}
           cliHtml={demoCliHtml}
         />
@@ -213,55 +206,46 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_director
   }
 
   /* ============================================================
-   * Top bar — real Clive header: user/status + tabs + online
+   * Top bar — real Clive header: segmented tabs
    * ============================================================ */
   :global(.demo-tui__topbar) {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
     flex-wrap: wrap;
-    gap: var(--space-1);
-    padding: var(--space-1) var(--space-3);
     background-color: var(--mode-bg-header, var(--color-bg-elevated));
     border-bottom: 1px solid var(--mode-border, var(--color-border-default));
     border-radius: var(--radius-md) var(--radius-md) 0 0;
     font-size: var(--text-xs);
     transition: background-color 300ms ease, border-color 300ms ease;
   }
-  :global(.demo-tui__topbar-left),
-  :global(.demo-tui__topbar-right) {
+  :global(.demo-tui__topbar-seg) {
+    padding: var(--space-1) var(--space-2);
+    color: var(--mode-text-muted, var(--color-text-muted));
+    border-right: 1px solid var(--mode-border, var(--color-border-default));
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    white-space: nowrap;
   }
-  :global(.demo-tui__topbar-user) {
+  :global(.demo-tui__topbar-seg:last-child) {
+    border-right: none;
+    margin-left: auto;
+  }
+  :global(.demo-tui__topbar-seg--user) {
     color: var(--mode-text, var(--color-text));
     font-weight: var(--font-weight-medium);
   }
-  :global(.demo-tui__topbar-unlock) {
+  :global(.demo-tui__topbar-seg--ok) {
+    color: #22c55e;
+    font-weight: var(--font-weight-medium);
+  }
+  :global(.demo-tui__topbar-seg--unlock) {
+    color: #eab308;
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.04em;
+  }
+  :global(.demo-tui__topbar-seg--online) {
+    color: #22c55e;
     font-size: 0.9em;
-  }
-  :global(.demo-tui__topbar-tab) {
-    padding: 0.125rem 0.5rem;
-    color: var(--mode-text-muted, var(--color-text-muted));
-    border-radius: var(--radius-xs);
-  }
-  :global(.demo-tui__topbar-tab--active) {
-    background-color: rgba(96, 165, 250, 0.20);
-    color: var(--mode-text, var(--color-text));
-    font-weight: var(--font-weight-medium);
-  }
-  :global(.demo-tui__topbar-online) {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: var(--mode-text-muted, var(--color-text-muted));
-    font-size: 0.9em;
-  }
-  :global(.demo-tui__topbar-dot) {
-    font-size: 0.5em;
   }
 
   /* ============================================================
@@ -296,26 +280,16 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_director
     }
   }
 
-  /* Panel title bar with operation tabs */
+  /* Panel title bar — centered description */
   :global(.demo-tui__panel-title) {
-    padding: var(--space-1) var(--space-3);
-    font-size: var(--text-xs);
-    color: var(--mode-text-muted, var(--color-text-muted));
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--mode-text, var(--color-text));
     border-bottom: 1px solid var(--mode-border, var(--color-border-default));
     letter-spacing: 0.02em;
-    display: flex;
-    gap: var(--space-1);
-    transition: border-color 300ms ease;
-  }
-  :global(.demo-tui__tab) {
-    padding: 0.125rem 0.5rem;
-    border-radius: var(--radius-xs);
-    color: var(--mode-text-muted, var(--color-text-muted));
-  }
-  :global(.demo-tui__tab--active) {
-    background-color: rgba(96, 165, 250, 0.20);
-    color: var(--mode-text, var(--color-text));
+    text-align: center;
     font-weight: var(--font-weight-medium);
+    transition: border-color 300ms ease;
   }
 
   :global(.demo-tui__panel-body) {
@@ -351,15 +325,14 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_director
     margin: 0;
     font-variant-numeric: tabular-nums;
   }
-  :global(.demo-tui__cart-title) {
+  :global(.demo-tui__cart-empty) {
     margin: 0;
     font-weight: var(--font-weight-semibold);
-    font-size: 0.6875rem;
-    letter-spacing: 0.02em;
-  }
-  :global(.demo-tui__cart-item) {
     font-size: var(--text-xs);
-    padding-left: var(--space-1);
+    letter-spacing: 0.04em;
+    color: var(--mode-text-muted, var(--color-text-muted));
+    text-align: center;
+    padding: var(--space-2) 0;
   }
 
   :global(.demo-tui__sep) {
@@ -392,10 +365,17 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_director
     color: var(--mode-text-muted, var(--color-text-muted));
   }
   :global(.demo-tui__label--req) {
-    color: #22c55e;
+    color: #38bdf8;
+  }
+  :global(.demo-tui__label--from) {
+    background-color: #22c55e;
+    color: #000;
+    padding: 0.0625rem 0.375rem;
+    border-radius: 2px;
+    font-weight: var(--font-weight-semibold);
   }
   :global(.demo-tui__asterisk) {
-    color: #22c55e;
+    color: #38bdf8;
     font-weight: var(--font-weight-bold);
   }
 
@@ -416,29 +396,23 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_director
   :global(.demo-tui__input--empty) {
     min-height: 1.5em;
   }
-  :global(.demo-tui__field-hint) {
-    font-size: 0.6875rem;
-    flex-basis: 100%;
-    padding-left: calc(4rem + var(--space-2));
-    margin-top: -0.25rem;
-  }
 
   /* Amount row extras */
   :global(.demo-tui__amount-asset) {
     font-size: var(--text-xs);
-    color: var(--mode-text-muted, var(--color-text-muted));
+    color: var(--mode-text, var(--color-text));
     padding: var(--space-1) var(--space-2);
     border: 1px solid var(--mode-border, var(--color-border-default));
     border-radius: var(--radius-xs);
     flex-shrink: 0;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
   }
-  :global(.demo-tui__amount-all) {
-    font-size: var(--text-xs);
-    color: #4ade80;
-    font-weight: var(--font-weight-semibold);
-    flex-shrink: 0;
-    white-space: nowrap;
+  :global(.demo-tui__dropdown-arrow) {
+    font-size: 0.75em;
+    color: var(--mode-text-muted, var(--color-text-muted));
   }
 
   /* ============================================================
@@ -469,6 +443,8 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_director
    * ============================================================ */
   :global(.demo-tui__bottombar) {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
     gap: var(--space-1) var(--space-3);
     padding: var(--space-1) var(--space-3);
@@ -478,6 +454,15 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_director
     color: var(--mode-text-muted, var(--color-text-muted));
     border-radius: 0 0 var(--radius-md) var(--radius-md);
     transition: background-color 300ms ease, border-color 300ms ease;
+  }
+  :global(.demo-tui__bottombar-left) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+  }
+  :global(.demo-tui__bottombar-right) {
+    display: flex;
+    gap: var(--space-3);
   }
 
   /* Keyboard shortcut key styling — amber accent */
@@ -492,7 +477,7 @@ const demoCliHtml = `<span class="t-dim">clive@cli:~/.clive/mapped_host_director
    * Responsive — hide right panel details on narrow screens
    * ============================================================ */
   @media (max-width: 25rem) {
-    :global(.demo-tui__topbar-right .demo-tui__topbar-tab:nth-child(-n+2)) {
+    :global(.demo-tui__topbar-seg:not(.demo-tui__topbar-seg--user):not(.demo-tui__topbar-seg--unlock):not(.demo-tui__topbar-seg--online)) {
       display: none;
     }
   }
