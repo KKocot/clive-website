@@ -18,7 +18,7 @@ interface Props {
 
 const {
   title,
-  description = "Clive — power-user wallet for Hive. Encrypted keys, mouse-driven TUI, full blockchain operations from your terminal.",
+  description = "Clive — power-user wallet for Hive. Encrypted keys, mouse-driven TUI, blockchain operations from your terminal.",
   image,
   hideFooter = false,
   noindex,
@@ -31,7 +31,7 @@ const centerNavLinks: {
 }[] = [
   { href: "/#features", label: "features" },
   { href: "/#install", label: "install" },
-  { href: "/#demo", label: "demo" },
+  { href: "/#preview", label: "preview" },
   { href: "/#blog", label: "blog" },
 ];
 
@@ -290,7 +290,7 @@ const isCurrent = (href: string): boolean => {
       // Highlights the matching nav tab when a section scrolls into the
       // upper 20-60% of the viewport (the "under navbar" sweet spot).
       const initSectionObserver = () => {
-        const sectionIds = ['hero', 'features', 'install', 'demo', 'blog'];
+        const sectionIds = ['hero', 'features', 'install', 'preview', 'blog'];
         const sections = sectionIds
           .map((id) => document.getElementById(id))
           .filter((el): el is HTMLElement => el !== null);
