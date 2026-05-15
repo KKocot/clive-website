@@ -23,33 +23,29 @@ const firstStepsHtml = `<div class="install-tui">
 
     <div class="install-tui__section">
       <div class="install-tui__section-title">Enter profile data</div>
-      <div class="install-tui__field">
-        <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Profile name</span>
-        <span class="install-tui__input"><span class="t-emerald">my-profile</span></span>
+      <div class="install-tui__field install-tui__field--focused">
+        <span class="install-tui__label"><span class="install-tui__asterisk">*</span> Profile name</span>
+        <span class="install-tui__input">e.g.: master</span>
       </div>
       <div class="install-tui__field">
-        <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Password</span>
-        <span class="install-tui__input"><span class="t-dim">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span></span>
+        <span class="install-tui__asterisk">*</span>
+        <span class="install-tui__input"><span class="t-dim">Password</span></span>
       </div>
       <div class="install-tui__field">
-        <span class="install-tui__label install-tui__label--req"><span class="install-tui__asterisk">*</span> Repeat password</span>
-        <span class="install-tui__input"><span class="t-dim">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span></span>
+        <span class="install-tui__asterisk">*</span>
+        <span class="install-tui__input"><span class="t-dim">Repeat password</span></span>
       </div>
       <div class="install-tui__actions install-tui__actions--spread">
         <span class="install-tui__btn install-tui__btn--ghost">&larr; Previous</span>
         <span class="install-tui__btn install-tui__btn--primary">Next &rarr;</span>
       </div>
     </div>
-
-    <div class="install-tui__hint">
-      <span class="install-tui__hint-icon t-dim">&#x25B6;</span>
-      <span class="t-dim">How to select, copy and paste text inside TUI app like Clive?</span>
-    </div>
   </div>
 
   <footer class="install-tui__footer">
-    <span><span class="install-tui__key">esc</span> <span class="t-dim">back</span></span>
-    <span><span class="install-tui__key">?</span> <span class="t-dim">help</span></span>
+    <span class="install-tui__footer-left"><span class="install-tui__hint-icon">&#x25B6;</span> <span class="install-tui__hint-text">How to select, copy and paste text inside TUI app like Clive?</span></span>
+    <span class="install-tui__footer-center"><span class="install-tui__key">?</span> <span class="t-dim">Help</span></span>
+    <span class="install-tui__footer-right"><span class="install-tui__key">~p</span> <span class="t-dim">palette</span></span>
   </footer>
 </div>`;
 
@@ -80,7 +76,7 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
 <span class="t-prompt">$</span> <span class="t-cursor" aria-hidden="true">▌</span></span>`;
 ---
 
-<TuiPanel title="$ bash <(curl -s get.clive.sh)" statusLeft="supported: linux, macos" id="install" class="install reveal-scroll">
+<TuiPanel title="$ bash <(curl -s get.clive.sh)" statusLeft="supported: linux, macos, windows" id="install" class="install reveal-scroll">
   <div class="container-x">
     <header class="install__header reveal">
       <p class="install__eyebrow"><span aria-hidden="true">$ </span>get clive</p>
@@ -120,7 +116,7 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
         </div>
       </div>
       <p class="install__note">
-        Works on Linux, macOS 13+, and Windows (WSL2 required).
+        Works on Linux, macOS, and Windows — Docker required.
       </p>
     </div>
 
@@ -369,67 +365,125 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
 
   :global(.install-tui__big-title) {
     text-align: center;
-    font-size: clamp(1.25rem, 1rem + 1.5vw, 1.75rem);
+    font-family: serif;
+    font-size: clamp(1.5rem, 1.2rem + 2vw, 2.25rem);
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.25em;
+    word-spacing: 0.4em;
     color: var(--mode-text, var(--color-text));
-    padding: var(--space-1) 0;
+    padding: var(--space-3) 0 var(--space-2);
     line-height: 1.2;
   }
 
   :global(.install-tui__section) {
-    border: 1px solid var(--mode-border, var(--color-border-default));
+    border: 1px solid rgba(96, 165, 250, 0.35);
     border-radius: var(--radius-xs);
-    padding: var(--space-2) var(--space-3);
+    padding: 0;
+    overflow: hidden;
     transition: border-color 300ms ease;
   }
 
   :global(.install-tui__section-title) {
+    display: block;
+    width: 100%;
+    padding: var(--space-1) var(--space-3);
+    background-color: #1565c0;
     font-size: 0.6875em;
     font-weight: var(--font-weight-semibold);
-    text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--mode-text-muted, var(--color-text-muted));
-    margin-bottom: var(--space-1);
+    color: #fff;
+    text-align: center;
+    margin: 0;
   }
 
   :global(.install-tui__field) {
+    position: relative;
     display: flex;
-    align-items: baseline;
-    gap: var(--space-3);
-    margin-bottom: var(--space-1);
+    flex-direction: column;
+    gap: 0;
+    margin: var(--space-3) var(--space-3);
+    border: 1px solid rgba(96, 165, 250, 0.35);
+    border-radius: var(--radius-xs);
+    transition: border-color 300ms ease;
+  }
+
+  :global(.install-tui__field--focused) {
+    border-color: #3b9dd6;
+    box-shadow: 0 0 0 1px rgba(59, 157, 214, 0.25);
   }
 
   :global(.install-tui__label) {
-    min-width: 7rem;
-    text-align: right;
-    flex-shrink: 0;
-    font-size: 0.8125em;
-    color: var(--mode-text-muted, var(--color-text-muted));
+    display: inline-block;
+    position: absolute;
+    top: -0.55em;
+    left: 0.75em;
+    padding: 0.05em 0.5em;
+    background-color: #1e5a8a;
+    color: #d0dce8;
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.75em;
+    border-radius: 2px;
+    z-index: 2;
+    line-height: 1.4;
   }
-  :global(.install-tui__label--req) {
-    color: var(--mode-accent-success, var(--color-accent-success));
-  }
+
   :global(.install-tui__asterisk) {
-    color: var(--mode-accent-success, var(--color-accent-success));
+    position: absolute;
+    top: -0.5em;
+    left: 0.5em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4em;
+    height: 1.4em;
+    font-size: 0.6875em;
     font-weight: var(--font-weight-bold);
+    line-height: 1;
+    color: #fff;
+    background-color: #1565c0;
+    border-radius: 2px;
+    z-index: 2;
+  }
+
+  :global(.install-tui__field--focused .install-tui__asterisk) {
+    position: static;
+    display: inline;
+    width: auto;
+    height: auto;
+    padding: 0;
+    font-size: inherit;
+    line-height: inherit;
+    color: #ef4444;
+    background-color: transparent;
+    border-radius: 0;
   }
 
   :global(.install-tui__input) {
-    flex: 1;
-    padding: 0.125rem var(--space-2);
-    border: 1px solid var(--mode-accent-success, #22c55e);
-    border-radius: var(--radius-xs);
-    font-size: 0.875em;
-    transition: border-color 300ms ease;
+    display: block;
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.8125em;
+    color: rgba(255, 255, 255, 0.35);
+    background-color: rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 0;
+    min-height: 1.8em;
+    transition: color 300ms ease, background-color 300ms ease;
+  }
+
+  :global(.install-tui__field--focused .install-tui__input) {
+    padding: var(--space-2) var(--space-3);
+    color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(10, 25, 50, 0.6);
+    min-height: 2em;
   }
 
   :global(.install-tui__actions) {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: var(--space-3);
-    padding-top: var(--space-2);
+    padding: var(--space-3) var(--space-3) var(--space-3);
     flex-wrap: wrap;
   }
 
@@ -441,34 +495,37 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     border-radius: var(--radius-xs);
   }
   :global(.install-tui__btn--primary) {
-    background-color: var(--mode-accent-success, #22c55e);
+    background-color: #22c55e;
     color: #fff;
+    padding: 0.5rem 4rem;
+    font-size: 0.9em;
   }
   :global(.install-tui__btn--ghost) {
     background-color: transparent;
-    border: 1px solid var(--mode-border, var(--color-border-default));
-    color: var(--mode-text-muted, var(--color-text-muted));
+    border: none;
+    color: var(--mode-text, var(--color-text));
+    padding: 0.3rem 0;
   }
   :global(.install-tui__actions--spread) {
     justify-content: space-between;
   }
 
-  :global(.install-tui__hint) {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-1) 0;
-    font-size: 0.75em;
-    cursor: default;
-  }
   :global(.install-tui__hint-icon) {
-    font-size: 0.625em;
+    font-size: 0.75em;
+    color: #22c55e;
     transition: transform var(--duration-fast) var(--ease-out-quad);
+  }
+
+  :global(.install-tui__hint-text) {
+    color: #93c5fd;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   :global(.install-tui__footer) {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: var(--space-1) var(--space-3);
     padding: var(--space-1) var(--space-3);
     background-color: var(--mode-bg-header, var(--color-bg-elevated));
@@ -477,6 +534,23 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
     color: var(--mode-text-muted, var(--color-text-muted));
     border-radius: 0 0 var(--radius-md) var(--radius-md);
     transition: background-color 300ms ease, border-color 300ms ease;
+  }
+
+  :global(.install-tui__footer-left) {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :global(.install-tui__footer-center),
+  :global(.install-tui__footer-right) {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   :global(.install-tui__key) {
@@ -495,12 +569,10 @@ const cliStepsHtml = `<span class="install-step install-step--1"><span class="t-
   /* Mobile adjustments for TUI setup */
   @media (max-width: 32rem) {
     :global(.install-tui__field) {
-      flex-direction: column;
-      gap: var(--space-1);
+      margin: var(--space-1) var(--space-2);
     }
-    :global(.install-tui__label) {
-      text-align: left;
-      min-width: unset;
+    :global(.install-tui__footer-left) {
+      flex-basis: 100%;
     }
   }
 
